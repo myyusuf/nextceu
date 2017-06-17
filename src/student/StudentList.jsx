@@ -5,8 +5,8 @@ import { Row, Col, Thumbnail, Button } from 'react-bootstrap';
 class StudentList extends React.Component {
 // const StudentList = () => {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       students: [],
     };
@@ -24,6 +24,10 @@ class StudentList extends React.Component {
     });
   }
 
+  viewStudent(student) {
+    window.location.href = `#/students_details/${student.id}`;
+  }
+
   render() {
     const studentThumbnails = [];
     const students = this.state.students;
@@ -36,7 +40,12 @@ class StudentList extends React.Component {
             <h3>{ student.name }</h3>
             <p>{student.oldSid} {student.newSid}</p>
             <p>
-              <Button bsStyle="primary">Details</Button>&nbsp;
+              <Button
+                bsStyle="primary"
+                onClick={() => this.viewStudent(student)}
+              >
+                Details
+              </Button>
             </p>
           </Thumbnail>
         </Col>

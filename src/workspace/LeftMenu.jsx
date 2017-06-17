@@ -5,8 +5,8 @@ const LeftMenu = () => {
   return (
     <Panel collapsible defaultExpanded header="Main Menu" bsStyle="primary">
       <ListGroup fill>
-        <ListGroupItem>Dashboard</ListGroupItem>
-        <ListGroupItem>Student</ListGroupItem>
+        <ListGroupItem><a href="#/dashboard">Dashboard</a></ListGroupItem>
+        <ListGroupItem><a href="#/students">Student</a></ListGroupItem>
       </ListGroup>
     </Panel>
   );
