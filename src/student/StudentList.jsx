@@ -36,7 +36,7 @@ class StudentList extends React.Component {
       const student = students[i];
       studentThumbnails.push(
         <Col xs={6} md={4} key={student.id}>
-          <Thumbnail src="/assets/thumbnaildiv.png" alt="242x200">
+          <Thumbnail src="" alt="">
             <h3>{ student.name }</h3>
             <p>{student.oldSid} {student.newSid}</p>
             <p>

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Row, Col, Panel, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
+import { Row, Col, Panel, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 
 class StudentInfo extends React.Component {
 
@@ -11,6 +11,7 @@ class StudentInfo extends React.Component {
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -37,12 +38,17 @@ class StudentInfo extends React.Component {
     console.log(this.state);
   }
 
+  handleSubmit(event) {
+    console.log(this.state);
+    event.preventDefault();
+  }
+
   render() {
     return (
       <Row>
         <Col xs={12} md={8}>
           <Panel header="" style={{ marginTop: 20 }}>
-            <form>
+            <form onSubmit={this.handleSubmit}>
               <FormGroup controlId={'1'}>
                 <ControlLabel>Stambuk Lama</ControlLabel>
                 <FormControl type="text" name="oldSid" onChange={this.handleInputChange} />
@@ -57,6 +63,10 @@ class StudentInfo extends React.Component {
                 <ControlLabel>Nama</ControlLabel>
                 <FormControl type="text" name="name" onChange={this.handleInputChange} />
               </FormGroup>
+
+              <Button type="submit" bsStyle="primary">
+                Save
+              </Button>
             </form>
           </Panel>
         </Col>
