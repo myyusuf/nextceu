@@ -1,52 +1,53 @@
 import React from 'react';
-import { Grid, Row, Col, Thumbnail, Button } from 'react-bootstrap';
+import axios from 'axios';
+import { Row, Col, Thumbnail, Button } from 'react-bootstrap';
 
-const StudentList = () => {
-  return (
+class StudentList extends React.Component {
+// const StudentList = () => {
+
+  constructor() {
+    super();
+    this.state = {
+      students: [],
+    };
+  }
+
+  componentDidMount() {
+    axios.get('/students')
+    .then((response) => {
+      this.setState({
+        students: response.data,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  render() {
+    const studentThumbnails = [];
+    const students = this.state.students;
+
+    for (let i = 0; i < students.length; i += 1) {
+      const student = students[i];
+      studentThumbnails.push(
+        <Col xs={6} md={4} key={student.id}>
+          <Thumbnail src="/assets/thumbnaildiv.png" alt="242x200">
+            <h3>{ student.name }</h3>
+            <p>{student.oldSid} {student.newSid}</p>
+            <p>
+              <Button bsStyle="primary">Details</Button>&nbsp;
+            </p>
+          </Thumbnail>
+        </Col>
+      );
+    }
+    return (
       <Row>
-        <Col xs={6} md={4}>
-          <Thumbnail src="/assets/thumbnaildiv.png" alt="242x200">
-            <h3>Thumbnail label</h3>
-            <p>Description</p>
-            <p>
-              <Button bsStyle="primary">Button</Button>&nbsp;
-              <Button bsStyle="default">Button</Button>
-            </p>
-          </Thumbnail>
-        </Col>
-        <Col xs={6} md={4}>
-          <Thumbnail src="/assets/thumbnaildiv.png" alt="242x200">
-            <h3>Thumbnail label</h3>
-            <p>Description</p>
-            <p>
-              <Button bsStyle="primary">Button</Button>&nbsp;
-              <Button bsStyle="default">Button</Button>
-            </p>
-          </Thumbnail>
-        </Col>
-        <Col xs={6} md={4}>
-          <Thumbnail src="/assets/thumbnaildiv.png" alt="242x200">
-            <h3>Thumbnail label</h3>
-            <p>Description</p>
-            <p>
-              <Button bsStyle="primary">Button</Button>&nbsp;
-              <Button bsStyle="default">Button</Button>
-            </p>
-          </Thumbnail>
-        </Col>
-
-        <Col xs={6} md={4}>
-          <Thumbnail src="/assets/thumbnaildiv.png" alt="242x200">
-            <h3>Thumbnail label</h3>
-            <p>Description</p>
-            <p>
-              <Button bsStyle="primary">Button</Button>&nbsp;
-              <Button bsStyle="default">Button</Button>
-            </p>
-          </Thumbnail>
-        </Col>
+        {studentThumbnails}
       </Row>
-  );
-};
+    );
+  }
+}
 
 export default StudentList;
