@@ -11,6 +11,7 @@ const Workspace = ({ children }) => {
       <Grid>
         <Row className="show-grid">
           <Col sm={6} md={3}><LeftMenu /></Col>
+          <Col sm={18} md={9}>{ children }</Col>
         </Row>
       </Grid>
     </div>

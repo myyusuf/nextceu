@@ -18754,6 +18754,11 @@ var Workspace = function Workspace(_ref) {
           _reactBootstrap.Col,
           { sm: 6, md: 3 },
           _react2.default.createElement(_LeftMenu2.default, null)
+        ),
+        _react2.default.createElement(
+          _reactBootstrap.Col,
+          { sm: 18, md: 9 },
+          children
         )
       )
     )
@@ -18842,12 +18847,20 @@ var _Workspace = __webpack_require__(212);
 
 var _Workspace2 = _interopRequireDefault(_Workspace);
 
+var _StudentList = __webpack_require__(480);
+
+var _StudentList2 = _interopRequireDefault(_StudentList);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _reactDom2.default.render(_react2.default.createElement(
   _reactRouterDom.HashRouter,
   null,
-  _react2.default.createElement(_Workspace2.default, null)
+  _react2.default.createElement(
+    _Workspace2.default,
+    null,
+    _react2.default.createElement(_reactRouterDom.Route, { path: '/students', component: _StudentList2.default })
+  )
 ), document.getElementById('app'));
 
 /***/ }),
@@ -44246,6 +44259,166 @@ var valueEqual = function valueEqual(a, b) {
 };
 
 exports.default = valueEqual;
+
+/***/ }),
+/* 480 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = __webpack_require__(111);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var StudentList = function StudentList() {
+  return _react2.default.createElement(
+    _reactBootstrap.Row,
+    null,
+    _react2.default.createElement(
+      _reactBootstrap.Col,
+      { xs: 6, md: 4 },
+      _react2.default.createElement(
+        _reactBootstrap.Thumbnail,
+        { src: '/assets/thumbnaildiv.png', alt: '242x200' },
+        _react2.default.createElement(
+          'h3',
+          null,
+          'Thumbnail label'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          'Description'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          _react2.default.createElement(
+            _reactBootstrap.Button,
+            { bsStyle: 'primary' },
+            'Button'
+          ),
+          '\xA0',
+          _react2.default.createElement(
+            _reactBootstrap.Button,
+            { bsStyle: 'default' },
+            'Button'
+          )
+        )
+      )
+    ),
+    _react2.default.createElement(
+      _reactBootstrap.Col,
+      { xs: 6, md: 4 },
+      _react2.default.createElement(
+        _reactBootstrap.Thumbnail,
+        { src: '/assets/thumbnaildiv.png', alt: '242x200' },
+        _react2.default.createElement(
+          'h3',
+          null,
+          'Thumbnail label'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          'Description'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          _react2.default.createElement(
+            _reactBootstrap.Button,
+            { bsStyle: 'primary' },
+            'Button'
+          ),
+          '\xA0',
+          _react2.default.createElement(
+            _reactBootstrap.Button,
+            { bsStyle: 'default' },
+            'Button'
+          )
+        )
+      )
+    ),
+    _react2.default.createElement(
+      _reactBootstrap.Col,
+      { xs: 6, md: 4 },
+      _react2.default.createElement(
+        _reactBootstrap.Thumbnail,
+        { src: '/assets/thumbnaildiv.png', alt: '242x200' },
+        _react2.default.createElement(
+          'h3',
+          null,
+          'Thumbnail label'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          'Description'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          _react2.default.createElement(
+            _reactBootstrap.Button,
+            { bsStyle: 'primary' },
+            'Button'
+          ),
+          '\xA0',
+          _react2.default.createElement(
+            _reactBootstrap.Button,
+            { bsStyle: 'default' },
+            'Button'
+          )
+        )
+      )
+    ),
+    _react2.default.createElement(
+      _reactBootstrap.Col,
+      { xs: 6, md: 4 },
+      _react2.default.createElement(
+        _reactBootstrap.Thumbnail,
+        { src: '/assets/thumbnaildiv.png', alt: '242x200' },
+        _react2.default.createElement(
+          'h3',
+          null,
+          'Thumbnail label'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          'Description'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          _react2.default.createElement(
+            _reactBootstrap.Button,
+            { bsStyle: 'primary' },
+            'Button'
+          ),
+          '\xA0',
+          _react2.default.createElement(
+            _reactBootstrap.Button,
+            { bsStyle: 'default' },
+            'Button'
+          )
+        )
+      )
+    )
+  );
+};
+
+exports.default = StudentList;
 
 /***/ })
 /******/ ]);
