@@ -5,6 +5,7 @@ import Workspace from './Workspace.jsx';
 import StudentList from './student/StudentList.jsx';
 import StudentView from './student/StudentView.jsx';
 import DepartmentList from './department/DepartmentList.jsx';
+import DepartmentEdit from './department/DepartmentEdit.jsx';
 
 ReactDOM.render(
   <HashRouter>
@@ -12,6 +13,7 @@ ReactDOM.render(
       <Route path="/students" component={ StudentList } />
       <Route path="/students_details" component={ StudentView } />
       <Route path="/departments" component={ DepartmentList } />
+      <Route path="/departments_edit/:departmentId" component={ DepartmentEdit } />
     </Workspace>
   </HashRouter>,
   document.getElementById('app')

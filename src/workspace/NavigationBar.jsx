@@ -6,15 +6,16 @@ const NavigationBar = () => {
     <Navbar>
       <Navbar.Header>
         <Navbar.Brand>
-          <span style={{ fontWeight: 'bold' }}>CEU</span>
+          <i className="fa fa-dot-circle-o" style={{ marginRight: 2, fontSize: 20, color: '#0079D1' }} />
+          <span style={{ fontWeight: 'bold', color: '#0079D1' }}>CEU</span>
         </Navbar.Brand>
       </Navbar.Header>
       <Navbar.Form pullLeft>
         <FormGroup>
-          <FormControl type="text" placeholder="Search" />
+          <FormControl type="text" placeholder="Find in App..." />
         </FormGroup>
         {' '}
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Search</Button>
       </Navbar.Form>
       <Nav>
         <NavItem eventKey={1} href="#"><span style={{ fontWeight: 'bold' }}>Dashboard</span></NavItem>

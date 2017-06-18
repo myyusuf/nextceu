@@ -12,4 +12,13 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/edit/:departmentId', function(req, res, next) {
+  models.Department.findOne({
+    where: { id: req.params.departmentId },
+  })
+  .then((department) => {
+    res.json(department);
+  });
+});
+
 module.exports = router;

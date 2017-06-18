@@ -34,7 +34,17 @@ class DeartmentList extends React.Component {
           <td>{department.name}</td>
           <td>{department.color}</td>
           <td>{department.duration}</td>
-          <td></td>
+          <td>
+            <Button
+              bsStyle="default" style={{ marginRight: 5 }} bsSize="small"
+              href={`#/departments_edit/${department.id}`}
+            >
+              <i className="fa fa-edit" />
+            </Button>
+            <Button bsStyle="danger" bsSize="small">
+              <i className="fa fa-remove" />
+            </Button>
+          </td>
         </tr>
       );
     }
@@ -44,8 +54,12 @@ class DeartmentList extends React.Component {
           <FormControl type="text" placeholder="Code or Name" />
         </FormGroup>
         {' '}
-        <Button type="submit">
-          Search
+        <Button>
+          <i className="fa fa-search" />
+        </Button>
+        {' '}
+        <Button bsStyle="success">
+          <i className="fa fa-plus" />
         </Button>
       </Form>
     );
@@ -53,7 +67,7 @@ class DeartmentList extends React.Component {
       <Row>
         <Col xs={24} md={16}>
           <Panel header={title} style={{ marginTop: 0 }}>
-            <Table responsive fill striped>
+            <Table responsive fill>
               <thead>
                 <tr>
                   <th>No</th>
