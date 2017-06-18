@@ -9,9 +9,14 @@ class DeartmentList extends React.Component {
     this.state = {
       departments: [],
     };
+    this.confirmDelete = this.confirmDelete.bind(this);
   }
 
   componentDidMount() {
+    this.loadData();
+  }
+
+  loadData() {
     axios.get('/departments')
     .then((response) => {
       this.setState({
@@ -23,17 +28,31 @@ class DeartmentList extends React.Component {
     });
   }
 
+  confirmDelete(department) {
+    const result = confirm(`Anda akan menghapus bagian : ${department.name}?`);
+    if (result) {
+      axios.delete(`/departments/delete/${department.id}`)
+      .then((response) => {
+        console.log(response);
+        this.loadData();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+  }
+
   render() {
     const departmentComponents = [];
     for (let i = 0; i < this.state.departments.length; i += 1) {
       const department = this.state.departments[i];
       departmentComponents.push(
-        <tr>
+        <tr key={department.id}>
           <td>{ i + 1 }</td>
           <td>{department.code}</td>
           <td>{department.name}</td>
-          <td>{department.color}</td>
           <td>{department.duration}</td>
+          <td><div style={{ width: 35, height: 35, borderRadius: '50%', backgroundColor: department.color }} /></td>
           <td>
             <Button
               bsStyle="default" style={{ marginRight: 5 }} bsSize="small"
@@ -41,7 +60,7 @@ class DeartmentList extends React.Component {
             >
               <i className="fa fa-edit" />
             </Button>
-            <Button bsStyle="danger" bsSize="small">
+            <Button bsStyle="danger" bsSize="small" onClick={() => this.confirmDelete(department)}>
               <i className="fa fa-remove" />
             </Button>
           </td>
@@ -58,7 +77,7 @@ class DeartmentList extends React.Component {
           <i className="fa fa-search" />
         </Button>
         {' '}
-        <Button bsStyle="success">
+        <Button bsStyle="success" href={'#/departments_add'}>
           <i className="fa fa-plus" />
         </Button>
       </Form>

@@ -7,27 +7,41 @@ class DeartmentEdit extends React.Component {
 
   constructor(props) {
     super(props);
+
+    let departmentId = null;
+    let department = {};
+    if (props.match.params.departmentId) {
+      departmentId = props.match.params.departmentId;
+      department = null;
+    }
+
     this.state = {
-      departmentId: props.match.params.departmentId,
+      departmentId,
+      department,
       showModal: false,
       color: '',
     };
 
     this.pickColor = this.pickColor.bind(this);
     this.close = this.close.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleColorChange = this.handleColorChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
-    axios.get(`/departments/edit/${this.state.departmentId}`)
-    .then((response) => {
-      this.setState({
-        department: response.data,
+    if (this.state.departmentId) {
+      axios.get(`/departments/edit/${this.state.departmentId}`)
+      .then((response) => {
+        this.setState({
+          department: response.data,
+          color: response.data.color,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    }
   }
 
   handleInputChange(event) {
@@ -61,6 +75,33 @@ class DeartmentEdit extends React.Component {
       department,
       color: color.hex,
     });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    if (this.state.departmentId) {
+      axios.put(`/departments/edit/${this.state.departmentId}`,
+        this.state.department)
+      .then((response) => {
+        console.log(response);
+        window.location.href = '#/departments';
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } else {
+      axios.post('/departments/add',
+        this.state.department)
+      .then((response) => {
+        console.log(response);
+        window.location.href = '#/departments';
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+
   }
 
   render() {

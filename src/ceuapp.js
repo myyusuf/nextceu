@@ -14,6 +14,7 @@ ReactDOM.render(
       <Route path="/students_details" component={ StudentView } />
       <Route path="/departments" component={ DepartmentList } />
       <Route path="/departments_edit/:departmentId" component={ DepartmentEdit } />
+      <Route path="/departments_add" component={ DepartmentEdit } />
     </Workspace>
   </HashRouter>,
   document.getElementById('app')
