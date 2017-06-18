@@ -8,8 +8,11 @@ class DeartmentList extends React.Component {
     super(props);
     this.state = {
       departments: [],
+      searchText: '',
     };
+    this.loadData = this.loadData.bind(this);
     this.confirmDelete = this.confirmDelete.bind(this);
+    this.searchChange = this.searchChange.bind(this);
   }
 
   componentDidMount() {
@@ -17,7 +20,7 @@ class DeartmentList extends React.Component {
   }
 
   loadData() {
-    axios.get('/departments')
+    axios.get('/departments', { params: { searchText: this.state.searchText } })
     .then((response) => {
       this.setState({
         departments: response.data,
@@ -25,6 +28,13 @@ class DeartmentList extends React.Component {
     })
     .catch((error) => {
       console.log(error);
+    });
+  }
+
+  searchChange(event) {
+    const searchText = event.target.value;
+    this.setState({
+      searchText,
     });
   }
 
@@ -69,11 +79,11 @@ class DeartmentList extends React.Component {
     }
     const title = (
       <Form inline>
-        <FormGroup controlId="formInlineEmail">
-          <FormControl type="text" placeholder="Code or Name" />
+        <FormGroup controlId="search">
+          <FormControl type="text" placeholder="Code or Name" onChange={this.searchChange} />
         </FormGroup>
         {' '}
-        <Button>
+        <Button onClick={this.loadData}>
           <i className="fa fa-search" />
         </Button>
         {' '}

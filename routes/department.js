@@ -4,8 +4,15 @@ const models = require('../models');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+  const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
+
   models.Department.findAll({
-    where: {},
+    where: {
+      $or: [
+        { code: { $ilike: searchText } },
+        { name: { $ilike: searchText } }
+      ]
+    },
     order: ['id']
   })
   .then((departments) => {
