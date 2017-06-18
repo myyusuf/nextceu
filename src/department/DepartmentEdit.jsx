@@ -73,49 +73,78 @@ class DeartmentEdit extends React.Component {
             <Panel header="Edit Bagian" style={{ marginTop: 0 }}>
               <form onSubmit={this.handleSubmit}>
                 <FormGroup controlId={'1'}>
-                  <ControlLabel>Stambuk Lama</ControlLabel>
-                  <FormControl
-                    type="text"
-                    name="oldSid"
-                    value={this.state.department.oldSid}
-                    onChange={this.handleInputChange}
-                  />
-                </FormGroup>
-
-                <FormGroup controlId={'2'}>
-                  <ControlLabel>Stambuk Baru</ControlLabel>
-                  <FormControl
-                    type="text"
-                    name="newSid"
-                    value={this.state.department.newSid}
-                    onChange={this.handleInputChange}
-                  />
+                  <Row>
+                    <Col xs={12} md={4}>
+                      <ControlLabel>Kode</ControlLabel>
+                      <FormControl
+                        type="text"
+                        name="code"
+                        value={this.state.department.code}
+                        onChange={this.handleInputChange}
+                      />
+                    </Col>
+                    <Col xs={12} md={8}>
+                      <ControlLabel>Nama</ControlLabel>
+                      <FormControl
+                        type="text"
+                        name="name"
+                        value={this.state.department.name}
+                        onChange={this.handleInputChange}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
 
                 <FormGroup controlId={'3'}>
-                  <ControlLabel>Kode</ControlLabel>
-                  <FormControl
-                    type="text"
-                    name="code"
-                    value={this.state.department.code}
-                    onChange={this.handleInputChange}
-                  />
+                  <Row>
+                    <Col xs={8} md={4}>
+                      <ControlLabel>Durasi (Minggu)</ControlLabel>
+                      <FormControl
+                        type="number"
+                        name="duration"
+                        value={this.state.department.duration}
+                        onChange={this.handleInputChange}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
 
                 <FormGroup controlId={'4'}>
-                  <ControlLabel>Nama</ControlLabel>
-                  <FormControl
-                    type="text"
-                    name="name"
-                    value={this.state.department.name}
-                    onChange={this.handleInputChange}
-                  />
+                  <Row>
+                    <Col xs={8} md={4}>
+                      <ControlLabel>Durasi RS 1</ControlLabel>
+                      <FormControl
+                        type="number"
+                        name="duration1"
+                        value={this.state.department.duration1}
+                        onChange={this.handleInputChange}
+                      />
+                    </Col>
+                    <Col xs={8} md={4}>
+                      <ControlLabel>Durasi RS 2</ControlLabel>
+                      <FormControl
+                        type="number"
+                        name="duration2"
+                        value={this.state.department.duration2}
+                        onChange={this.handleInputChange}
+                      />
+                    </Col>
+                    <Col xs={8} md={4} >
+                      <ControlLabel>Durasi Puskesmas</ControlLabel>
+                      <FormControl
+                        type="number"
+                        name="duration3"
+                        value={this.state.department.duration3}
+                        onChange={this.handleInputChange}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
 
-                <FormGroup controlId={'5'}>
+                <FormGroup controlId={'2'}>
                   <ControlLabel>Warna</ControlLabel>
                   <Row>
-                    <Col xs={5} md={3} style={{ paddingRight: 0 }}>
+                    <Col xs={8} md={4} >
                       <FormControl
                         type="text"
                         name="color"
@@ -123,9 +152,9 @@ class DeartmentEdit extends React.Component {
                         style={{ backgroundColor: this.state.department.color }}
                       />
                     </Col>
-                    <Col xs={6} md={4} style={{ paddingLeft: 5 }}>
-                      <Button onClick={this.pickColor}>
-                        Pick
+                    <Col xs={8} md={4} style={{ paddingLeft: 0 }}>
+                      <Button onClick={this.pickColor} bsStyle="info">
+                        <i className="fa fa-eyedropper" />
                       </Button>
                     </Col>
                   </Row>
