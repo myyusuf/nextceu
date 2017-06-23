@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Row, Col, Panel, Button, ListGroup, ListGroupItem, Badge, ProgressBar } from 'react-bootstrap';
+import { Row, Col, Panel, Button, ListGroup, ListGroupItem, Badge, ProgressBar, Form, FormGroup, FormControl } from 'react-bootstrap';
 
 class StudentList extends React.Component {
 // const StudentList = () => {
@@ -44,7 +44,7 @@ class StudentList extends React.Component {
               <div style={{ paddingLeft: 20 }}>
                 <h4><a onClick={() => this.viewStudent(student)}>{ student.name }</a></h4>
                 <p>{student.oldSid} {student.newSid}</p>
-                <p><ProgressBar now={70} bsStyle="success" style={{ height: 10, padding: 0 }} /></p>
+                <ProgressBar now={70} bsStyle="success" style={{ height: 10, padding: 0 }} />
                 <p>
                   <Button
                     onClick={() => this.viewStudent(student)}
@@ -64,6 +64,16 @@ class StudentList extends React.Component {
     return (
       <Row>
         <Col xs={8} md={8}>
+
+          <div className="search-box">
+            <form className="search-form">
+              <input className="form-control" placeholder="Nama atau Stambuk" type="text" />
+              <button className="btn btn-link search-btn">
+                <i className="glyphicon glyphicon-search"></i>
+              </button>
+            </form>
+          </div>
+
           {studentThumbnails}
         </Col>
         <Col xs={4} md={4}>
