@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Row, Col, Thumbnail, Button } from 'react-bootstrap';
+import { Row, Col, Panel, Button, ListGroup, ListGroupItem, Badge, ProgressBar } from 'react-bootstrap';
 
 class StudentList extends React.Component {
 // const StudentList = () => {
@@ -35,25 +35,60 @@ class StudentList extends React.Component {
     for (let i = 0; i < students.length; i += 1) {
       const student = students[i];
       studentThumbnails.push(
-        <Col xs={6} md={4} key={student.id}>
-          <Thumbnail src="" alt="">
-            <h3>{ student.name }</h3>
-            <p>{student.oldSid} {student.newSid}</p>
-            <p>
-              <Button
-                bsStyle="primary"
-                onClick={() => this.viewStudent(student)}
-              >
-                Details
-              </Button>
-            </p>
-          </Thumbnail>
-        </Col>
+        <Panel>
+          <Row>
+            <Col md={1}>
+              <i className="fa fa-user-circle" style={{ marginRight: 10, fontSize: 50, color: 'silver' }} />
+            </Col>
+            <Col md={11}>
+              <div style={{ paddingLeft: 20 }}>
+                <h4><a onClick={() => this.viewStudent(student)}>{ student.name }</a></h4>
+                <p>{student.oldSid} {student.newSid}</p>
+                <p><ProgressBar now={70} bsStyle="success" style={{ height: 10, padding: 0 }} /></p>
+                <p>
+                  <Button
+                    onClick={() => this.viewStudent(student)}
+                  >
+                    <i className="fa fa-external-link" style={{ fontSize: 20 }} />
+                  </Button>
+                  <Button style={{ marginLeft: 10 }}>
+                    <i className="fa fa-commenting-o" style={{ fontSize: 20 }} />
+                  </Button>
+                </p>
+              </div>
+            </Col>
+          </Row>
+        </Panel>
       );
     }
     return (
       <Row>
-        {studentThumbnails}
+        <Col xs={8} md={8}>
+          {studentThumbnails}
+        </Col>
+        <Col xs={4} md={4}>
+          <ListGroup fill>
+            <ListGroupItem>
+              <a href="#/dashboard">
+                Aktif
+              </a>
+              <Badge>200</Badge>
+            </ListGroupItem>
+            <ListGroupItem>
+              <a href="#/students">
+                Bermasalah
+              </a>
+              <Badge>10</Badge>
+            </ListGroupItem>
+            <ListGroupItem>
+              <a href="#/departments">
+                Ujian UKMPPD
+              </a>
+              <Badge>30</Badge>
+            </ListGroupItem>
+          </ListGroup>
+        </Col>
+
       </Row>
     );
   }

@@ -6,8 +6,8 @@ const NavigationBar = () => {
     <Navbar>
       <Navbar.Header>
         <Navbar.Brand>
-          <i className="fa fa-dot-circle-o" style={{ marginRight: 2, fontSize: 20, color: '#0079D1' }} />
-          <span style={{ fontWeight: 'bold', color: '#0079D1' }}>CEU</span>
+          <i className="fa fa-dot-circle-o" style={{ marginRight: 2, fontSize: 20 }} />
+          <span style={{ fontWeight: 'bold' }}>CEU</span>
         </Navbar.Brand>
       </Navbar.Header>
       <Navbar.Form pullLeft>
