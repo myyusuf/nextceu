@@ -5,23 +5,17 @@ const LeftMenu = () => {
   return (
     <Panel collapsible defaultExpanded header="Main Menu" bsStyle="primary">
       <ListGroup fill>
-        <ListGroupItem>
-          <a href="#/dashboard">
-            <i className="fa fa-area-chart" style={{ marginRight: 10 }} />
-            Dashboard
-          </a>
+        <ListGroupItem href="#/dashboard">
+          <i className="fa fa-area-chart" style={{ marginRight: 10 }} />
+          Dashboard
         </ListGroupItem>
-        <ListGroupItem>
-          <a href="#/students">
-            <i className="fa fa-user-o" style={{ marginRight: 10 }} />
-            Mahasiswa
-          </a>
+        <ListGroupItem href="#/students">
+          <i className="fa fa-user-o" style={{ marginRight: 10 }} />
+          Mahasiswa
         </ListGroupItem>
-        <ListGroupItem>
-          <a href="#/departments">
-            <i className="fa fa-th-list" style={{ marginRight: 10 }} />
-            Bagian
-          </a>
+        <ListGroupItem href="#/departments">
+          <i className="fa fa-th-list" style={{ marginRight: 10 }} />
+          Bagian
         </ListGroupItem>
       </ListGroup>
     </Panel>

@@ -44,8 +44,8 @@ class StudentInfo extends React.Component {
   render() {
     return (
       <Row>
-        <Col xs={12} md={8}>
-          <Panel header="" style={{ marginTop: 20 }}>
+        <Col md={12}>
+          <Panel header="">
             <form onSubmit={this.handleSubmit}>
               <FormGroup controlId={'1'}>
                 <ControlLabel>Stambuk Lama</ControlLabel>

@@ -11,7 +11,7 @@ ReactDOM.render(
   <HashRouter>
     <Workspace>
       <Route path="/students" component={ StudentList } />
-      <Route path="/students_details" component={ StudentView } />
+      <Route path="/students_details/:studentId" component={ StudentView } />
       <Route path="/departments" component={ DepartmentList } />
       <Route path="/departments_edit/:departmentId" component={ DepartmentEdit } />
       <Route path="/departments_add" component={ DepartmentEdit } />

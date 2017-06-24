@@ -25,7 +25,7 @@ class StudentList extends React.Component {
   }
 
   viewStudent(student) {
-    window.location.href = `#/students_details/${student.id}`;
+    window.location.href = `#/students_details/${student.id}/profile`;
   }
 
   render() {
