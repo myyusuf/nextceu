@@ -28,6 +28,10 @@ class StudentList extends React.Component {
     window.location.href = `#/students_details/${student.id}/profile`;
   }
 
+  addStudent(student) {
+    window.location.href = '#/students_add';
+  }
+
   render() {
     const studentThumbnails = [];
     const students = this.state.students;
@@ -79,7 +83,12 @@ class StudentList extends React.Component {
         <Col xs={4} md={4}>
           <ListGroup fill>
             <ListGroupItem>
-              <Button bsStyle="success"><i className="fa fa-plus" /> Mahasiswa</Button>
+              <Button
+                bsStyle="success"
+                onClick={this.addStudent}
+              >
+                <i className="fa fa-plus" /> Mahasiswa
+              </Button>
             </ListGroupItem>
             <ListGroupItem>
               <a href="#/dashboard">

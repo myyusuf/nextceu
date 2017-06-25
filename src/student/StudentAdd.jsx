@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import { Row, Col, Modal, Panel, FormGroup, FormControl, Button, ControlLabel, HelpBlock } from 'react-bootstrap';
-import { SketchPicker } from 'react-color';
 
 class StudentAdd extends React.Component {
 
@@ -108,7 +107,7 @@ class StudentAdd extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const validation = this.validate(this.state.department);
+    const validation = this.validate(this.state.student);
     if (!validation.status) {
       this.setState({
         validation,
@@ -134,11 +133,11 @@ class StudentAdd extends React.Component {
           <Row>
             <Col xs={6} md={6}>
               <FormGroup controlId={'oldSid'} validationState={this.state.validation.oldSid.state}>
-                <ControlLabel>Kode</ControlLabel>
+                <ControlLabel>Stambuk Lama</ControlLabel>
                 <FormControl
                   type="text"
                   name="oldSid"
-                  value={this.state.department.oldSid}
+                  value={this.state.student.oldSid}
                   onChange={this.handleInputChange}
                 />
                 <HelpBlock>{this.state.validation.oldSid.message}</HelpBlock>
@@ -151,7 +150,22 @@ class StudentAdd extends React.Component {
                 <FormControl
                   type="text"
                   name="newSid"
-                  value={this.state.department.newSid}
+                  value={this.state.student.newSid}
+                  onChange={this.handleInputChange}
+                />
+                <HelpBlock>{this.state.validation.newSid.message}</HelpBlock>
+                <FormControl.Feedback />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={6} md={6}>
+              <FormGroup controlId={'name'} validationState={this.state.validation.name.state}>
+                <ControlLabel>Nama</ControlLabel>
+                <FormControl
+                  type="text"
+                  name="name"
+                  value={this.state.student.name}
                   onChange={this.handleInputChange}
                 />
                 <HelpBlock>{this.state.validation.name.message}</HelpBlock>
@@ -159,6 +173,24 @@ class StudentAdd extends React.Component {
               </FormGroup>
             </Col>
           </Row>
+          <Row>
+            <Col xs={6} md={6}>
+              <FormGroup controlId="formControlsSelect">
+                <ControlLabel>Tingkat</ControlLabel>
+                <FormControl componentClass="select" placeholder="Pilih Tingkat">
+                  <option value="1">Tingkat 1</option>
+                  <option value="2">Tingkat 2</option>
+                </FormControl>
+              </FormGroup>
+            </Col>
+          </Row>
+          <Button type="submit" bsStyle="primary">
+            Save
+          </Button>
+          { ' ' }
+          <Button type="button" href="#/students">
+            Cancel
+          </Button>
         </form>
       </Panel>
     );
