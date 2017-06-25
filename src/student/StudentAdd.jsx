@@ -66,7 +66,7 @@ class StudentAdd extends React.Component {
 
     if (!student.oldSid) {
       result.oldSid.state = 'error';
-      result.oldSid.message = 'Stambuk lama wajib diisi';
+      result.oldSid.message = 'Stambuk lama wajib diisi.';
       result.status = false;
     } else if (student.oldSid.length < 3) {
       result.oldSid.state = 'error';
