@@ -1,15 +1,10 @@
 const express = require('express');
+
 const router = express.Router();
-const models = require('../models');
+const StudentController = require('../controllers/students');
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  models.Student.findAll({
-    where: {}
-  })
-  .then((students) => {
-    res.json(students);
-  });
-});
+router.get('/', StudentController.findAll);
+router.post('/', StudentController.create);
 
 module.exports = router;

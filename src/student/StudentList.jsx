@@ -79,6 +79,9 @@ class StudentList extends React.Component {
         <Col xs={4} md={4}>
           <ListGroup fill>
             <ListGroupItem>
+              <Button bsStyle="success"><i className="fa fa-plus" /> Mahasiswa</Button>
+            </ListGroupItem>
+            <ListGroupItem>
               <a href="#/dashboard">
                 Aktif
               </a>

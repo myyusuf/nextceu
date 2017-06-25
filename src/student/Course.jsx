@@ -46,9 +46,11 @@ class Course extends React.Component {
       <Row>
         <Col md={12}>
           <ListGroup>
-            <ListGroupItem header="Heading 1">Some body text</ListGroupItem>
-            <ListGroupItem header="Heading 2" href="#">Linked item</ListGroupItem>
-            <ListGroupItem header="Heading 3" bsStyle="danger">Danger styling</ListGroupItem>
+            <ListGroupItem header="Tingkat 1" bsStyle="info"></ListGroupItem>
+            <ListGroupItem header="Radiologi" href="#">Radiologi (1)</ListGroupItem>
+            <ListGroupItem header="Tingkat 2" bsStyle="info"></ListGroupItem>
+            <ListGroupItem header="Neurologi" href="#">Neurologi (1)</ListGroupItem>
+            <ListGroupItem header="Anestesi" href="#">Anestesi (1)</ListGroupItem>
           </ListGroup>
         </Col>
       </Row>

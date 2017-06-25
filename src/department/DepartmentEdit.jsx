@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Row, Col, Modal, Panel, FormGroup, FormControl, Button, ControlLabel } from 'react-bootstrap';
+import { Row, Col, Modal, Panel, FormGroup, FormControl, Button, ControlLabel, HelpBlock } from 'react-bootstrap';
 import { SketchPicker } from 'react-color';
 
 class DeartmentEdit extends React.Component {
@@ -20,6 +20,17 @@ class DeartmentEdit extends React.Component {
       department,
       showModal: false,
       color: '',
+      validation: {
+        code: {
+          state: null,
+          message: '',
+        },
+        name: {
+          state: null,
+          message: '',
+        },
+        status: true,
+      },
     };
 
     this.pickColor = this.pickColor.bind(this);
@@ -51,9 +62,55 @@ class DeartmentEdit extends React.Component {
 
     const department = this.state.department;
     department[name] = value;
+
+    const validation = this.validate(department);
     this.setState({
       department,
+      validation,
     });
+  }
+
+  validate(department) {
+    const result =
+      {
+        code: {
+          state: null,
+          message: '',
+        },
+        name: {
+          state: null,
+          message: '',
+        },
+        status: true,
+      };
+
+    if (!department.code) {
+      result.code.state = 'error';
+      result.code.message = 'Kode wajib diisi';
+      result.status = false;
+    } else if (department.code.length < 3) {
+      result.code.state = 'error';
+      result.code.message = 'Minimum panjang kode adalah tiga karakter';
+      result.status = false;
+    } else {
+      result.code.state = 'success';
+      result.code.message = '';
+    }
+
+    if (!department.name) {
+      result.name.state = 'error';
+      result.name.message = 'Nama wajib diisi';
+      result.status = false;
+    } else if (department.name.length < 3) {
+      result.name.state = 'error';
+      result.name.message = 'Minimum panjang nama adalah tiga karakter';
+      result.status = false;
+    } else {
+      result.name.state = 'success';
+      result.name.message = '';
+    }
+
+    return result;
   }
 
   pickColor() {
@@ -79,6 +136,13 @@ class DeartmentEdit extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    const validation = this.validate(this.state.department);
+    if (!validation.status) {
+      this.setState({
+        validation,
+      });
+      return;
+    }
 
     if (this.state.departmentId) {
       axios.put(`/departments/edit/${this.state.departmentId}`,
@@ -113,9 +177,9 @@ class DeartmentEdit extends React.Component {
           <Col xs={12} md={8}>
             <Panel header="Edit Bagian" style={{ marginTop: 0 }}>
               <form onSubmit={this.handleSubmit}>
-                <FormGroup controlId={'1'}>
-                  <Row>
-                    <Col xs={12} md={4}>
+                <Row>
+                  <Col xs={12} md={4}>
+                    <FormGroup controlId={'code'} validationState={this.state.validation.code.state}>
                       <ControlLabel>Kode</ControlLabel>
                       <FormControl
                         type="text"
@@ -123,8 +187,12 @@ class DeartmentEdit extends React.Component {
                         value={this.state.department.code}
                         onChange={this.handleInputChange}
                       />
-                    </Col>
-                    <Col xs={12} md={8}>
+                      <HelpBlock>{this.state.validation.code.message}</HelpBlock>
+                      <FormControl.Feedback />
+                    </FormGroup>
+                  </Col>
+                  <Col xs={12} md={8}>
+                    <FormGroup controlId={'name'} validationState={this.state.validation.name.state}>
                       <ControlLabel>Nama</ControlLabel>
                       <FormControl
                         type="text"
@@ -132,10 +200,11 @@ class DeartmentEdit extends React.Component {
                         value={this.state.department.name}
                         onChange={this.handleInputChange}
                       />
-                    </Col>
-                  </Row>
-                </FormGroup>
-
+                      <HelpBlock>{this.state.validation.name.message}</HelpBlock>
+                      <FormControl.Feedback />
+                    </FormGroup>
+                  </Col>
+                </Row>
                 <FormGroup controlId={'3'}>
                   <Row>
                     <Col xs={8} md={4}>
