@@ -1,16 +1,17 @@
 import React from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { Row, Col, Modal, Panel, FormGroup, FormControl, Button, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 const STUDENTS_URL = '/api/students';
 
-class StudentAdd extends React.Component {
+class StudentForm extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      student: {},
+      student: props.student,
       validation: {
         oldSid: {
           state: null,
@@ -134,15 +135,18 @@ class StudentAdd extends React.Component {
       return;
     }
 
-    axios.post(STUDENTS_URL,
-      this.state.student)
-    .then((response) => {
-      console.log(response);
-      window.location.href = '#/students';
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    this.props.onSaveSuccess();
+
+    // axios.post(STUDENTS_URL,
+    //   this.state.student)
+    // .then((response) => {
+    //   console.log(response);
+    //   this.props.onSaveSuccess();
+    //   // window.location.href = '#/students';
+    // })
+    // .catch((error) => {
+    //   console.log(error);
+    // });
   }
 
   render() {
@@ -218,7 +222,7 @@ class StudentAdd extends React.Component {
             Save
           </Button>
           { ' ' }
-          <Button type="button" href="#/students">
+          <Button type="button" onClick={this.props.onCancel}>
             Cancel
           </Button>
         </form>
@@ -227,4 +231,10 @@ class StudentAdd extends React.Component {
   }
 }
 
-export default StudentAdd;
+StudentForm.propTypes = {
+  student: PropTypes.shape({}).isRequired,
+  onSaveSuccess: PropTypes.shape({}).isRequired,
+  onCancel: PropTypes.shape({}).isRequired,
+};
+
+export default StudentForm;
