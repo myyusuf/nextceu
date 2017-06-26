@@ -1,11 +1,19 @@
 import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { Row, Col, Modal, Panel, FormGroup, FormControl, Button, ControlLabel, HelpBlock } from 'react-bootstrap';
+import { Row, Col, Panel, FormGroup, FormControl, Button, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 const STUDENTS_URL = '/api/students';
 
 class StudentForm extends React.Component {
+
+  static get ADD_FORM() {
+    return 'ADD';
+  }
+
+  static get EDIT_FORM() {
+    return 'EDIT';
+  }
 
   constructor(props) {
     super(props);
@@ -35,6 +43,12 @@ class StudentForm extends React.Component {
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      student: nextProps.student,
+    });
   }
 
   handleInputChange(event) {
@@ -135,23 +149,41 @@ class StudentForm extends React.Component {
       return;
     }
 
-    this.props.onSaveSuccess();
-
-    // axios.post(STUDENTS_URL,
-    //   this.state.student)
-    // .then((response) => {
-    //   console.log(response);
-    //   this.props.onSaveSuccess();
-    //   // window.location.href = '#/students';
-    // })
-    // .catch((error) => {
-    //   console.log(error);
-    // });
+    if (this.props.formType === StudentForm.ADD_FORM) {
+      axios.post(STUDENTS_URL,
+        this.state.student)
+      .then((response) => {
+        this.props.onSaveSuccess();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } else {
+      axios.put(`${STUDENTS_URL}/${this.props.student.id}`,
+        this.state.student)
+      .then((response) => {
+        this.props.onSaveSuccess();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
   }
 
   render() {
+
+    let cancelButton = <div />;
+
+    if (this.props.showCancel) {
+      cancelButton = (
+        <Button type="button" onClick={this.props.onCancel}>
+          Cancel
+        </Button>
+      );
+    }
+
     return (
-      <Panel header="Tambah Siswa">
+      <Panel header="Data Siswa">
         <form onSubmit={this.handleSubmit}>
           <Row>
             <Col xs={6} md={6}>
@@ -222,9 +254,7 @@ class StudentForm extends React.Component {
             Save
           </Button>
           { ' ' }
-          <Button type="button" onClick={this.props.onCancel}>
-            Cancel
-          </Button>
+          {cancelButton}
         </form>
       </Panel>
     );
@@ -232,9 +262,13 @@ class StudentForm extends React.Component {
 }
 
 StudentForm.propTypes = {
-  student: PropTypes.shape({}).isRequired,
+  student: PropTypes.shape({
+    id: PropTypes.integer,
+  }).isRequired,
   onSaveSuccess: PropTypes.shape({}).isRequired,
   onCancel: PropTypes.shape({}).isRequired,
+  formType: PropTypes.string.isRequired,
+  showCancel: PropTypes.bool.isRequired,
 };
 
 export default StudentForm;

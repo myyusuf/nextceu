@@ -12,7 +12,13 @@ class StudentAddPage extends React.Component {
   render() {
     const student = {};
     return (
-      <StudentForm student={student} onSaveSuccess={this.close} onCancel={this.close} />
+      <StudentForm
+        student={student}
+        onSaveSuccess={this.close}
+        onCancel={this.close}
+        showCancel
+        formType={StudentForm.ADD_FORM}
+      />
     );
   }
 }

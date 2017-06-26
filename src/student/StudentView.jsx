@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Route } from 'react-router-dom';
 import { Row, Col, Tabs, Tab, Panel, ListGroup, ListGroupItem, Badge, Grid } from 'react-bootstrap';
 import StudentInfo from './StudentInfo.jsx';
+import StudentEditPage from './StudentEditPage.jsx';
 import Course from './Course.jsx';
 
 class StudentView extends React.Component {
@@ -36,7 +37,7 @@ class StudentView extends React.Component {
 
           <Row>
             <Col md={8}>
-              <Route path="/students_details/:studentId/profile" component={StudentInfo} />
+              <Route path="/students_details/:studentId/profile" component={StudentEditPage} />
               <Route path="/students_details/:studentId/courses" component={Course} />
             </Col>
             <Col md={4}>
