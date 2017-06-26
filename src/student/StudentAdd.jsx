@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import { Row, Col, Modal, Panel, FormGroup, FormControl, Button, ControlLabel, HelpBlock } from 'react-bootstrap';
 
+const STUDENTS_URL = '/api/students';
+
 class StudentAdd extends React.Component {
 
   constructor(props) {
@@ -19,6 +21,10 @@ class StudentAdd extends React.Component {
           message: '',
         },
         name: {
+          state: null,
+          message: '',
+        },
+        level: {
           state: null,
           message: '',
         },
@@ -57,6 +63,10 @@ class StudentAdd extends React.Component {
           message: '',
         },
         name: {
+          state: null,
+          message: '',
+        },
+        level: {
           state: null,
           message: '',
         },
@@ -102,6 +112,15 @@ class StudentAdd extends React.Component {
       result.name.message = '';
     }
 
+    if (!student.level) {
+      result.level.state = 'error';
+      result.level.message = 'Level wajib diisi';
+      result.status = false;
+    } else {
+      result.level.state = 'success';
+      result.level.message = '';
+    }
+
     return result;
   }
 
@@ -115,7 +134,7 @@ class StudentAdd extends React.Component {
       return;
     }
 
-    axios.post('/students',
+    axios.post(STUDENTS_URL,
       this.state.student)
     .then((response) => {
       console.log(response);
@@ -175,12 +194,23 @@ class StudentAdd extends React.Component {
           </Row>
           <Row>
             <Col xs={6} md={6}>
-              <FormGroup controlId="formControlsSelect">
+              <FormGroup
+                controlId="formControlsSelect"
+                validationState={this.state.validation.level.state}
+              >
                 <ControlLabel>Tingkat</ControlLabel>
-                <FormControl componentClass="select" placeholder="Pilih Tingkat">
+                <FormControl
+                  componentClass="select"
+                  name="level"
+                  value={this.state.student.level}
+                  onChange={this.handleInputChange}
+                >
+                  <option value="">Pilih Tingkat</option>
                   <option value="1">Tingkat 1</option>
                   <option value="2">Tingkat 2</option>
                 </FormControl>
+                <HelpBlock>{this.state.validation.level.message}</HelpBlock>
+                <FormControl.Feedback />
               </FormGroup>
             </Col>
           </Row>

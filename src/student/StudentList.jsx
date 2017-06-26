@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import { Row, Col, Panel, Button, ListGroup, ListGroupItem, Badge, ProgressBar, Form, FormGroup, FormControl } from 'react-bootstrap';
 
+const STUDENTS_URL = '/api/students';
+
 class StudentList extends React.Component {
 // const StudentList = () => {
 
@@ -13,7 +15,7 @@ class StudentList extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('/students')
+    axios.get(STUDENTS_URL)
     .then((response) => {
       this.setState({
         students: response.data,
@@ -38,6 +40,18 @@ class StudentList extends React.Component {
 
     for (let i = 0; i < students.length; i += 1) {
       const student = students[i];
+      let studentLevel = '';
+      switch (student.level) {
+        case 1:
+          studentLevel = 'Tingkat 1';
+          break;
+        case 2:
+          studentLevel = 'Tingkat 2';
+          break;
+        default:
+          studentLevel = '0';
+          break;
+      }
       studentThumbnails.push(
         <Panel>
           <Row>
@@ -48,6 +62,7 @@ class StudentList extends React.Component {
               <div style={{ paddingLeft: 20 }}>
                 <h4><a onClick={() => this.viewStudent(student)}>{ student.name }</a></h4>
                 <p>{student.oldSid} {student.newSid}</p>
+                <p>{studentLevel}</p>
                 <ProgressBar now={70} bsStyle="success" style={{ height: 10, padding: 0 }} />
                 <p>
                   <Button

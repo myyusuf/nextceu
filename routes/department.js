@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
   });
 });
 
-router.post('/add', function(req, res, next) {
+router.post('/', function(req, res, next) {
   const departmentForm = req.body;
   models.Department.create(departmentForm)
   .then((department) => {
@@ -28,7 +28,7 @@ router.post('/add', function(req, res, next) {
   });
 });
 
-router.get('/edit/:departmentId', function(req, res, next) {
+router.get('/:departmentId', function(req, res, next) {
   models.Department.findOne({
     where: { id: req.params.departmentId },
   })
@@ -37,7 +37,7 @@ router.get('/edit/:departmentId', function(req, res, next) {
   });
 });
 
-router.put('/edit/:departmentId', function(req, res, next) {
+router.put('/:departmentId', function(req, res, next) {
   const departmentForm = req.body;
   models.Department.update(
     departmentForm,
@@ -49,7 +49,7 @@ router.put('/edit/:departmentId', function(req, res, next) {
   });
 });
 
-router.delete('/delete/:departmentId', function(req, res, next) {
+router.delete('/:departmentId', function(req, res, next) {
   models.Department.destroy(
     {
       where: { id: req.params.departmentId },

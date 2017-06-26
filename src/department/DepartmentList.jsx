@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import { Row, Col, Table, Panel, Form, FormGroup, FormControl, Button } from 'react-bootstrap';
 
+const DEPARTMENTS_URL = '/api/departments';
+
 class DeartmentList extends React.Component {
 
   constructor(props) {
@@ -20,7 +22,7 @@ class DeartmentList extends React.Component {
   }
 
   loadData() {
-    axios.get('/departments', { params: { searchText: this.state.searchText } })
+    axios.get(DEPARTMENTS_URL, { params: { searchText: this.state.searchText } })
     .then((response) => {
       this.setState({
         departments: response.data,
@@ -41,7 +43,7 @@ class DeartmentList extends React.Component {
   confirmDelete(department) {
     const result = confirm(`Anda akan menghapus bagian : ${department.name}?`);
     if (result) {
-      axios.delete(`/departments/delete/${department.id}`)
+      axios.delete(`${DEPARTMENTS_URL}/${department.id}`)
       .then((response) => {
         console.log(response);
         this.loadData();

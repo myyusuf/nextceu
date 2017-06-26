@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Row, Col, Modal, Panel, FormGroup, FormControl, Button, ControlLabel, HelpBlock } from 'react-bootstrap';
 import { SketchPicker } from 'react-color';
 
+const DEPARTMENTS_URL = '/api/departments';
+
 class DeartmentEdit extends React.Component {
 
   constructor(props) {
@@ -42,11 +44,11 @@ class DeartmentEdit extends React.Component {
 
   componentDidMount() {
     if (this.state.departmentId) {
-      axios.get(`/departments/edit/${this.state.departmentId}`)
+      axios.get(`${DEPARTMENTS_URL}/${this.state.departmentId}`)
       .then((response) => {
         this.setState({
           department: response.data,
-          color: response.data.color,
+          color: response.data.color ? response.data.color : '',
         });
       })
       .catch((error) => {
@@ -145,7 +147,7 @@ class DeartmentEdit extends React.Component {
     }
 
     if (this.state.departmentId) {
-      axios.put(`/departments/edit/${this.state.departmentId}`,
+      axios.put(`${DEPARTMENTS_URL}/${this.state.departmentId}`,
         this.state.department)
       .then((response) => {
         console.log(response);
@@ -155,7 +157,7 @@ class DeartmentEdit extends React.Component {
         console.log(error);
       });
     } else {
-      axios.post('/departments/add',
+      axios.post(DEPARTMENTS_URL,
         this.state.department)
       .then((response) => {
         console.log(response);

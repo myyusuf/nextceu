@@ -4,6 +4,7 @@ module.exports = function(sequelize, DataTypes) {
     name: DataTypes.STRING,
     oldSid: DataTypes.STRING,
     newSid: DataTypes.STRING,
+    level: DataTypes.INTEGER,
     gender: DataTypes.STRING,
     address: DataTypes.STRING,
     phone: DataTypes.STRING,
