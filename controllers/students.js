@@ -38,11 +38,47 @@ exports.update = function updateStudent(req, res) {
 };
 
 exports.addCourses = function(req, res) {
+  const studentId = req.params.studentId;
   const form = req.body;
   if (form.formType === 'LEVEL') {
-    
+    models.Student.findOne({
+      where: { id: studentId },
+    })
+    .then((student) => {
+      models.Department.findAll({
+        where: {},
+      })
+      .then((departments) => {
+        const promises = [];
+        for (let i = 0; i < departments.length; i += 1) {
+          const department = departments[i];
+          const createCourse = new Promise((resolve, reject) => {
+            models.Course.create({
+              title: `${department.name} ${form.suffix}`,
+            })
+            .then((course) => {
+              course.setStudent(student)
+              .then(() => {
+                course.setDepartment(department)
+                .then(() => {
+                  resolve(course);
+                });
+              });
+            })
+            .catch((err) => {
+              reject(err);
+            });
+          });
+          promises.push(createCourse);
+        }
+
+        Promise.all(promises)
+        .then((courses) => {
+          res.json(courses);
+        });
+      });
+    });
   }
-  res.send('test');
 };
 
 exports.findCourses = function(req, res) {
