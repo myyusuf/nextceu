@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import DatePicker from 'react-bootstrap-date-picker';
 
-import { Row, Col, ListGroup, ListGroupItem, SplitButton, MenuItem, Modal, Button, FormGroup, HelpBlock, FormControl } from 'react-bootstrap';
+import { Row, Col, Panel, PanelGroup, ListGroup, ListGroupItem, SplitButton, MenuItem, Modal, Button, FormGroup, HelpBlock, FormControl } from 'react-bootstrap';
 import Level from '../../level/Level';
 import DepartmentSelect from '../../department/DepartmentSelect';
 
@@ -383,11 +383,14 @@ class Course extends React.Component {
           </Row>
           <Row>
             <Col md={12}>
-              <ListGroup>
-                <ListGroupItem header="Tingkat 1" bsStyle="info"></ListGroupItem>
-                {level1CoursesEl}
-                <ListGroupItem header="Tingkat 2" bsStyle="info"></ListGroupItem>
-              </ListGroup>
+              <PanelGroup defaultActiveKey="1" accordion>
+                <Panel header="Tingkat 1" eventKey="1">
+                  <ListGroup>
+                    {level1CoursesEl}
+                  </ListGroup>
+                </Panel>
+                <Panel header="Tingkat 2" eventKey="2">Panel 2 content</Panel>
+              </PanelGroup>
             </Col>
           </Row>
         </Col>

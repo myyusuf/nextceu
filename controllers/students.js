@@ -38,7 +38,10 @@ exports.update = function updateStudent(req, res) {
 };
 
 exports.addCourses = function(req, res) {
-  console.log('------------>', req.body);
+  const form = req.body;
+  if (form.formType === 'LEVEL') {
+    
+  }
   res.send('test');
 };
 
