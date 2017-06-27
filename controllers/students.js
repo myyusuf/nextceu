@@ -51,8 +51,8 @@ exports.addCourses = function(req, res) {
       .then((departments) => {
         const promises = [];
         for (let i = 0; i < departments.length; i += 1) {
-          const department = departments[i];
           const createCourse = new Promise((resolve, reject) => {
+            const department = departments[i];
             models.Course.create({
               title: `${department.name} ${form.suffix}`,
             })
@@ -89,10 +89,23 @@ exports.findCourses = function(req, res) {
   .then((student) => {
     models.Course.findAll({
       where: {},
-      include: [{ model: models.Student, where: { id: studentId } }]
+      include: [
+        { model: models.Student, where: { id: studentId } },
+        { model: models.Department },
+      ]
     })
     .then((courses) => {
       res.json(courses);
     });
+  });
+};
+
+exports.deleteCourse = function(req, res) {
+  const courseId = req.params.courseId;
+  models.Course.destroy({
+    where: { id: courseId },
+  })
+  .then((result) => {
+    res.json(result);
   });
 };

@@ -65,6 +65,10 @@ class Course extends React.Component {
   }
 
   componentDidMount() {
+    this.loadData();
+  }
+
+  loadData() {
     axios.get(`/api/students/${this.state.studentId}/courses`)
     .then((response) => {
       this.setState({
@@ -155,6 +159,7 @@ class Course extends React.Component {
     .then((response) => {
       // this.props.onSaveSuccess();
       this.close();
+      this.loadData();
     })
     .catch((error) => {
       console.log(error);
@@ -182,6 +187,7 @@ class Course extends React.Component {
     .then((response) => {
       // this.props.onSaveSuccess();
       this.close();
+      this.loadData();
     })
     .catch((error) => {
       console.log(error);
@@ -356,13 +362,38 @@ class Course extends React.Component {
     });
   }
 
+  confirmDelete(course) {
+    const result = confirm(`Anda akan menghapus bagian : ${course.title}?`);
+    if (result) {
+      axios.delete(`/api/students/${this.state.studentId}/courses/${course.id}`)
+      .then((response) => {
+        console.log(response);
+        this.loadData();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+  }
+
   render() {
     const level1Courses = this.state.courses;
     const level1CoursesEl = [];
     for (let i = 0; i < level1Courses.length; i += 1) {
       const course = level1Courses[i];
       level1CoursesEl.push(
-        <ListGroupItem header="Radiologi" href="#">{course.title}</ListGroupItem>
+        <ListGroupItem header={course.Department.name}>
+          <Row>
+            <Col md={10}>
+              {course.title}
+            </Col>
+            <Col md={2}>
+              <Button bsStyle="danger" bsSize="small" onClick={() => this.confirmDelete(course)}>
+                Delete
+              </Button>
+            </Col>
+          </Row>
+        </ListGroupItem>
       );
     }
     return (
