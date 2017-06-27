@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom';
 import { Row, Col, Tabs, Tab, Panel, ListGroup, ListGroupItem, Badge, Grid } from 'react-bootstrap';
 import StudentInfo from './StudentInfo.jsx';
 import StudentEditPage from './StudentEditPage.jsx';
-import Course from './Course.jsx';
+import Course from './course/Course';
 
 class StudentView extends React.Component {
 

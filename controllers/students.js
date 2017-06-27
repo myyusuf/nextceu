@@ -36,3 +36,19 @@ exports.update = function updateStudent(req, res) {
     res.json(result);
   });
 };
+
+exports.findCourses = function(req, res) {
+  const studentId = req.params.studentId;
+  models.Student.findOne({
+    where: { id: studentId }
+  })
+  .then((student) => {
+    models.Course.findAll({
+      where: {},
+      include: [{ model: models.Student, where: { id: studentId } }]
+    })
+    .then((courses) => {
+      res.json(courses);
+    });
+  });
+};

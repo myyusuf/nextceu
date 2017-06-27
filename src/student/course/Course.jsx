@@ -7,7 +7,8 @@ class Course extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      student: {},
+      studentId: props.match.params.studentId,
+      courses: [],
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -15,10 +16,10 @@ class Course extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('/students')
+    axios.get(`/api/students/${this.state.studentId}/courses`)
     .then((response) => {
       this.setState({
-        students: response.data,
+        courses: response.data,
       });
     })
     .catch((error) => {
@@ -42,12 +43,20 @@ class Course extends React.Component {
   }
 
   render() {
+    const level1Courses = this.state.courses;
+    const level1CoursesEl = [];
+    for (let i = 0; i < level1Courses.length; i += 1) {
+      const course = level1Courses[i];
+      level1CoursesEl.push(
+        <ListGroupItem header="Radiologi" href="#">{course.title}</ListGroupItem>
+      );
+    }
     return (
       <Row>
         <Col md={12}>
           <ListGroup>
             <ListGroupItem header="Tingkat 1" bsStyle="info"></ListGroupItem>
-            <ListGroupItem header="Radiologi" href="#">Radiologi (1)</ListGroupItem>
+            {level1CoursesEl}
             <ListGroupItem header="Tingkat 2" bsStyle="info"></ListGroupItem>
             <ListGroupItem header="Neurologi" href="#">Neurologi (1)</ListGroupItem>
             <ListGroupItem header="Anestesi" href="#">Anestesi (1)</ListGroupItem>
