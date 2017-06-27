@@ -12,6 +12,10 @@ a {
   width: 253px;
 }
 
+.chart-modal {
+  width: 95%;
+}
+
 
 .search-box {
   display: inline-block;

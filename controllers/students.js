@@ -78,6 +78,32 @@ exports.addCourses = function(req, res) {
         });
       });
     });
+  } else if (form.formType === 'DEPARTMENT') {
+    models.Student.findOne({
+      where: { id: studentId },
+    })
+    .then((student) => {
+      models.Department.findOne({
+        where: { id: form.department },
+      })
+      .then((department) => {
+        models.Course.create({
+          title: form.title,
+        })
+        .then((course) => {
+          course.setStudent(student)
+          .then(() => {
+            course.setDepartment(department)
+            .then(() => {
+              res.json(course);
+            });
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      });
+    });
   }
 };
 

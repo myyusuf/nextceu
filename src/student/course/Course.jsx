@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import DatePicker from 'react-bootstrap-date-picker';
+import Gantt from '../../chart/Gantt';
 
 import { Row, Col, Panel, PanelGroup, ListGroup, ListGroupItem, SplitButton, MenuItem, Modal, Button, FormGroup, HelpBlock, FormControl } from 'react-bootstrap';
 import Level from '../../level/Level';
@@ -62,6 +63,9 @@ class Course extends React.Component {
     this.createByDepartment = this.createByDepartment.bind(this);
     this.handleInputChange2 = this.handleInputChange2.bind(this);
     this.handleDateInputChange2 = this.handleDateInputChange2.bind(this);
+
+    this.closeChart = this.closeChart.bind(this);
+    this.showChart = this.showChart.bind(this);
   }
 
   componentDidMount() {
@@ -84,6 +88,7 @@ class Course extends React.Component {
     this.setState({
       showModal: false,
       showModal2: false,
+      showChart: false,
       addCourseByLevelForm: {},
       addCourseByDepartmentForm: {},
       validation: {
@@ -121,6 +126,12 @@ class Course extends React.Component {
     });
   }
 
+  closeChart() {
+    this.setState({
+      showChart: false,
+    });
+  }
+
   handleSubmit(event) {
     console.log(this.state);
     event.preventDefault();
@@ -134,6 +145,18 @@ class Course extends React.Component {
     } else if (eventKey === 'DEPARTMENT') {
       this.setState({
         showModal2: true,
+      });
+    }
+  }
+
+  showChart(eventKey, event) {
+    if (eventKey === '1') {
+      this.setState({
+        showChart: true,
+      });
+    } else if (eventKey === '2') {
+      this.setState({
+        showChart: true,
       });
     }
   }
@@ -396,6 +419,16 @@ class Course extends React.Component {
         </ListGroupItem>
       );
     }
+
+    const data = {
+      data: [
+        {id: 1, text: 'Task #1', start_date: '15-04-2017', duration: 3, progress: 0.6},
+        {id: 2, text: 'Task #2', start_date: '18-04-2017', duration: 3, progress: 0.4}
+      ],
+      links: [
+        {id: 1, source: 1, target: 2, type: '0'}
+      ]
+    };
     return (
       <Row>
         <Col md={12}>
@@ -404,6 +437,11 @@ class Course extends React.Component {
               <SplitButton bsStyle="success" title="+ Bagian" onSelect={this.addCourseButtonSelect}>
                 <MenuItem eventKey="LEVEL">Tingkat</MenuItem>
                 <MenuItem eventKey="DEPARTMENT">Bagian</MenuItem>
+              </SplitButton>
+
+              <SplitButton style={{ marginLeft: 10 }} title="Chart" onSelect={this.showChart}>
+                <MenuItem eventKey="1">Tingkat 1</MenuItem>
+                <MenuItem eventKey="2">Tingkat 2</MenuItem>
               </SplitButton>
             </Col>
           </Row>
@@ -420,7 +458,9 @@ class Course extends React.Component {
                     {level1CoursesEl}
                   </ListGroup>
                 </Panel>
-                <Panel header="Tingkat 2" eventKey="2">Panel 2 content</Panel>
+                <Panel header="Tingkat 2" eventKey="2">
+
+                </Panel>
               </PanelGroup>
             </Col>
           </Row>
@@ -547,6 +587,27 @@ class Course extends React.Component {
           <Modal.Footer>
             <Button onClick={this.close}>Cancel</Button>
             <Button bsStyle="primary" onClick={this.createByDepartment}>Save</Button>
+          </Modal.Footer>
+
+        </Modal>
+
+        <Modal
+          dialogClassName="chart-modal"
+          show={this.state.showChart}
+          onHide={this.close}
+        >
+          <Modal.Header>
+            <Modal.Title>Chart</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <div style={{ height: 500 }}>
+              <Gantt tasks={data} />
+            </div>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button onClick={this.closeChart}>Close</Button>
           </Modal.Footer>
 
         </Modal>
