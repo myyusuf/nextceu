@@ -7,7 +7,7 @@ class Level extends React.Component {
     return (
       <FormControl
         componentClass="select"
-        name="level"
+        name={this.props.name}
         value={this.props.value}
         onChange={this.props.onChange}
       >

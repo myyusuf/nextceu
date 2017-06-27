@@ -39,6 +39,7 @@ exports.update = function updateStudent(req, res) {
 
 exports.addCourses = function(req, res) {
   console.log('------------>', req.body);
+  res.send('test');
 };
 
 exports.findCourses = function(req, res) {
