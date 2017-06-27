@@ -37,6 +37,10 @@ exports.update = function updateStudent(req, res) {
   });
 };
 
+exports.addCourses = function(req, res) {
+  console.log('------------>', req.body);
+};
+
 exports.findCourses = function(req, res) {
   const studentId = req.params.studentId;
   models.Student.findOne({
