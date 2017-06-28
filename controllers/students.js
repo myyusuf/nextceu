@@ -43,6 +43,7 @@ exports.update = function updateStudent(req, res) {
 exports.addCourses = function(req, res) {
   const studentId = req.params.studentId;
   const form = req.body;
+
   if (form.formType === 'LEVEL') {
     models.Student.findOne({
       where: { id: studentId },
@@ -53,16 +54,14 @@ exports.addCourses = function(req, res) {
       })
       .then((departments) => {
         const promises = [];
-        for (let i = 0; i < departments.length; i += 1) {
-          const createCourse = new Promise((resolve, reject) => {
-            const department = departments[i];
-            models.Course.create({
-              title: `${department.name} ${form.suffix}`,
-            })
+
+        const createCourse = function (courseParam, studentParam, departmentParam) {
+          return new Promise((resolve, reject) => {
+            models.Course.create(courseParam)
             .then((course) => {
-              course.setStudent(student)
+              course.setStudent(studentParam)
               .then(() => {
-                course.setDepartment(department)
+                course.setDepartment(departmentParam)
                 .then(() => {
                   resolve(course);
                 });
@@ -72,7 +71,67 @@ exports.addCourses = function(req, res) {
               reject(err);
             });
           });
-          promises.push(createCourse);
+        };
+
+        let planStartDate = moment(form.formattedStartDate, 'DD/MM/YYYY');
+
+        for (let i = 0; i < departments.length; i += 1) {
+
+          const department = departments[i];
+
+          const planStartDate1 = planStartDate.clone();
+
+          const planEndDate = planStartDate.clone().add(parseInt(department.duration, 10), 'weeks');
+          const planEndDate1 = planStartDate1.clone().add(parseInt(department.duration1, 10), 'weeks');
+
+          const planStartDate2 = planEndDate1.clone();
+          const planEndDate2 = planStartDate2.clone().add(parseInt(department.duration2, 10), 'weeks');
+
+          const planStartDate3 = planEndDate2.clone();
+          const planEndDate3 = planStartDate3.clone().add(parseInt(department.duration3, 10), 'weeks');
+
+          const createCoursePromise = createCourse({
+            title: `${department.name} ${form.suffix}`,
+            planStartDate,
+            planEndDate,
+            planStartDate1,
+            planEndDate1,
+            planStartDate2,
+            planEndDate2,
+            planStartDate3,
+            planEndDate3,
+          }, student, department);
+
+          // const createCourse = new Promise((resolve, reject) => {
+          //   models.Course.create({
+          //     title: `${department.name} ${form.suffix}`,
+          //     planStartDate,
+          //     planEndDate,
+          //     planStartDate1,
+          //     planEndDate1,
+          //     planStartDate2,
+          //     planEndDate2,
+          //     planStartDate3,
+          //     planEndDate3,
+          //   })
+          //   .then((course) => {
+          //     course.setStudent(student)
+          //     .then(() => {
+          //       course.setDepartment(department)
+          //       .then(() => {
+          //         resolve(course);
+          //       });
+          //     });
+          //   })
+          //   .catch((err) => {
+          //     reject(err);
+          //   });
+          // });
+          // promises.push(createCourse);
+
+          promises.push(createCoursePromise);
+
+          planStartDate = planEndDate.clone().add(WEEK_BREAK_DURATION, 'weeks');
         }
 
         Promise.all(promises)
