@@ -1,4 +1,7 @@
+const moment = require('moment');
 const models = require('../models');
+
+const WEEK_BREAK_DURATION = 2;
 
 exports.findAll = function(req, res) {
   models.Student.findAll({
@@ -79,6 +82,8 @@ exports.addCourses = function(req, res) {
       });
     });
   } else if (form.formType === 'DEPARTMENT') {
+    const planStartDate = moment(form.formattedStartDate, 'DD/MM/YYYY');
+    const planStartDate1 = planStartDate.clone();
     models.Student.findOne({
       where: { id: studentId },
     })
@@ -87,8 +92,25 @@ exports.addCourses = function(req, res) {
         where: { id: form.department },
       })
       .then((department) => {
+        const planEndDate = planStartDate.clone().add(parseInt(department.duration, 10), 'weeks');
+        const planEndDate1 = planStartDate1.clone().add(parseInt(department.duration1, 10), 'weeks');
+
+        const planStartDate2 = planEndDate1.clone();
+        const planEndDate2 = planStartDate2.clone().add(parseInt(department.duration2, 10), 'weeks');
+
+        const planStartDate3 = planEndDate2.clone();
+        const planEndDate3 = planStartDate3.clone().add(parseInt(department.duration3, 10), 'weeks');
+
         models.Course.create({
           title: form.title,
+          planStartDate,
+          planEndDate,
+          planStartDate1,
+          planEndDate1,
+          planStartDate2,
+          planEndDate2,
+          planStartDate3,
+          planEndDate3,
         })
         .then((course) => {
           course.setStudent(student)

@@ -496,6 +496,7 @@ class Course extends React.Component {
                 >
                   <DatePicker
                     name="startDate"
+                    dateFormat="DD/MM/YYYY"
                     value={this.state.addCourseByLevelForm.startDate}
                     onChange={this.handleDateInputChange}
                   />
@@ -559,6 +560,7 @@ class Course extends React.Component {
                 >
                   <DatePicker
                     name="startDate"
+                    dateFormat="DD/MM/YYYY"
                     value={this.state.addCourseByDepartmentForm.startDate}
                     onChange={this.handleDateInputChange2}
                   />

@@ -63,7 +63,7 @@ class StudentList extends React.Component {
                 <h4><a onClick={() => this.viewStudent(student)}>{ student.name }</a></h4>
                 <p>{student.oldSid} {student.newSid}</p>
                 <p>{studentLevel}</p>
-                <ProgressBar now={70} bsStyle="success" style={{ height: 10, padding: 0 }} />
+                <ProgressBar now={70} style={{ height: 10, padding: 0 }} />
                 <p>
                   <Button
                     onClick={() => this.viewStudent(student)}
