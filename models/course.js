@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
     realEndDate: DataTypes.DATE,
     planEndDate1: DataTypes.DATE,
     realEndDate1: DataTypes.DATE,
-    planEndtDate2: DataTypes.DATE,
+    planEndDate2: DataTypes.DATE,
     realEndDate2: DataTypes.DATE,
     planEndDate3: DataTypes.DATE,
     realEndDate3: DataTypes.DATE

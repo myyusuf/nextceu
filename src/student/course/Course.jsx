@@ -111,11 +111,11 @@ class Course extends React.Component {
     // });
 
     const result = [];
-    let id = 0;
+    let childId = 100000000;
     for (let i = 0; i < courses.length; i += 1) {
       const course = courses[i];
       const mainSchedule = {
-        id: course.id + (id += 1),
+        id: course.id,
         text: course.title,
         color: course.Department.color,
         start_date: moment(course.planStartDate).format('DD-MM-YYYY'),
@@ -123,7 +123,7 @@ class Course extends React.Component {
       };
 
       const hospitalSchedule1 = {
-        id: course.id + (id += 1),
+        id: course.id + childId,
         parent: course.id,
         text: 'RS 1',
         color: '#D6DBDF',
@@ -131,8 +131,10 @@ class Course extends React.Component {
         end_date: moment(course.planEndDate1).format('DD-MM-YYYY'),
       };
 
+      childId += 1;
+
       const clinic = {
-        id: course.id + (id += 1),
+        id: course.id + childId,
         parent: course.id,
         text: 'Puskesmas',
         color: '#D6DBDF',
@@ -140,13 +142,15 @@ class Course extends React.Component {
         end_date: moment(course.planEndDate2).format('DD-MM-YYYY'),
       };
 
+      childId += 1;
+
       const hospitalSchedule2 = {
-        id: course.id + (id += 1),
+        id: course.id + childId,
         parent: course.id,
         text: 'RS 2',
         color: '#D6DBDF',
-        start_date: moment(course.planStartDate1).format('DD-MM-YYYY'),
-        end_date: moment(course.planEndDate1).format('DD-MM-YYYY'),
+        start_date: moment(course.planStartDate3).format('DD-MM-YYYY'),
+        end_date: moment(course.planEndDate3).format('DD-MM-YYYY'),
       };
 
       result.push(mainSchedule);

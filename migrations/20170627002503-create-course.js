@@ -47,7 +47,7 @@ module.exports = {
       realEndDate1: {
         type: Sequelize.DATE
       },
-      planEndtDate2: {
+      planEndDate2: {
         type: Sequelize.DATE
       },
       realEndDate2: {
