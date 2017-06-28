@@ -3,7 +3,7 @@ import { Panel, ListGroup, ListGroupItem } from 'react-bootstrap';
 
 const LeftMenu = () => {
   return (
-    <Panel collapsible defaultExpanded header="Main Menu" bsStyle="primary">
+    <Panel collapsible defaultExpanded header="Main Menu" bsStyle="info">
       <ListGroup fill>
         <ListGroupItem href="#/dashboard">
           <i className="fa fa-area-chart" style={{ marginRight: 10 }} />

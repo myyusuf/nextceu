@@ -102,33 +102,6 @@ exports.addCourses = function(req, res) {
             planEndDate3,
           }, student, department);
 
-          // const createCourse = new Promise((resolve, reject) => {
-          //   models.Course.create({
-          //     title: `${department.name} ${form.suffix}`,
-          //     planStartDate,
-          //     planEndDate,
-          //     planStartDate1,
-          //     planEndDate1,
-          //     planStartDate2,
-          //     planEndDate2,
-          //     planStartDate3,
-          //     planEndDate3,
-          //   })
-          //   .then((course) => {
-          //     course.setStudent(student)
-          //     .then(() => {
-          //       course.setDepartment(department)
-          //       .then(() => {
-          //         resolve(course);
-          //       });
-          //     });
-          //   })
-          //   .catch((err) => {
-          //     reject(err);
-          //   });
-          // });
-          // promises.push(createCourse);
-
           promises.push(createCoursePromise);
 
           planStartDate = planEndDate.clone().add(WEEK_BREAK_DURATION, 'weeks');

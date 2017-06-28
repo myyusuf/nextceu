@@ -8,6 +8,8 @@ import StudentAddPage from './student/StudentAddPage.jsx';
 import DepartmentList from './department/DepartmentList.jsx';
 import DepartmentEdit from './department/DepartmentEdit.jsx';
 
+import CourseView from './student/course/CourseView';
+
 ReactDOM.render(
   <HashRouter>
     <Workspace>
@@ -17,6 +19,8 @@ ReactDOM.render(
       <Route path="/departments" component={DepartmentList} />
       <Route path="/departments_edit/:departmentId" component={DepartmentEdit} />
       <Route path="/departments_add" component={DepartmentEdit} />
+
+      <Route path="/course_details/:courseId" component={CourseView} />
     </Workspace>
   </HashRouter>,
   document.getElementById('app')
