@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import DatePicker from 'react-bootstrap-date-picker';
 import Gantt from '../../chart/Gantt';
+import moment from 'moment';
 
 import { Row, Col, Panel, PanelGroup, ListGroup, ListGroupItem, SplitButton, MenuItem, Modal, Button, FormGroup, HelpBlock, FormControl } from 'react-bootstrap';
 import Level from '../../level/Level';
@@ -14,6 +15,7 @@ class Course extends React.Component {
     this.state = {
       studentId: props.match.params.studentId,
       courses: [],
+      chartData: [],
       showModal: false,
       addCourseByLevelForm: {},
       addCourseByDepartmentForm: {},
@@ -75,13 +77,40 @@ class Course extends React.Component {
   loadData() {
     axios.get(`/api/students/${this.state.studentId}/courses`)
     .then((response) => {
+      const courses = response.data;
+      const chartData = this.parseChartData(courses);
       this.setState({
-        courses: response.data,
+        courses,
+        chartData,
       });
     })
     .catch((error) => {
       console.log(error);
     });
+  }
+
+  parseChartData(courses) {
+    // const data = {
+    //   data: [
+    //     {id: 1, text: 'Task #1', start_date: '15-04-2017', duration: 3, progress: 0.6},
+    //     {id: 2, text: 'Task #2', start_date: '18-04-2017', duration: 3, progress: 0.4}
+    //   ],
+    //   links: [
+    //     {id: 1, source: 1, target: 2, type: '0'}
+    //   ]
+    // };
+
+    const result = courses.map((course) => {
+      return {
+        id: course.id,
+        text: course.title,
+        start_date: moment(course.planStartDate).format('DD-MM-YYYY'),
+        end_date: moment(course.planEndDate).format('DD-MM-YYYY'),
+        // duration: 3,
+      };
+    });
+
+    return result;
   }
 
   close() {
@@ -420,14 +449,17 @@ class Course extends React.Component {
       );
     }
 
+    // const data = {
+    //   data: [
+    //     {id: 1, text: 'Task #1', start_date: '15-04-2017', duration: 3, progress: 0.6},
+    //     {id: 2, text: 'Task #2', start_date: '18-04-2017', duration: 3, progress: 0.4}
+    //   ],
+    //   links: [
+    //     {id: 1, source: 1, target: 2, type: '0'}
+    //   ]
+    // };
     const data = {
-      data: [
-        {id: 1, text: 'Task #1', start_date: '15-04-2017', duration: 3, progress: 0.6},
-        {id: 2, text: 'Task #2', start_date: '18-04-2017', duration: 3, progress: 0.4}
-      ],
-      links: [
-        {id: 1, source: 1, target: 2, type: '0'}
-      ]
+      data: this.state.chartData,
     };
     return (
       <Row>
