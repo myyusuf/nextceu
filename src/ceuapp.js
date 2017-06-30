@@ -8,11 +8,14 @@ import StudentAddPage from './student/StudentAddPage.jsx';
 import DepartmentList from './department/DepartmentList.jsx';
 import DepartmentEdit from './department/DepartmentEdit.jsx';
 
+import Dashboard from './dashboard/Dashboard';
+
 import CourseView from './student/course/CourseView';
 
 ReactDOM.render(
   <HashRouter>
     <Workspace>
+      <Route path="/dashboard" component={Dashboard} />
       <Route path="/students" component={StudentList} />
       <Route path="/students_details/:studentId" component={StudentView} />
       <Route path="/students_add" component={StudentAddPage} />
