@@ -2,7 +2,7 @@ import React from 'react';
 import CourseForm from './CourseForm';
 import axios from 'axios';
 
-const STUDENTS_URL = '/api/students';
+const COURSES_URL = '/api/courses';
 
 class CourseEditPage extends React.Component {
 
@@ -10,15 +10,17 @@ class CourseEditPage extends React.Component {
     super(props);
 
     this.state = {
-      student: {},
+      course: {},
     };
   }
 
   componentDidMount() {
-    axios.get(`${STUDENTS_URL}/${this.props.match.params.studentId}`)
+    axios.get(`${COURSES_URL}/${this.props.match.params.courseId}`)
     .then((response) => {
+      const course = response.data;
+      course.department = course.Department;
       this.setState({
-        student: response.data,
+        course,
         color: response.data.color ? response.data.color : '',
       });
     })
@@ -28,13 +30,13 @@ class CourseEditPage extends React.Component {
   }
 
   close() {
-    window.location.href = '#/students';
+    window.location.href = '#/courses';
   }
 
   render() {
     return (
       <CourseForm
-        student={this.state.student}
+        course={this.state.course}
         onSaveSuccess={this.close}
         onCancel={this.close}
         formType={CourseForm.EDIT_FORM}

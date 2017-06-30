@@ -39,21 +39,17 @@ class CourseView extends React.Component {
             </Col>
             <Col md={4}>
               <ListGroup fill>
-                <ListGroupItem href="#/students_details/1/profile">
-                  Profile
+                <ListGroupItem href={`#/course_details/${this.props.match.params.courseId}/main`}>
+                  Info
                 </ListGroupItem>
-                <ListGroupItem href="#/students_details/1/courses">
-                  Bagian Diambil
-                </ListGroupItem>
-                <ListGroupItem>
-                  <a href="#/departments">
-                    Nilai UKMPPD
-                  </a>
+                <ListGroupItem href={`#/course_details/${this.props.match.params.courseId}/schedule`}>
+                  Jadwal
                 </ListGroupItem>
                 <ListGroupItem>
-                  <a href="#/departments">
-                    Masalah
-                  </a>
+                  Nilai
+                </ListGroupItem>
+                <ListGroupItem>
+                  Masalah
                 </ListGroupItem>
               </ListGroup>
             </Col>

@@ -2,8 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { Row, Col, Panel, FormGroup, FormControl, Button, ControlLabel, HelpBlock } from 'react-bootstrap';
+import DepartmentSelect from '../../department/DepartmentSelect';
 
-const STUDENTS_URL = '/api/students';
+const COURSES_URL = '/api/courses';
 
 class CourseForm extends React.Component {
 
@@ -19,21 +20,13 @@ class CourseForm extends React.Component {
     super(props);
 
     this.state = {
-      student: props.student,
+      course: props.course,
       validation: {
-        oldSid: {
+        department: {
           state: null,
           message: '',
         },
-        newSid: {
-          state: null,
-          message: '',
-        },
-        name: {
-          state: null,
-          message: '',
-        },
-        level: {
+        title: {
           state: null,
           message: '',
         },
@@ -47,7 +40,7 @@ class CourseForm extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      student: nextProps.student,
+      course: nextProps.course,
     });
   }
 
@@ -56,84 +49,54 @@ class CourseForm extends React.Component {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
-    const student = this.state.student;
-    student[name] = value;
+    const course = this.state.course;
+    course[name] = value;
 
-    const validation = this.validate(student);
+    const validation = this.validate(course);
     this.setState({
-      student,
+      course,
       validation,
     });
   }
 
-  validate(student) {
+  validate(course) {
     const result =
       {
-        oldSid: {
+        department: {
           state: null,
           message: '',
         },
-        newSid: {
-          state: null,
-          message: '',
-        },
-        name: {
-          state: null,
-          message: '',
-        },
-        level: {
+        title: {
           state: null,
           message: '',
         },
         status: true,
       };
 
-    if (!student.oldSid) {
-      result.oldSid.state = 'error';
-      result.oldSid.message = 'Stambuk lama wajib diisi.';
+    if (!course.department) {
+      result.department.state = 'error';
+      result.department.message = 'Stambuk lama wajib diisi.';
       result.status = false;
-    } else if (student.oldSid.length < 3) {
-      result.oldSid.state = 'error';
-      result.oldSid.message = 'Minimum panjang stambuk adalah tiga karakter';
+    } else if (course.department.length < 3) {
+      result.department.state = 'error';
+      result.department.message = 'Minimum panjang stambuk adalah tiga karakter';
       result.status = false;
     } else {
-      result.oldSid.state = 'success';
-      result.oldSid.message = '';
+      result.department.state = 'success';
+      result.department.message = '';
     }
 
-    if (!student.newSid) {
-      result.newSid.state = 'error';
-      result.newSid.message = 'Stambuk wajib diisi';
+    if (!course.title) {
+      result.title.state = 'error';
+      result.title.message = 'Stambuk wajib diisi';
       result.status = false;
-    } else if (student.newSid.length < 3) {
-      result.newSid.state = 'error';
-      result.newSid.message = 'Minimum panjang stambuk adalah tiga karakter';
-      result.status = false;
-    } else {
-      result.newSid.state = 'success';
-      result.newSid.message = '';
-    }
-
-    if (!student.name) {
-      result.name.state = 'error';
-      result.name.message = 'Nama wajib diisi';
-      result.status = false;
-    } else if (student.name.length < 3) {
-      result.name.state = 'error';
-      result.name.message = 'Minimum panjang nama adalah tiga karakter';
+    } else if (course.title.length < 3) {
+      result.title.state = 'error';
+      result.title.message = 'Minimum panjang stambuk adalah tiga karakter';
       result.status = false;
     } else {
-      result.name.state = 'success';
-      result.name.message = '';
-    }
-
-    if (!student.level) {
-      result.level.state = 'error';
-      result.level.message = 'Level wajib diisi';
-      result.status = false;
-    } else {
-      result.level.state = 'success';
-      result.level.message = '';
+      result.title.state = 'success';
+      result.title.message = '';
     }
 
     return result;
@@ -141,7 +104,7 @@ class CourseForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const validation = this.validate(this.state.student);
+    const validation = this.validate(this.state.course);
     if (!validation.status) {
       this.setState({
         validation,
@@ -150,8 +113,8 @@ class CourseForm extends React.Component {
     }
 
     if (this.props.formType === CourseForm.ADD_FORM) {
-      axios.post(STUDENTS_URL,
-        this.state.student)
+      axios.post(COURSES_URL,
+        this.state.course)
       .then((response) => {
         this.props.onSaveSuccess();
       })
@@ -159,8 +122,8 @@ class CourseForm extends React.Component {
         console.log(error);
       });
     } else {
-      axios.put(`${STUDENTS_URL}/${this.props.student.id}`,
-        this.state.student)
+      axios.put(`${COURSES_URL}/${this.props.course.id}`,
+        this.state.course)
       .then((response) => {
         this.props.onSaveSuccess();
       })
@@ -182,70 +145,34 @@ class CourseForm extends React.Component {
       );
     }
 
+    const department = this.state.course.department ? this.state.course.department : {};
+
     return (
-      <Panel header="Data Siswa">
+      <Panel header="">
         <form onSubmit={this.handleSubmit}>
           <Row>
             <Col xs={6} md={6}>
-              <FormGroup controlId={'oldSid'} validationState={this.state.validation.oldSid.state}>
+              <FormGroup controlId={'department'} validationState={this.state.validation.department.state}>
                 <ControlLabel>Bagian</ControlLabel>
-                <FormControl
-                  type="text"
-                  name="oldSid"
-                  value={this.state.student.oldSid}
+                <DepartmentSelect
+                  name="department"
+                  value={department.id}
                   onChange={this.handleInputChange}
                 />
-                <HelpBlock>{this.state.validation.oldSid.message}</HelpBlock>
+                <HelpBlock>{this.state.validation.department.message}</HelpBlock>
                 <FormControl.Feedback />
               </FormGroup>
             </Col>
             <Col xs={6} md={6}>
-              <FormGroup controlId={'newSid'} validationState={this.state.validation.newSid.state}>
+              <FormGroup controlId={'title'} validationState={this.state.validation.title.state}>
                 <ControlLabel>Judul</ControlLabel>
                 <FormControl
                   type="text"
-                  name="newSid"
-                  value={this.state.student.newSid}
+                  name="title"
+                  value={this.state.course.title}
                   onChange={this.handleInputChange}
                 />
-                <HelpBlock>{this.state.validation.newSid.message}</HelpBlock>
-                <FormControl.Feedback />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={6} md={6}>
-              <FormGroup controlId={'name'} validationState={this.state.validation.name.state}>
-                <ControlLabel>Nama</ControlLabel>
-                <FormControl
-                  type="text"
-                  name="name"
-                  value={this.state.student.name}
-                  onChange={this.handleInputChange}
-                />
-                <HelpBlock>{this.state.validation.name.message}</HelpBlock>
-                <FormControl.Feedback />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={6} md={6}>
-              <FormGroup
-                controlId="formControlsSelect"
-                validationState={this.state.validation.level.state}
-              >
-                <ControlLabel>Tingkat</ControlLabel>
-                <FormControl
-                  componentClass="select"
-                  name="level"
-                  value={this.state.student.level}
-                  onChange={this.handleInputChange}
-                >
-                  <option value="">Pilih Tingkat</option>
-                  <option value="1">Tingkat 1</option>
-                  <option value="2">Tingkat 2</option>
-                </FormControl>
-                <HelpBlock>{this.state.validation.level.message}</HelpBlock>
+                <HelpBlock>{this.state.validation.title.message}</HelpBlock>
                 <FormControl.Feedback />
               </FormGroup>
             </Col>
@@ -262,7 +189,7 @@ class CourseForm extends React.Component {
 }
 
 CourseForm.propTypes = {
-  student: PropTypes.shape({
+  course: PropTypes.shape({
     id: PropTypes.integer,
   }).isRequired,
   onSaveSuccess: PropTypes.shape({}).isRequired,

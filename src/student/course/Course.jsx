@@ -486,7 +486,7 @@ class Course extends React.Component {
         <ListGroupItem header={course.Department.name}>
           <Row>
             <Col md={10}>
-              <a href="#/course_details/1/main">{course.title}</a>
+              <a href={`#/course_details/${course.id}/main`}>{course.title}</a>
             </Col>
             <Col md={2}>
               <Button bsStyle="danger" bsSize="small" onClick={() => this.confirmDelete(course)}>

@@ -17,6 +17,10 @@ const LeftMenu = () => {
           <i className="fa fa-th-list" style={{ marginRight: 10 }} />
           Bagian
         </ListGroupItem>
+        <ListGroupItem href="#/hospitals">
+          <i className="fa fa-th-list" style={{ marginRight: 10 }} />
+          Rumah Sakit
+        </ListGroupItem>
       </ListGroup>
     </Panel>
   );
