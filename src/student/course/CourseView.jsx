@@ -2,18 +2,78 @@ import React from 'react';
 import axios from 'axios';
 import { Route } from 'react-router-dom';
 import { Row, Col, Tabs, Tab, Panel, ListGroup, ListGroupItem, Badge, Grid } from 'react-bootstrap';
-import CourseEditPage from './CourseEditPage.jsx';
+import CourseForm from './CourseForm';
+import CourseScheduleForm from './CourseScheduleForm';
+import CourseHospital1ScheduleForm from './CourseHospital1ScheduleForm';
+
+const COURSES_URL = '/api/courses';
 
 class CourseView extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      student: {},
+      course: {},
     };
   }
 
+  componentDidMount() {
+    axios.get(`${COURSES_URL}/${this.props.match.params.courseId}`)
+    .then((response) => {
+      const course = response.data;
+      course.department = course.Department;
+      this.setState({
+        course,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
   render() {
+
+    const courseForm = (props) => {
+      return (<CourseForm
+        course={this.state.course}
+        onSaveSuccess={this.close}
+        onCancel={this.close}
+        formType={CourseForm.EDIT_FORM}
+      />);
+    };
+
+    // const courseScheduleForm = (props) => {
+    //   return (<CourseScheduleForm
+    //     course={this.state.course}
+    //     onSaveSuccess={this.close}
+    //     onCancel={this.close}
+    //     formType={CourseForm.EDIT_FORM}
+    //   />);
+    // };
+
+    const courseScheduleForm = (props) => {
+      return (
+        <Row>
+          <Col md={12}>
+            <CourseScheduleForm
+              course={this.state.course}
+              onSaveSuccess={this.close}
+              onCancel={this.close}
+              formType={CourseForm.EDIT_FORM}
+            />
+          </Col>
+          <Col md={12}>
+            <CourseHospital1ScheduleForm
+              course={this.state.course}
+              onSaveSuccess={this.close}
+              onCancel={this.close}
+              formType={CourseForm.EDIT_FORM}
+            />
+          </Col>
+        </Row>
+      );
+    };
+
     return (
       <Row>
         <Col xs={12} md={12}>
@@ -35,7 +95,8 @@ class CourseView extends React.Component {
 
           <Row>
             <Col md={8}>
-              <Route path="/course_details/:courseId/main" component={CourseEditPage} />
+              <Route path="/course_details/:courseId/main" render={courseForm} />
+              <Route path="/course_details/:courseId/schedule" render={courseScheduleForm} />
             </Col>
             <Col md={4}>
               <ListGroup fill>
