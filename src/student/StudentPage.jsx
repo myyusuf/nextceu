@@ -83,31 +83,62 @@ class StudentPage extends React.Component {
     return (
       <section>
         <div className="container-full">
+          <div className="content-heading bg-white">
+            <Row>
+              <Col sm={5}>
+                <div className="input-group" style={{ padding: 10 }}>
+                            <input type="text" className="form-control" placeholder="Stambuk atau Nama"/><span className="input-group-btn">
+                              <button type="button" className="btn btn-default">Search</button></span>
+                          </div>
+              </Col>
+              <Col sm={7} className="text-right hidden-xs">
+                <button
+                  type="button"
+                  className="mt-sm btn btn-labeled btn-success ripple"
+                >
+                  Mahasiswa
+                  <span className="btn-label btn-label-right">
+                    <i className="ion-plus-round" />
+                  </span>
+                </button>
+              </Col>
+            </Row>
+          </div>
           <div className="row fh bg-white">
-            <div className="col-md-3 fh-md oa text-center">
-              <div className="p-lg">
-                <h5>Left Column</h5>
-                <p className="text-center">Nullam pretium fermentum sapien ut convallis.</p>
-              </div>
-              <div className="p-lg">
-                <p>Pellentesque sed purus libero. Nam eleifend, ipsum at suscipit pellentesque, diam enim dignissim nunc, eu egestas sem velit vel nunc. Phasellus vel nisl orci.</p>
+            <div className="col-md-3 fh-md oa pr0">
+
+
+
+              <div id="markers-list" className="list-group">
+                  <a data-panto-marker="0" className="list-group-item">
+                      <em className="pull-right ion-ios-arrow-forward"></em>
+                      Aktif
+                      <span className="pull-right nav-label" style={{ marginRight: 20 }}>
+                        <span className="badge bg-success">350</span>
+                      </span>
+                  </a>
+                  <a data-panto-marker="1" className="list-group-item">
+                      <em className="pull-right ion-ios-arrow-forward"></em>
+                      Ujian UKMPPD
+                      <span className="pull-right nav-label" style={{ marginRight: 20 }}>
+                        <span className="badge bg-primary">30</span>
+                      </span>
+                  </a>
+                  <a data-panto-marker="2" className="list-group-item">
+                      <em className="pull-right ion-ios-arrow-forward">
+                      </em>Bermasalah
+                      <span className="pull-right nav-label" style={{ marginRight: 20 }}>
+                        <span className="badge bg-danger">30</span>
+                      </span>
+                  </a>
               </div>
             </div>
-            <div className="col-md-6 fh-md oa text-center bg-gray-lighter">
+            <div className="col-md-9 fh-md oa text-center bg-gray-lighter">
               <h2>Content</h2>
               <p className="lead">Content with auto scrolling</p><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
               <p className="lead">Bottom</p>
             </div>
-            <div className="col-md-3 fh-md oa text-center">
-              <div className="p-lg">
-                <h5>Right Column</h5>
-                <p className="text-center">Nullam pretium fermentum sapien ut convallis.</p>
-              </div>
-              <div className="p-lg">
-                <p>Pellentesque sed purus libero. Nam eleifend, ipsum at suscipit pellentesque, diam enim dignissim nunc, eu egestas sem velit vel nunc. Phasellus vel nisl orci.</p>
-              </div><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-              <p className="lead">Bottom</p>
-            </div>
+
           </div>
         </div>
       </section>

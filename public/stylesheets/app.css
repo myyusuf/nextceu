@@ -1267,7 +1267,7 @@ tr.danger > td {
 .navbar .dropdown-menu {
   filter: none !important;
 }
-.badge {
+/*.badge {
   width: 20px;
   height: 20px;
   padding: 0;
@@ -1275,7 +1275,7 @@ tr.danger > td {
   font-size: 12px;
   border-radius: 50%;
   color: #fff;
-}
+}*/
 .has-badge {
   position: relative;
 }
