@@ -30,12 +30,12 @@ class Sidebar extends React.Component {
                   <nav className="sidebar-nav">
                       <ul>
                         <li className="active">
-                          <a href="dashboard.html" className="ripple">
+                          <a href="#/dashboard" className="ripple">
                             <span className="pull-right nav-label">
                               <span className="badge bg-success">2</span>
                             </span>
                             <span className="nav-icon">
-                              <img src="" data-svg-replace="img/icons/aperture.svg" alt="MenuItem" className="hidden" />
+                              <img src="images/icons/aperture.svg" alt="MenuItem" style={{ color: 'blue' }} />
                               </span>
                               <span>
                                 Dashboard
@@ -45,12 +45,32 @@ class Sidebar extends React.Component {
                             </a>
                           </li>
                           <li className="">
+                            <a href="#/students" className="ripple">
+                              <span className="pull-right nav-label"></span>
+                              <span className="nav-icon">
+                                <img src="" data-svg-replace="img/icons/radio-waves.svg" alt="MenuItem" className="hidden" />
+                              </span>
+                              <span>Mahasiswa</span>
+                              <span className="md-ripple"></span>
+                            </a>
+                          </li>
+                          <li className="">
                             <a href="cards.html" className="ripple">
                               <span className="pull-right nav-label"></span>
                               <span className="nav-icon">
                                 <img src="" data-svg-replace="img/icons/radio-waves.svg" alt="MenuItem" className="hidden" />
                               </span>
-                              <span>Cards</span>
+                              <span>Bagian</span>
+                              <span className="md-ripple"></span>
+                            </a>
+                          </li>
+                          <li className="">
+                            <a href="cards.html" className="ripple">
+                              <span className="pull-right nav-label"></span>
+                              <span className="nav-icon">
+                                <img src="" data-svg-replace="img/icons/radio-waves.svg" alt="MenuItem" className="hidden" />
+                              </span>
+                              <span>Rumah Sakit</span>
                               <span className="md-ripple"></span>
                             </a>
                           </li>
