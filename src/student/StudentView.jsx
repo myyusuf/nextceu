@@ -1,68 +1,82 @@
 import React from 'react';
 import axios from 'axios';
-import { Route } from 'react-router-dom';
-import { Row, Col, Tabs, Tab, Panel, ListGroup, ListGroupItem, Badge, Grid } from 'react-bootstrap';
-import StudentInfo from './StudentInfo.jsx';
-import StudentEditPage from './StudentEditPage.jsx';
-import Course from './course/Course';
+import { Grid, Row, Col } from 'react-bootstrap';
+
 
 class StudentView extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      student: {},
-    };
+  }
+
+  componentDidMount() {
   }
 
   render() {
     return (
-      <Row>
-        <Col xs={12} md={12}>
-          <Row>
-            <Col xs={12} md={12}>
-              <Panel>
-                <Row>
-                  <Col md={1}>
-                    <i className="fa fa-user-circle student-avatar" />
-                  </Col>
-                  <Col md={11}>
-                    <h4 style={{ marginLeft: 10 }}>Student Name</h4>
-                    <h6 style={{ marginLeft: 10 }}>Stambuk</h6>
-                  </Col>
-                </Row>
-              </Panel>
-            </Col>
-          </Row>
+      <section>
+        <div className="container-full">
 
-          <Row>
-            <Col md={8}>
-              <Route path="/students_details/:studentId/profile" component={StudentEditPage} />
-              <Route path="/students_details/:studentId/courses" component={Course} />
-            </Col>
-            <Col md={4}>
-              <ListGroup fill>
-                <ListGroupItem href="#/students_details/1/profile">
-                  Profile
-                </ListGroupItem>
-                <ListGroupItem href="#/students_details/1/courses">
-                  Bagian Diambil
-                </ListGroupItem>
-                <ListGroupItem>
-                  <a href="#/departments">
-                    Nilai UKMPPD
+          <div className="row fh bg-white">
+            <div className="col-md-3 fh-md oa pr0">
+
+              <Row>
+
+                <Col sm={12} className="text-left">
+                  <img src="images/user/02.jpg" alt="Contact" className="fw img-responsive" style={{ padding: 20 }} />
+                </Col>
+              </Row>
+
+              <div id="markers-list" className="list-group">
+                  <a data-panto-marker="0" className="list-group-item">
+                      <em className="pull-right ion-ios-arrow-forward"></em>
+                      Data Siswa
                   </a>
-                </ListGroupItem>
-                <ListGroupItem>
-                  <a href="#/departments">
-                    Masalah
+                  <a data-panto-marker="0" className="list-group-item">
+                      <em className="pull-right ion-ios-arrow-forward"></em>
+                      Bagian Diambil
+                      <span className="pull-right nav-label" style={{ marginRight: 20 }}>
+                        <span className="badge bg-default">7</span>
+                      </span>
+                      <span className="pull-right nav-label" style={{ marginRight: 5 }}>
+                        <span className="badge bg-default">9</span>
+                      </span>
                   </a>
-                </ListGroupItem>
-              </ListGroup>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+                  <a data-panto-marker="1" className="list-group-item">
+                      <em className="pull-right ion-ios-arrow-forward"></em>
+                      Nilai UKMPPD
+                  </a>
+                  <a data-panto-marker="1" className="list-group-item">
+                      <em className="pull-right ion-ios-arrow-forward"></em>
+                      Seminar
+                  </a>
+                  <a data-panto-marker="2" className="list-group-item">
+                      <em className="pull-right ion-ios-arrow-forward">
+                      </em>Masalah
+                      <span className="pull-right nav-label" style={{ marginRight: 20 }}>
+                        <span className="badge bg-danger">30</span>
+                      </span>
+                  </a>
+              </div>
+
+            </div>
+
+            <div className="col-md-9 fh-md oa text-center bg-gray-lighter">
+              <Grid fluid style={{ padding: 12, paddingLeft: 0 }}>
+                <Row>
+
+
+
+
+                </Row>
+              </Grid>
+
+            </div>
+
+          </div>
+        </div>
+
+      </section>
     );
   }
 }

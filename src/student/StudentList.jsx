@@ -1,20 +1,30 @@
 import React from 'react';
 import axios from 'axios';
-import { Row, Col, Panel, Button, ListGroup, ListGroupItem, Badge, ProgressBar, Form, FormGroup, FormControl } from 'react-bootstrap';
+import { Row, Col, Panel, Button, ListGroup, ListGroupItem, Badge, ProgressBar, Grid } from 'react-bootstrap';
+import StudentAddWindow from './StudentAddWindow';
 
 const STUDENTS_URL = '/api/students';
 
-class StudentList extends React.Component {
-// const StudentList = () => {
+class StudentPage extends React.Component {
+// const StudentPage = () => {
 
   constructor(props) {
     super(props);
     this.state = {
       students: [],
+      showStudentAddWindow: false,
     };
+
+    this.showStudentAddWindow = this.showStudentAddWindow.bind(this);
+    this.onAddStudentSuccess = this.onAddStudentSuccess.bind(this);
+    this.viewStudent = this.viewStudent.bind(this);
   }
 
   componentDidMount() {
+    this.getStudents();
+  }
+
+  getStudents() {
     axios.get(STUDENTS_URL)
     .then((response) => {
       this.setState({
@@ -27,11 +37,22 @@ class StudentList extends React.Component {
   }
 
   viewStudent(student) {
-    window.location.href = `#/students_details/${student.id}/profile`;
+    // window.location.href = `#/students_details/${student.id}/profile`;
+    window.location.href = `#/students_view/${student.id}/profile`;
   }
 
-  addStudent(student) {
-    window.location.href = '#/students_add';
+  showStudentAddWindow() {
+    this.setState({
+      showStudentAddWindow: true,
+    });
+  }
+
+  onAddStudentSuccess() {
+    this.setState({
+      showStudentAddWindow: false,
+    }, () => {
+      this.getStudents();
+    });
   }
 
   render() {
@@ -53,82 +74,111 @@ class StudentList extends React.Component {
           break;
       }
       studentThumbnails.push(
-        <Panel>
-          <Row>
-            <Col md={1}>
-              <i className="fa fa-user-circle" style={{ marginRight: 10, fontSize: 50, color: 'silver' }} />
-            </Col>
-            <Col md={11}>
-              <div style={{ paddingLeft: 20 }}>
-                <h4><a onClick={() => this.viewStudent(student)}>{ student.name }</a></h4>
-                <p>{student.oldSid} {student.newSid}</p>
-                <p>{studentLevel}</p>
-                <ProgressBar now={70} style={{ height: 10, padding: 0 }} />
-                <p>
-                  <Button
-                    onClick={() => this.viewStudent(student)}
-                  >
-                    <i className="fa fa-external-link" style={{ fontSize: 20 }} />
-                  </Button>
-                  <Button style={{ marginLeft: 10 }}>
-                    <i className="fa fa-commenting-o" style={{ fontSize: 20 }} />
-                  </Button>
-                </p>
+        <Col md={4} sm={6} key={student.id}>
+          <div className="card">
+            <div className="card-body">
+              <div className="pull-right dropdown visible-lg visible-md">
+                <button type="button" data-toggle="dropdown" className="btn btn-flat btn-flat-icon" onClick={this.viewStudent}>
+                  <em className="ion-android-more-vertical"></em>
+                </button>
               </div>
-            </Col>
-          </Row>
-        </Panel>
+              <Row>
+                  <Col lg={4} md={8}><a href=""><img src="images/user/02.jpg" alt="Contact" className="fw img-responsive" /></a></Col>
+              </Row>
+              <h5>{student.name}</h5>
+              <p className="mt"><em className="ion-android-list mr-sm"></em><span>{student.oldSid} {student.newSid}</span></p>
+              <p className="mt">Proin est sapien, convallis non hendrerit nec</p>
+            </div>
+            <div className="card-footer text-center">
+              <button type="button" className="btn btn-default btn-xs"><em className="ion-email icon-lg icon-fw"></em></button>
+              <button type="button" className="btn btn-default btn-xs"><em className="ion-social-facebook icon-lg icon-fw"></em></button>
+              <button type="button" className="btn btn-default btn-xs"><em className="ion-social-twitter icon-lg icon-fw"></em></button>
+              <button type="button" className="btn btn-default btn-xs"><em className="ion-social-linkedin icon-lg icon-fw"></em></button>
+              <button type="button" className="btn btn-default btn-xs"><em className="ion-social-skype icon-lg icon-fw"></em></button>
+            </div>
+          </div>
+        </Col>
       );
     }
     return (
-      <Row>
-        <Col xs={8} md={8}>
+      <section>
+        <div className="container-full">
 
-          <div className="search-box">
-            <form className="search-form">
-              <input className="form-control" placeholder="Nama atau Stambuk" type="text" />
-              <button className="btn btn-link search-btn">
-                <i className="glyphicon glyphicon-search"></i>
-              </button>
-            </form>
+          <div className="row fh bg-white">
+            <div className="col-md-3 fh-md oa pr0">
+
+              <Row>
+
+                <Col sm={12} className="text-left">
+                  <button
+                    type="button"
+                    className="btn btn-labeled btn-success ripple"
+                    style={{ marginLeft: 10, marginTop: 20, marginBottom: 10 }}
+                    onClick={this.showStudentAddWindow}
+                  >
+                    Mahasiswa
+                    <span className="btn-label btn-label-right">
+                      <i className="ion-plus-round" />
+                    </span>
+                  </button>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col sm={12}>
+                  <div className="input-group" style={{ padding: 10, marginBottom: 10 }}>
+                    <input type="text" className="form-control" placeholder="Stambuk atau Nama"/><span className="input-group-btn">
+                    <button type="button" className="btn btn-default">Search</button></span>
+                  </div>
+                </Col>
+
+              </Row>
+              <div id="markers-list" className="list-group">
+                  <a data-panto-marker="0" className="list-group-item">
+                      <em className="pull-right ion-ios-arrow-forward"></em>
+                      Aktif
+                      <span className="pull-right nav-label" style={{ marginRight: 20 }}>
+                        <span className="badge bg-success">350</span>
+                      </span>
+                  </a>
+                  <a data-panto-marker="1" className="list-group-item">
+                      <em className="pull-right ion-ios-arrow-forward"></em>
+                      Ujian UKMPPD
+                      <span className="pull-right nav-label" style={{ marginRight: 20 }}>
+                        <span className="badge bg-primary">30</span>
+                      </span>
+                  </a>
+                  <a data-panto-marker="2" className="list-group-item">
+                      <em className="pull-right ion-ios-arrow-forward">
+                      </em>Bermasalah
+                      <span className="pull-right nav-label" style={{ marginRight: 20 }}>
+                        <span className="badge bg-danger">30</span>
+                      </span>
+                  </a>
+              </div>
+
+            </div>
+
+
+            <div className="col-md-9 fh-md oa text-center bg-gray-lighter">
+              <Grid fluid style={{ padding: 12, paddingLeft: 0 }}>
+                <Row>
+                  {studentThumbnails}
+                </Row>
+              </Grid>
+
+            </div>
+
           </div>
+        </div>
 
-          {studentThumbnails}
-        </Col>
-        <Col xs={4} md={4}>
-          <ListGroup fill>
-            <ListGroupItem>
-              <Button
-                bsStyle="success"
-                onClick={this.addStudent}
-              >
-                <i className="fa fa-plus" /> Mahasiswa
-              </Button>
-            </ListGroupItem>
-            <ListGroupItem>
-              <a href="#/dashboard">
-                Aktif
-              </a>
-              <Badge>200</Badge>
-            </ListGroupItem>
-            <ListGroupItem>
-              <a href="#/students">
-                Bermasalah
-              </a>
-              <Badge>10</Badge>
-            </ListGroupItem>
-            <ListGroupItem>
-              <a href="#/departments">
-                Ujian UKMPPD
-              </a>
-              <Badge>30</Badge>
-            </ListGroupItem>
-          </ListGroup>
-        </Col>
-
-      </Row>
+        <StudentAddWindow
+          showModal={this.state.showStudentAddWindow}
+          onSaveSuccess={this.onAddStudentSuccess}
+        />
+      </section>
     );
   }
 }
 
-export default StudentList;
+export default StudentPage;
