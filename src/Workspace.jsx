@@ -12,10 +12,10 @@ const Workspace = ({ children }) => {
       <div className="sidebar-layout-obfuscator" />
       <div className="main-container">
         { children }
+        <footer>
+          <span>2017 - CEU app.</span>
+        </footer>
       </div>
-      <footer>
-        <span>2017 - CEU app.</span>
-      </footer>
     </div>
   );
 };
