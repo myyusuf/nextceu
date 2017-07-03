@@ -1,15 +1,31 @@
 import React from 'react';
 import axios from 'axios';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Route } from 'react-router-dom';
+import { Grid, Row, Col, Pager } from 'react-bootstrap';
 
+import StudentProfile from './StudentProfile';
+
+const STUDENTS_URL = '/api/students';
 
 class StudentView extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      student: {},
+    };
   }
 
   componentDidMount() {
+    axios.get(`${STUDENTS_URL}/${this.props.match.params.studentId}`)
+    .then((response) => {
+      this.setState({
+        student: response.data,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
   render() {
@@ -18,12 +34,28 @@ class StudentView extends React.Component {
         <div className="container-full">
 
           <div className="row fh bg-white">
-            <div className="col-md-3 fh-md oa pr0">
+            <div className="col-md-3 fh-md oa pr0 student-profile-menu-container">
 
               <Row>
 
                 <Col sm={12} className="text-left">
                   <img src="images/user/02.jpg" alt="Contact" className="fw img-responsive" style={{ padding: 20 }} />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col sm={12} className="text-left">
+                  <h5 className="" style={{ marginLeft: 20, marginBottom: 10, marginTop: -5 }}>{this.state.student.name}</h5>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={12} className="text-left">
+                  <h6
+                    className=""
+                    style={{ marginLeft: 20, marginBottom: 15, marginTop: 0 }}
+                  >
+                    {this.state.student.oldSid} {this.state.student.newSid}
+                  </h6>
                 </Col>
               </Row>
 
@@ -57,14 +89,18 @@ class StudentView extends React.Component {
                         <span className="badge bg-danger">30</span>
                       </span>
                   </a>
+
+                  <Pager style={{ paddingLeft: 20, paddingTop: 20 }}>
+                    <Pager.Item previous href="#/students" style={{ color: '#448AFF' }}>&larr; Student List</Pager.Item>
+                  </Pager>
               </div>
 
             </div>
 
-            <div className="col-md-9 fh-md oa text-center bg-gray-lighter">
+            <div className="col-md-9 fh-md oa text-center bg-white">
               <Grid fluid style={{ padding: 12, paddingLeft: 0 }}>
                 <Row>
-
+                  <Route path="/students_view/:studentId/profile" component={StudentProfile} />
 
 
 

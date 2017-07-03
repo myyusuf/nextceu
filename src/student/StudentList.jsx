@@ -36,9 +36,9 @@ class StudentPage extends React.Component {
     });
   }
 
-  viewStudent(student) {
+  viewStudent(studentId) {
     // window.location.href = `#/students_details/${student.id}/profile`;
-    window.location.href = `#/students_view/${student.id}/profile`;
+    window.location.href = `#/students_view/${studentId}/profile`;
   }
 
   showStudentAddWindow() {
@@ -78,7 +78,7 @@ class StudentPage extends React.Component {
           <div className="card">
             <div className="card-body">
               <div className="pull-right dropdown visible-lg visible-md">
-                <button type="button" data-toggle="dropdown" className="btn btn-flat btn-flat-icon" onClick={this.viewStudent}>
+                <button type="button" data-toggle="dropdown" className="btn btn-flat btn-flat-icon" onClick={() => this.viewStudent(student.id)}>
                   <em className="ion-android-more-vertical"></em>
                 </button>
               </div>
