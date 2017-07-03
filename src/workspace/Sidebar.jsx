@@ -74,6 +74,22 @@ class Sidebar extends React.Component {
                               <span className="md-ripple"></span>
                             </a>
                           </li>
+                          <li className="">
+                              <a href="#" className="ripple">
+                                  <span className="pull-right nav-caret"><em className="ion-ios-arrow-right"></em></span><span className="pull-right nav-label"></span><span className="nav-icon">
+                                  <img src="" data-svg-replace="images/icons/connection-bars.svg" alt="MenuItem" className="hidden" /></span>
+                                  <span>Laporan</span>
+                              </a>
+                              <ul className="sidebar-subnav">
+                                  <li className="">
+                                    <a href="cards.html" className="ripple">
+                                      
+                                      <span>Cost Unit</span>
+                                      <span className="md-ripple"></span>
+                                    </a>
+                                  </li>
+                              </ul>
+                          </li>
                       </ul>
                   </nav>
               </div>
