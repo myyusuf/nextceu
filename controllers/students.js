@@ -40,6 +40,16 @@ exports.update = function updateStudent(req, res) {
   });
 };
 
+exports.delete = function deleteStudent(req, res) {
+  models.Student.destroy(
+    {
+      where: { id: req.params.studentId },
+    })
+  .then((result) => {
+    res.json(result);
+  });
+};
+
 exports.addCourses = function(req, res) {
   const studentId = req.params.studentId;
   const form = req.body;

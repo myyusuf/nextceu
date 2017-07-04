@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Route } from 'react-router-dom';
-import { Grid, Row, Col, Pager } from 'react-bootstrap';
+import { Grid, Row, Col, Pager, Button } from 'react-bootstrap';
 
 import StudentProfile from './StudentProfile';
 
@@ -16,6 +16,7 @@ class StudentView extends React.Component {
     };
 
     this.onStudentProfileUpdateSuccess = this.onStudentProfileUpdateSuccess.bind(this);
+    this.deleteStudent = this.deleteStudent.bind(this);
   }
 
   componentDidMount() {
@@ -38,6 +39,22 @@ class StudentView extends React.Component {
     this.setState({
       student: studentInState,
     });
+  }
+
+  deleteStudent() {
+
+    if (this.state.student.id) {
+      const answer = confirm(`Student ${this.state.student.name} will be deleted.\nThis action can not be undone. Continue?.`);
+      if (answer) {
+        axios.delete(`${STUDENTS_URL}/${this.state.student.id}`)
+        .then((response) => {
+          window.location.href = '#/students';
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }
+    }
   }
 
   render() {
@@ -111,8 +128,13 @@ class StudentView extends React.Component {
                         <span className="badge bg-danger">30</span>
                       </span>
                   </a>
+                  <li data-panto-marker="2" className="list-group-item">
+                    <Button type="button" bsStyle="danger" className="" style={{ width: '100%' }} onClick={this.deleteStudent}>
+                      Hapus Siswa
+                    </Button>
+                  </li>
 
-                  <Pager style={{ paddingLeft: 20, paddingTop: 20 }}>
+                  <Pager style={{ paddingLeft: 20, paddingTop: 0 }}>
                     <Pager.Item previous href="#/students" style={{ color: '#448AFF' }}>&larr; Student List</Pager.Item>
                   </Pager>
               </div>

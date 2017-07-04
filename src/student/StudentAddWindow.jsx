@@ -96,7 +96,7 @@ class StudentWindow extends React.Component {
 
     if (!student.newSid) {
       result.newSid.state = 'error';
-      result.newSid.message = 'Stambuk wajib diisi';
+      result.newSid.message = 'Stambuk baru wajib diisi';
       result.status = false;
     } else if (student.newSid.length < 3) {
       result.newSid.state = 'error';
