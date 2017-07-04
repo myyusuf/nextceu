@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { Tabs, Tab, SplitButton, MenuItem, Row, Col, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Tabs, Tab, SplitButton, MenuItem, Row, Col, ListGroup, ListGroupItem, Button } from 'react-bootstrap';
 import CourseAddByLevelWindow from './CourseAddByLevelWindow';
 
 class CourseList extends React.Component {
@@ -76,14 +76,25 @@ class CourseList extends React.Component {
       const course = level1Courses[i];
 
       level1CoursesEl.push(
-        <div className="panel panel-default" >
+        <div className="panel panel-default">
             <div className="panel-heading">
-                <div className="panel-title">{course.title}</div>
+                <div className="panel-title">
+                  <div style={{ display: 'flex' }}>
+                    <div style={{ width: 25, height: 25, border: '1px solid black', borderRadius: '50%', backgroundColor: course.Department.color }} />
+                    <div style={{ marginLeft: 10 }}><a href="#">{course.title}</a></div>
+                  </div>
+                </div>
             </div>
             <div className="panel-body">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+              <div>
+                <strong>Bagian : </strong>{course.Department.name}
+              </div>
+              <div className="text-right">
+                <Button bsStyle="danger" bsSize="small" onClick={() => this.confirmDelete(department)}>
+                  <i className="fa fa-remove" />
+                </Button>
+              </div>
             </div>
-            <div className="panel-footer">Panel Footer</div>
         </div>
       );
     }
@@ -95,13 +106,25 @@ class CourseList extends React.Component {
         defaultActiveKey={1}
         id="uncontrolled-tab-example"
       >
-        <Tab eventKey={1} title="Tingkat 1">
+        <Tab eventKey={1} title="Tingkat 1" style={{ marginTop: -10 }}>
           <Row>
-            <Col md={3} mdOffset={9}>
-              <SplitButton bsStyle="success" title="+ Bagian" onSelect={this.addCourseButtonSelect}>
-                <MenuItem eventKey="LEVEL">Tingkat</MenuItem>
-                <MenuItem eventKey="DEPARTMENT">Bagian</MenuItem>
-              </SplitButton>
+            <Col md={6} mdOffset={6}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }} className="text-right">
+                <button style={{ marginRight: 10 }}
+                  type="button"
+                  className="btn btn-labeled btn-default ripple"
+                >
+                  Chart
+                  <span className="btn-label btn-label-right">
+                    <i className="ion-stats-bars" />
+                  </span>
+                </button>
+                <SplitButton bsStyle="success" title="+ Bagian" onSelect={this.addCourseButtonSelect}>
+                  <MenuItem eventKey="LEVEL">Tingkat</MenuItem>
+                  <MenuItem eventKey="DEPARTMENT">Bagian</MenuItem>
+                </SplitButton>
+              </div>
+
             </Col>
           </Row>
           <Row>

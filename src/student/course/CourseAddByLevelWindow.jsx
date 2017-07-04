@@ -176,7 +176,7 @@ class CourseAddByLevelWindow extends React.Component {
         onHide={this.close}
       >
         <Modal.Header>
-          <Modal.Title>Tambah Bagian Dalam Tingkat</Modal.Title>
+          <Modal.Title>Tambah Bagian</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
