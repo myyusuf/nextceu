@@ -14,6 +14,8 @@ class StudentView extends React.Component {
     this.state = {
       student: {},
     };
+
+    this.onStudentProfileUpdateSuccess = this.onStudentProfileUpdateSuccess.bind(this);
   }
 
   componentDidMount() {
@@ -28,12 +30,23 @@ class StudentView extends React.Component {
     });
   }
 
+  onStudentProfileUpdateSuccess(student) {
+    const studentInState = this.state.student;
+    studentInState.name = student.name;
+    studentInState.oldSid = student.oldSid;
+    studentInState.newSid = student.newSid;
+    this.setState({
+      student: studentInState,
+    });
+  }
+
   render() {
 
     const studentProfile = (props) => {
       return (
         <StudentProfile
           student={this.state.student}
+          onSaveSuccess={this.onStudentProfileUpdateSuccess}
         />
       );
     }

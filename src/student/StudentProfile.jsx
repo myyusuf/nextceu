@@ -142,11 +142,10 @@ class StudentProfile extends React.Component {
       return;
     }
 
-    axios.put(STUDENTS_URL,
+    axios.put(`${STUDENTS_URL}/${this.state.student.id}`,
       this.state.student)
     .then((response) => {
-      this.close();
-      this.props.onSaveSuccess();
+      this.props.onSaveSuccess(this.state.student);
     })
     .catch((error) => {
       console.log(error);
