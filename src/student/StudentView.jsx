@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 import { Grid, Row, Col, Pager, Button } from 'react-bootstrap';
 
 import StudentProfile from './StudentProfile';
+import CourseList from './course/CourseList';
 
 const STUDENTS_URL = '/api/students';
 
@@ -68,6 +69,15 @@ class StudentView extends React.Component {
       );
     }
 
+    const courseList = (props) => {
+      return (
+        <CourseList
+          student={this.state.student}
+          onSaveSuccess={this.onStudentProfileUpdateSuccess}
+        />
+      );
+    }
+
     return (
       <section>
         <div className="container-full">
@@ -99,11 +109,11 @@ class StudentView extends React.Component {
               </Row>
 
               <div id="markers-list" className="list-group">
-                  <a data-panto-marker="0" className="list-group-item">
+                  <a data-panto-marker="0" className="list-group-item" href={`#/students_view/${this.state.student.id}/profile`}>
                       <em className="pull-right ion-ios-arrow-forward"></em>
                       Data Siswa
                   </a>
-                  <a data-panto-marker="0" className="list-group-item">
+                  <a data-panto-marker="0" className="list-group-item" href={`#/students_view/${this.state.student.id}/course`}>
                       <em className="pull-right ion-ios-arrow-forward"></em>
                       Bagian Diambil
                       <span className="pull-right nav-label" style={{ marginRight: 20 }}>
@@ -129,7 +139,7 @@ class StudentView extends React.Component {
                       </span>
                   </a>
                   <li data-panto-marker="2" className="list-group-item">
-                    <Button type="button" bsStyle="danger" className="" style={{ width: '100%' }} onClick={this.deleteStudent}>
+                    <Button type="button" bsStyle="danger" className="" block onClick={this.deleteStudent}>
                       Hapus Siswa
                     </Button>
                   </li>
@@ -145,6 +155,7 @@ class StudentView extends React.Component {
               <Grid fluid style={{ padding: 12, paddingLeft: 0 }}>
                 <Row>
                   <Route path="/students_view/:studentId/profile" render={studentProfile} />
+                  <Route path="/students_view/:studentId/course" render={courseList} />
 
 
 

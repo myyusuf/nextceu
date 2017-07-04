@@ -168,6 +168,8 @@ exports.addCourses = function(req, res) {
         });
       });
     });
+  } else {
+    res.status(500).send({ error: 'Unknown add course formType' });
   }
 };
 
