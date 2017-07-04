@@ -160,7 +160,7 @@ class StudentPage extends React.Component {
             </div>
 
 
-            <div className="col-md-9 fh-md oa text-center bg-gray-lighter">
+            <div className="col-md-9 fh-md oa bg-gray-lighter">
               <Grid fluid style={{ padding: 12, paddingLeft: 0 }}>
                 <Row>
                   {studentThumbnails}

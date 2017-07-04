@@ -29,6 +29,15 @@ class StudentView extends React.Component {
   }
 
   render() {
+
+    const studentProfile = (props) => {
+      return (
+        <StudentProfile
+          student={this.state.student}
+        />
+      );
+    }
+
     return (
       <section>
         <div className="container-full">
@@ -97,10 +106,10 @@ class StudentView extends React.Component {
 
             </div>
 
-            <div className="col-md-9 fh-md oa text-center bg-white">
+            <div className="col-md-9 fh-md oa bg-white">
               <Grid fluid style={{ padding: 12, paddingLeft: 0 }}>
                 <Row>
-                  <Route path="/students_view/:studentId/profile" component={StudentProfile} />
+                  <Route path="/students_view/:studentId/profile" render={studentProfile} />
 
 
 
