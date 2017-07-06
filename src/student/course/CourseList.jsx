@@ -81,7 +81,7 @@ class CourseList extends React.Component {
                 <div className="panel-title">
                   <div style={{ display: 'flex' }}>
                     <div style={{ width: 25, height: 25, border: '1px solid black', borderRadius: '50%', backgroundColor: course.Department.color }} />
-                    <div style={{ marginLeft: 10 }}><a href="#">{course.title}</a></div>
+                    <div style={{ marginLeft: 10 }}><a href={`#/students_view/${this.state.student.id}/course_details/${course.id}`}>{course.title}</a></div>
                   </div>
                 </div>
             </div>

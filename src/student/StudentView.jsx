@@ -5,6 +5,7 @@ import { Grid, Row, Col, Pager, Button } from 'react-bootstrap';
 
 import StudentProfile from './StudentProfile';
 import CourseList from './course/CourseList';
+import CourseDetails from './course/CourseDetails';
 
 const STUDENTS_URL = '/api/students';
 
@@ -156,8 +157,7 @@ class StudentView extends React.Component {
                 <Row>
                   <Route path="/students_view/:studentId/profile" render={studentProfile} />
                   <Route path="/students_view/:studentId/course" render={courseList} />
-
-
+                  <Route path="/students_view/:studentId/course_details/:courseId" component={CourseDetails} />
 
                 </Row>
               </Grid>
