@@ -12,3 +12,15 @@ exports.findOne = function(req, res) {
     res.json(student);
   });
 };
+
+exports.update = function(req, res, next) {
+  const title = req.body.title;
+  models.Course.update(
+    { title },
+    {
+      where: { id: req.params.courseId },
+    })
+  .then((result) => {
+    res.json(result);
+  });
+};
