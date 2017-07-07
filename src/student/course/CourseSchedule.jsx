@@ -21,11 +21,11 @@ class CourseSchedule extends React.Component {
           state: null,
           message: '',
         },
-        realStartDate: {
+        planStartDate1: {
           state: null,
           message: '',
         },
-        realEndDate: {
+        planEndDate1: {
           state: null,
           message: '',
         },
@@ -38,6 +38,9 @@ class CourseSchedule extends React.Component {
     this.handleDateInputChange2 = this.handleDateInputChange2.bind(this);
     this.handleDateInputChange3 = this.handleDateInputChange3.bind(this);
     this.handleDateInputChange4 = this.handleDateInputChange4.bind(this);
+
+    this.handleDateInputChange5 = this.handleDateInputChange5.bind(this);
+    this.handleDateInputChange6 = this.handleDateInputChange6.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -110,6 +113,56 @@ class CourseSchedule extends React.Component {
     });
   }
 
+  //-----
+
+  handleDateInputChange5(value, formattedValue) {
+    const course = this.state.course;
+    course.formattedPlanStartDate1 = formattedValue;
+    course.planStartDate1 = value;
+
+    const validation = this.validate(course);
+    this.setState({
+      course,
+      validation,
+    });
+  }
+
+  handleDateInputChange6(value, formattedValue) {
+    const course = this.state.course;
+    course.formattedRealEndDate1 = formattedValue;
+    course.planEndDate1 = value;
+
+    const validation = this.validate(course);
+    this.setState({
+      course,
+      validation,
+    });
+  }
+
+  handleDateInputChange7(value, formattedValue) {
+    const course = this.state.course;
+    course.formattedRealStartDate1 = formattedValue;
+    course.realStartDate1 = value;
+
+    const validation = this.validate(course);
+    this.setState({
+      course,
+      validation,
+    });
+  }
+
+  handleDateInputChange8(value, formattedValue) {
+    const course = this.state.course;
+    course.formattedPlanEndDate1 = formattedValue;
+    course.realEndDate1 = value;
+
+    const validation = this.validate(course);
+    this.setState({
+      course,
+      validation,
+    });
+  }
+
   validate(course) {
     const result =
       {
@@ -118,6 +171,14 @@ class CourseSchedule extends React.Component {
           message: '',
         },
         planEndDate: {
+          state: null,
+          message: '',
+        },
+        planStartDate1: {
+          state: null,
+          message: '',
+        },
+        planEndDate1: {
           state: null,
           message: '',
         },
@@ -140,6 +201,24 @@ class CourseSchedule extends React.Component {
     } else {
       result.planEndDate.state = 'success';
       result.planEndDate.message = '';
+    }
+
+    if (!course.planStartDate1) {
+      result.planStartDate1.state = 'error';
+      result.planStartDate1.message = 'Tanggal Mulai wajib diisi';
+      result.status = false;
+    } else {
+      result.planStartDate1.state = 'success';
+      result.planStartDate1.message = '';
+    }
+
+    if (!course.planEndDate1) {
+      result.planEndDate1.state = 'error';
+      result.planEndDate1.message = 'Tanggal Selesai wajib diisi';
+      result.status = false;
+    } else {
+      result.planEndDate1.state = 'success';
+      result.planEndDate1.message = '';
     }
 
     return result;
@@ -232,6 +311,69 @@ class CourseSchedule extends React.Component {
                       dateFormat="DD/MM/YYYY"
                       value={this.state.course.realEndDate}
                       onChange={this.handleDateInputChange4}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+            </Panel>
+
+            <Panel header="Jadwal RS 1">
+              <Row>
+                <Col md={6}>
+                  <FormGroup
+                    controlId="planStartDate1"
+                    validationState={this.state.validation.planStartDate1.state}
+                  >
+                    <ControlLabel>Rencana Mulai</ControlLabel>
+                    <DatePicker
+                      name="planStartDate1"
+                      dateFormat="DD/MM/YYYY"
+                      value={this.state.course.planStartDate1}
+                      onChange={this.handleDateInputChange5}
+                    />
+                    <HelpBlock>{this.state.validation.planStartDate1.message}</HelpBlock>
+                  </FormGroup>
+                </Col>
+                <Col md={6}>
+                  <FormGroup
+                    controlId="planEndDate1"
+                    validationState={this.state.validation.planEndDate1.state}
+                  >
+                    <ControlLabel>Rencana Selesai</ControlLabel>
+                    <DatePicker
+                      name="planEndDate1"
+                      dateFormat="DD/MM/YYYY"
+                      value={this.state.course.planEndDate1}
+                      onChange={this.handleDateInputChange6}
+                    />
+                    <HelpBlock>{this.state.validation.planEndDate1.message}</HelpBlock>
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col md={6}>
+                  <FormGroup
+                    controlId="realStartDate"
+                  >
+                    <ControlLabel>Realisasi Mulai</ControlLabel>
+                    <DatePicker
+                      name="realStartDate"
+                      dateFormat="DD/MM/YYYY"
+                      value={this.state.course.realStartDate}
+                      onChange={this.handleDateInputChange7}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={6}>
+                  <FormGroup
+                    controlId="realEndDate"
+                  >
+                    <ControlLabel>Realisasi Selesai</ControlLabel>
+                    <DatePicker
+                      name="realEndDate"
+                      dateFormat="DD/MM/YYYY"
+                      value={this.state.course.realEndDate}
+                      onChange={this.handleDateInputChange8}
                     />
                   </FormGroup>
                 </Col>
