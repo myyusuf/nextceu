@@ -3,6 +3,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { Tabs, Tab, Row, Col, Button } from 'react-bootstrap';
 import CourseInfo from './CourseInfo';
+import CourseSchedule from './CourseSchedule';
 
 const COURSES_URL = '/api/courses';
 
@@ -74,7 +75,9 @@ class CourseDetails extends React.Component {
               <Tab eventKey={1} title="Info">
                 <CourseInfo course={this.state.course} />
               </Tab>
-              <Tab eventKey={2} title="Jadwal">Tab 2 content</Tab>
+              <Tab eventKey={2} title="Jadwal">
+                <CourseSchedule course={this.state.course} />
+              </Tab>
               <Tab eventKey={3} title="Nilai">Tab 3 content</Tab>
               <Tab eventKey={4} title="Seminar">Tab 4 content</Tab>
               <Tab eventKey={5} title="Masalah">Tab 5 content</Tab>

@@ -14,9 +14,9 @@ exports.findOne = function(req, res) {
 };
 
 exports.update = function(req, res, next) {
-  const title = req.body.title;
+  // const title = req.body.title;
   models.Course.update(
-    { title },
+    req.body,
     {
       where: { id: req.params.courseId },
     })
