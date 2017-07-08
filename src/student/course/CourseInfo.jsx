@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import { Row, Col, Modal, Panel, FormGroup, FormControl, Button, ControlLabel, HelpBlock } from 'react-bootstrap';
-import { SketchPicker } from 'react-color';
 
 const COURSES_URL = '/api/courses';
 

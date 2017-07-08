@@ -118,10 +118,10 @@ class StudentView extends React.Component {
                       <em className="pull-right ion-ios-arrow-forward"></em>
                       Bagian Diambil
                       <span className="pull-right nav-label" style={{ marginRight: 20 }}>
-                        <span className="badge bg-default">7</span>
+                        <span className="badge bg-default"></span>
                       </span>
                       <span className="pull-right nav-label" style={{ marginRight: 5 }}>
-                        <span className="badge bg-default">9</span>
+                        <span className="badge bg-default"></span>
                       </span>
                   </a>
                   <a data-panto-marker="1" className="list-group-item">
