@@ -83,12 +83,15 @@ class CourseInfo extends React.Component {
     }
 
     const course = this.state.course;
+    const theObject = this;
     // course.updateType = 'INFO';
 
     axios.put(`${COURSES_URL}/${this.state.course.id}`,
       this.state.course)
     .then((response) => {
       console.log(response);
+      console.log(theObject.props);
+      theObject.props.onSaveSuccess(this.state.course);
       alert('Info saved');
     })
     .catch((error) => {

@@ -17,10 +17,20 @@ class CourseDetails extends React.Component {
     };
 
     this.close = this.close.bind(this);
+    this.onSaveInfoSuccess = this.onSaveInfoSuccess.bind(this);
+
   }
 
   componentDidMount() {
     this.getCourse();
+  }
+
+  onSaveInfoSuccess(updatedCourse) {
+    const course = this.state.course;
+    course.title = updatedCourse.title;
+    this.setState({
+      course,
+    });
   }
 
   getCourse() {
@@ -55,7 +65,7 @@ class CourseDetails extends React.Component {
                   <Col md={10}>
                     <div style={{ display: 'flex' }}>
                       <div style={{ width: 25, height: 25, border: '1px solid black', borderRadius: '50%', backgroundColor: department.color }}></div>
-                      <div style={{ marginLeft: 10 }}><strong>{course.title}</strong></div>
+                      <div style={{ marginLeft: 10 }}><strong>{course.title} ( {department.name} )</strong></div>
                     </div>
                   </Col>
                   <Col md={2} className="text-right">
@@ -73,7 +83,7 @@ class CourseDetails extends React.Component {
           <Col md={12}>
             <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
               <Tab eventKey={1} title="Info">
-                <CourseInfo course={this.state.course} />
+                <CourseInfo course={this.state.course} onSaveSuccess={this.onSaveInfoSuccess} />
               </Tab>
               <Tab eventKey={2} title="Jadwal">
                 <CourseSchedule course={this.state.course} />

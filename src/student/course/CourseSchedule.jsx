@@ -29,6 +29,22 @@ class CourseSchedule extends React.Component {
           state: null,
           message: '',
         },
+        planStartDate2: {
+          state: null,
+          message: '',
+        },
+        planEndDate2: {
+          state: null,
+          message: '',
+        },
+        planStartDate3: {
+          state: null,
+          message: '',
+        },
+        planEndDate3: {
+          state: null,
+          message: '',
+        },
         status: true,
       },
     };
@@ -41,6 +57,18 @@ class CourseSchedule extends React.Component {
 
     this.handleDateInputChange5 = this.handleDateInputChange5.bind(this);
     this.handleDateInputChange6 = this.handleDateInputChange6.bind(this);
+    this.handleDateInputChange7 = this.handleDateInputChange7.bind(this);
+    this.handleDateInputChange8 = this.handleDateInputChange8.bind(this);
+
+    this.handleDateInputChange9 = this.handleDateInputChange9.bind(this);
+    this.handleDateInputChange10 = this.handleDateInputChange10.bind(this);
+    this.handleDateInputChange11 = this.handleDateInputChange11.bind(this);
+    this.handleDateInputChange12 = this.handleDateInputChange12.bind(this);
+
+    this.handleDateInputChange13 = this.handleDateInputChange13.bind(this);
+    this.handleDateInputChange14 = this.handleDateInputChange14.bind(this);
+    this.handleDateInputChange15 = this.handleDateInputChange15.bind(this);
+    this.handleDateInputChange16 = this.handleDateInputChange16.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -163,6 +191,106 @@ class CourseSchedule extends React.Component {
     });
   }
 
+  //-----
+
+  handleDateInputChange9(value, formattedValue) {
+    const course = this.state.course;
+    course.formattedPlanStartDate2 = formattedValue;
+    course.planStartDate2 = value;
+
+    const validation = this.validate(course);
+    this.setState({
+      course,
+      validation,
+    });
+  }
+
+  handleDateInputChange10(value, formattedValue) {
+    const course = this.state.course;
+    course.formattedRealEndDate2 = formattedValue;
+    course.planEndDate2 = value;
+
+    const validation = this.validate(course);
+    this.setState({
+      course,
+      validation,
+    });
+  }
+
+  handleDateInputChange11(value, formattedValue) {
+    const course = this.state.course;
+    course.formattedRealStartDate2 = formattedValue;
+    course.realStartDate2 = value;
+
+    const validation = this.validate(course);
+    this.setState({
+      course,
+      validation,
+    });
+  }
+
+  handleDateInputChange12(value, formattedValue) {
+    const course = this.state.course;
+    course.formattedPlanEndDate2 = formattedValue;
+    course.realEndDate2 = value;
+
+    const validation = this.validate(course);
+    this.setState({
+      course,
+      validation,
+    });
+  }
+
+  //-----
+
+  handleDateInputChange13(value, formattedValue) {
+    const course = this.state.course;
+    course.formattedPlanStartDate3 = formattedValue;
+    course.planStartDate3 = value;
+
+    const validation = this.validate(course);
+    this.setState({
+      course,
+      validation,
+    });
+  }
+
+  handleDateInputChange14(value, formattedValue) {
+    const course = this.state.course;
+    course.formattedRealEndDate3 = formattedValue;
+    course.planEndDate3 = value;
+
+    const validation = this.validate(course);
+    this.setState({
+      course,
+      validation,
+    });
+  }
+
+  handleDateInputChange15(value, formattedValue) {
+    const course = this.state.course;
+    course.formattedRealStartDate3 = formattedValue;
+    course.realStartDate3 = value;
+
+    const validation = this.validate(course);
+    this.setState({
+      course,
+      validation,
+    });
+  }
+
+  handleDateInputChange16(value, formattedValue) {
+    const course = this.state.course;
+    course.formattedPlanEndDate3 = formattedValue;
+    course.realEndDate3 = value;
+
+    const validation = this.validate(course);
+    this.setState({
+      course,
+      validation,
+    });
+  }
+
   validate(course) {
     const result =
       {
@@ -179,6 +307,22 @@ class CourseSchedule extends React.Component {
           message: '',
         },
         planEndDate1: {
+          state: null,
+          message: '',
+        },
+        planStartDate2: {
+          state: null,
+          message: '',
+        },
+        planEndDate2: {
+          state: null,
+          message: '',
+        },
+        planStartDate3: {
+          state: null,
+          message: '',
+        },
+        planEndDate3: {
           state: null,
           message: '',
         },
@@ -219,6 +363,42 @@ class CourseSchedule extends React.Component {
     } else {
       result.planEndDate1.state = 'success';
       result.planEndDate1.message = '';
+    }
+
+    if (!course.planStartDate2) {
+      result.planStartDate2.state = 'error';
+      result.planStartDate2.message = 'Tanggal Mulai wajib diisi';
+      result.status = false;
+    } else {
+      result.planStartDate2.state = 'success';
+      result.planStartDate2.message = '';
+    }
+
+    if (!course.planEndDate2) {
+      result.planEndDate2.state = 'error';
+      result.planEndDate2.message = 'Tanggal Selesai wajib diisi';
+      result.status = false;
+    } else {
+      result.planEndDate2.state = 'success';
+      result.planEndDate2.message = '';
+    }
+
+    if (!course.planStartDate3) {
+      result.planStartDate3.state = 'error';
+      result.planStartDate3.message = 'Tanggal Mulai wajib diisi';
+      result.status = false;
+    } else {
+      result.planStartDate3.state = 'success';
+      result.planStartDate3.message = '';
+    }
+
+    if (!course.planEndDate3) {
+      result.planEndDate3.state = 'error';
+      result.planEndDate3.message = 'Tanggal Selesai wajib diisi';
+      result.status = false;
+    } else {
+      result.planEndDate3.state = 'success';
+      result.planEndDate3.message = '';
     }
 
     return result;
@@ -353,27 +533,153 @@ class CourseSchedule extends React.Component {
               <Row>
                 <Col md={6}>
                   <FormGroup
-                    controlId="realStartDate"
+                    controlId="realStartDate1"
                   >
                     <ControlLabel>Realisasi Mulai</ControlLabel>
                     <DatePicker
-                      name="realStartDate"
+                      name="realStartDate1"
                       dateFormat="DD/MM/YYYY"
-                      value={this.state.course.realStartDate}
+                      value={this.state.course.realStartDate1}
                       onChange={this.handleDateInputChange7}
                     />
                   </FormGroup>
                 </Col>
                 <Col md={6}>
                   <FormGroup
-                    controlId="realEndDate"
+                    controlId="realEndDate1"
                   >
                     <ControlLabel>Realisasi Selesai</ControlLabel>
                     <DatePicker
-                      name="realEndDate"
+                      name="realEndDate1"
                       dateFormat="DD/MM/YYYY"
-                      value={this.state.course.realEndDate}
+                      value={this.state.course.realEndDate1}
                       onChange={this.handleDateInputChange8}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+            </Panel>
+
+            <Panel header="Jadwal Puskesmas">
+              <Row>
+                <Col md={6}>
+                  <FormGroup
+                    controlId="planStartDate2"
+                    validationState={this.state.validation.planStartDate2.state}
+                  >
+                    <ControlLabel>Rencana Mulai</ControlLabel>
+                    <DatePicker
+                      name="planStartDate2"
+                      dateFormat="DD/MM/YYYY"
+                      value={this.state.course.planStartDate2}
+                      onChange={this.handleDateInputChange9}
+                    />
+                    <HelpBlock>{this.state.validation.planStartDate2.message}</HelpBlock>
+                  </FormGroup>
+                </Col>
+                <Col md={6}>
+                  <FormGroup
+                    controlId="planEndDate2"
+                    validationState={this.state.validation.planEndDate2.state}
+                  >
+                    <ControlLabel>Rencana Selesai</ControlLabel>
+                    <DatePicker
+                      name="planEndDate2"
+                      dateFormat="DD/MM/YYYY"
+                      value={this.state.course.planEndDate2}
+                      onChange={this.handleDateInputChange10}
+                    />
+                    <HelpBlock>{this.state.validation.planEndDate2.message}</HelpBlock>
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col md={6}>
+                  <FormGroup
+                    controlId="realStartDate2"
+                  >
+                    <ControlLabel>Realisasi Mulai</ControlLabel>
+                    <DatePicker
+                      name="realStartDate2"
+                      dateFormat="DD/MM/YYYY"
+                      value={this.state.course.realStartDate2}
+                      onChange={this.handleDateInputChange11}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={6}>
+                  <FormGroup
+                    controlId="realEndDate2"
+                  >
+                    <ControlLabel>Realisasi Selesai</ControlLabel>
+                    <DatePicker
+                      name="realEndDate2"
+                      dateFormat="DD/MM/YYYY"
+                      value={this.state.course.realEndDate2}
+                      onChange={this.handleDateInputChange12}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+            </Panel>
+
+            <Panel header="Jadwal RS 2">
+              <Row>
+                <Col md={6}>
+                  <FormGroup
+                    controlId="planStartDate3"
+                    validationState={this.state.validation.planStartDate3.state}
+                  >
+                    <ControlLabel>Rencana Mulai</ControlLabel>
+                    <DatePicker
+                      name="planStartDate3"
+                      dateFormat="DD/MM/YYYY"
+                      value={this.state.course.planStartDate3}
+                      onChange={this.handleDateInputChange13}
+                    />
+                    <HelpBlock>{this.state.validation.planStartDate3.message}</HelpBlock>
+                  </FormGroup>
+                </Col>
+                <Col md={6}>
+                  <FormGroup
+                    controlId="planEndDate3"
+                    validationState={this.state.validation.planEndDate3.state}
+                  >
+                    <ControlLabel>Rencana Selesai</ControlLabel>
+                    <DatePicker
+                      name="planEndDate3"
+                      dateFormat="DD/MM/YYYY"
+                      value={this.state.course.planEndDate3}
+                      onChange={this.handleDateInputChange14}
+                    />
+                    <HelpBlock>{this.state.validation.planEndDate3.message}</HelpBlock>
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col md={6}>
+                  <FormGroup
+                    controlId="realStartDate3"
+                  >
+                    <ControlLabel>Realisasi Mulai</ControlLabel>
+                    <DatePicker
+                      name="realStartDate3"
+                      dateFormat="DD/MM/YYYY"
+                      value={this.state.course.realStartDate3}
+                      onChange={this.handleDateInputChange15}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={6}>
+                  <FormGroup
+                    controlId="realEndDate3"
+                  >
+                    <ControlLabel>Realisasi Selesai</ControlLabel>
+                    <DatePicker
+                      name="realEndDate3"
+                      dateFormat="DD/MM/YYYY"
+                      value={this.state.course.realEndDate3}
+                      onChange={this.handleDateInputChange16}
                     />
                   </FormGroup>
                 </Col>
