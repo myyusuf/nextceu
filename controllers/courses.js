@@ -50,3 +50,15 @@ exports.update = function(req, res, next) {
       });
   }
 };
+
+exports.findCourseProblems = function(req, res) {
+  models.Course.findOne({
+    where: { id: req.params.courseId },
+  })
+  .then((course) => {
+    course.getCourseProblems()
+    .then((courseProblems) => {
+      res.json(courseProblems);
+    });
+  });
+};

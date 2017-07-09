@@ -29,6 +29,7 @@ module.exports = function(sequelize, DataTypes) {
     Course.belongsTo(models.Student);
     Course.belongsTo(models.Department);
     Course.hasOne(models.Score);
+    Course.hasMany(models.CourseProblem);
   };
 
   return Course;
