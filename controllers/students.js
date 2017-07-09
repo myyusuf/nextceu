@@ -67,13 +67,20 @@ exports.addCourses = function(req, res) {
 
         const createCourse = function (courseParam, studentParam, departmentParam) {
           return new Promise((resolve, reject) => {
-            models.Course.create(courseParam)
-            .then((course) => {
-              course.setStudent(studentParam)
-              .then(() => {
-                course.setDepartment(departmentParam)
+
+            models.Score.create({})
+            .then((score) => {
+              models.Course.create(courseParam)
+              .then((course) => {
+                course.setStudent(studentParam)
                 .then(() => {
-                  resolve(course);
+                  course.setDepartment(departmentParam)
+                  .then(() => {
+                    course.setScore(score)
+                    .then(() => {
+                      resolve(course);
+                    });
+                  });
                 });
               });
             })

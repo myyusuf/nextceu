@@ -3,6 +3,8 @@ import React from 'react';
 import axios from 'axios';
 import { Row, Col, FormGroup, FormControl, Button, ControlLabel, HelpBlock } from 'react-bootstrap';
 
+const COURSES_URL = '/api/courses';
+
 class CourseScore extends React.Component {
 
   constructor(props) {
@@ -27,7 +29,8 @@ class CourseScore extends React.Component {
     const name = target.name;
 
     const course = this.state.course;
-    course[name] = value;
+    const score = course.Score;
+    score[name] = value;
 
     this.setState({
       course,
@@ -37,11 +40,14 @@ class CourseScore extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    const score = this.state.course.Score;
+    score.editType = 'SCORE';
+
     axios.put(`${COURSES_URL}/${this.state.course.id}`,
-      this.state.course)
+      score)
     .then((response) => {
       console.log(response);
-      if (props.onSaveSuccess) {
+      if (this.props.onSaveSuccess) {
         this.props.onSaveSuccess(this.state.course);
       }
       alert('Info saved');
@@ -64,6 +70,7 @@ class CourseScore extends React.Component {
                   <ControlLabel>Pre-Test</ControlLabel>
                   <FormControl
                     type="number"
+                    step=".1"
                     name="preTest"
                     value={score.preTest}
                     onChange={this.handleInputChange}
