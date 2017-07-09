@@ -27,6 +27,10 @@ exports.update = function(req, res, next) {
     .then((course) => {
       const score = course.Score;
       score.preTest = req.body.preTest;
+      score.research = req.body.research;
+      score.weeklyDiscussion = req.body.weeklyDiscussion;
+      score.test = req.body.test;
+      score.postTest = req.body.postTest;
       score.save()
       .then((result) => {
         res.json(result);

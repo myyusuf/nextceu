@@ -96,7 +96,7 @@ class DeartmentList extends React.Component {
     );
     return (
       <Row>
-        <Col xs={24} md={16}>
+        <Col xs={24} md={16} style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
           <Panel header={title} style={{ marginTop: 0 }}>
             <Table responsive fill>
               <thead>

@@ -1,3 +1,7 @@
 .student-profile-menu-container {
   border-right: 1px solid #E3E3E3;
 }
+
+.custom-modal {
+  width: 253px;
+}

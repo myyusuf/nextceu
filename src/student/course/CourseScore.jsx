@@ -66,13 +66,69 @@ class CourseScore extends React.Component {
           <form onSubmit={this.handleSubmit}>
             <Row>
               <Col md={6}>
-                <FormGroup controlId={'title'}>
+                <FormGroup controlId={'preTest'}>
                   <ControlLabel>Pre-Test</ControlLabel>
                   <FormControl
                     type="number"
                     step=".1"
                     name="preTest"
                     value={score.preTest}
+                    onChange={this.handleInputChange}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <FormGroup controlId={'research'}>
+                  <ControlLabel>Tugas Ilmiah</ControlLabel>
+                  <FormControl
+                    type="number"
+                    step=".1"
+                    name="research"
+                    value={score.research}
+                    onChange={this.handleInputChange}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <FormGroup controlId={'weeklyDiscussion'}>
+                  <ControlLabel>Diskusi Mingguan</ControlLabel>
+                  <FormControl
+                    type="number"
+                    step=".1"
+                    name="weeklyDiscussion"
+                    value={score.weeklyDiscussion}
+                    onChange={this.handleInputChange}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <FormGroup controlId={'test'}>
+                  <ControlLabel>Nilai Ujian</ControlLabel>
+                  <FormControl
+                    type="number"
+                    step=".1"
+                    name="test"
+                    value={score.test}
+                    onChange={this.handleInputChange}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <FormGroup controlId={'postTest'}>
+                  <ControlLabel>Post-Test</ControlLabel>
+                  <FormControl
+                    type="number"
+                    step=".1"
+                    name="postTest"
+                    value={score.postTest}
                     onChange={this.handleInputChange}
                   />
                 </FormGroup>

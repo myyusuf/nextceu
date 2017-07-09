@@ -176,7 +176,7 @@ class DeartmentEdit extends React.Component {
     if (this.state.department) {
       form = (
         <Row>
-          <Col xs={12} md={12}>
+          <Col xs={12} md={12} style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
             <Panel header="Edit Bagian" style={{ marginTop: 0 }}>
               <form onSubmit={this.handleSubmit}>
                 <Row>
