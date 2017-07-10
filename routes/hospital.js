@@ -7,6 +7,6 @@ router.get('/', HospitalController.findAll);
 router.get('/:hospitalId', HospitalController.findOne);
 router.post('/', HospitalController.create);
 router.put('/:hospitalId', HospitalController.update);
-router.delete('/:hospitalId', HospitalController.delete);
+router.delete('/:hospitalId', HospitalController.destroy);
 
 module.exports = router;
