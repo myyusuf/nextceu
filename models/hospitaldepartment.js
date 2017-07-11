@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Hospital = sequelize.define('Hospital', {
+  var HospitalDepartment = sequelize.define('HospitalDepartment', {
     code: DataTypes.STRING,
     name: DataTypes.STRING
   }, {
@@ -10,10 +10,5 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
-
-  Hospital.associate = function (models) {
-    Hospital.hasMany(models.HospitalDepartment);
-  };
-
-  return Hospital;
+  return HospitalDepartment;
 };

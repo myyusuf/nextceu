@@ -12,6 +12,7 @@ var students = require('./routes/students');
 var departments = require('./routes/department');
 var courses = require('./routes/course');
 var hospitals = require('./routes/hospital');
+var hospitalDepartments = require('./routes/hospital_department');
 
 var app = express();
 
@@ -34,6 +35,7 @@ app.use('/api/students', students);
 app.use('/api/departments', departments);
 app.use('/api/courses', courses);
 app.use('/api/hospitals', hospitals);
+app.use('/api/hospitals/:hospitalId/departments', hospitalDepartments);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
