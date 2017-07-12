@@ -13,6 +13,9 @@ exports.findAll = function findAll(req, res) {
         { name: { $ilike: searchText } },
       ],
     },
+    include: [
+      { model: models.Role },
+    ],
   })
   .then((users) => {
     res.json(users);
@@ -36,17 +39,54 @@ exports.findOne = function findOne(req, res) {
 
 exports.create = function create(req, res) {
   const userForm = req.body;
-  models.User.create(userForm)
-  .then((user) => {
-    res.json(user);
+  const roleId = userForm.role;
+
+  models.Role.findOne({
+    where: { id: roleId },
   })
-  .catch((err) => {
-    sendError(err, res);
+  .then((role) => {
+    models.User.create(userForm)
+    .then((user) => {
+      user.setRole(role)
+      .then((result) => {
+        res.json(result);
+      });
+    })
+    .catch((err) => {
+      sendError(err, res);
+    });
   });
 };
 
 exports.update = function update(req, res) {
   const userForm = req.body;
+  const roleId = userForm.role;
+
+  models.User.findOne({
+    where: { id: req.params.userId },
+  })
+  .then((user) => {
+    models.Role.findOne({
+      where: { id: roleId },
+    })
+    .then((role) => {
+      user.setRole(role)
+      .then((updateResult) => {
+        user.username = userForm.username;
+        user.password = userForm.password;
+        user.name = userForm.name;
+
+        user.save()
+        .then((saveResult) => {
+          res.json(saveResult);
+        });
+      });
+    });
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
+
   models.User.update(
     userForm,
     {
