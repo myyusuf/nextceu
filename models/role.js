@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var HospitalDepartment = sequelize.define('HospitalDepartment', {
+  var Role = sequelize.define('Role', {
     code: DataTypes.STRING,
     name: DataTypes.STRING
   }, {
@@ -10,5 +10,5 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
-  return HospitalDepartment;
+  return Role;
 };
