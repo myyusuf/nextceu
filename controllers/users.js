@@ -5,11 +5,17 @@ const sendError = (err, res) => {
 };
 
 exports.findAll = function findAll(req, res) {
-  models.HospitalDepartment.findAll({
-    where: {},
+  const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
+  models.User.findAll({
+    where: {
+      $or: [
+        { username: { $ilike: searchText } },
+        { name: { $ilike: searchText } },
+      ],
+    },
   })
-  .then((hospitalDepartments) => {
-    res.json(hospitalDepartments);
+  .then((users) => {
+    res.json(users);
   })
   .catch((err) => {
     sendError(err, res);
@@ -17,11 +23,11 @@ exports.findAll = function findAll(req, res) {
 };
 
 exports.findOne = function findOne(req, res) {
-  models.HospitalDepartment.findOne({
-    where: { id: req.params.hospitalDepartmentId },
+  models.User.findOne({
+    where: { id: req.params.userId },
   })
-  .then((hospitalDepartment) => {
-    res.json(hospitalDepartment);
+  .then((user) => {
+    res.json(user);
   })
   .catch((err) => {
     sendError(err, res);
@@ -29,10 +35,10 @@ exports.findOne = function findOne(req, res) {
 };
 
 exports.create = function create(req, res) {
-  const hospitalDepartmentForm = req.body;
-  models.HospitalDepartment.create(hospitalDepartmentForm)
-  .then((hospitalDepartment) => {
-    res.json(hospitalDepartment);
+  const userForm = req.body;
+  models.User.create(userForm)
+  .then((user) => {
+    res.json(user);
   })
   .catch((err) => {
     sendError(err, res);
@@ -40,11 +46,11 @@ exports.create = function create(req, res) {
 };
 
 exports.update = function update(req, res) {
-  const hospitalDepartmentForm = req.body;
-  models.HospitalDepartment.update(
-    hospitalDepartmentForm,
+  const userForm = req.body;
+  models.User.update(
+    userForm,
     {
-      where: { id: req.params.hospitalDepartmentId },
+      where: { id: req.params.userId },
     })
   .then((result) => {
     res.json(result);
@@ -55,9 +61,9 @@ exports.update = function update(req, res) {
 };
 
 exports.destroy = function destroy(req, res) {
-  models.HospitalDepartment.destroy(
+  models.User.destroy(
     {
-      where: { id: req.params.hospitalDepartmentId },
+      where: { id: req.params.userId },
     })
   .then((result) => {
     res.json(result);

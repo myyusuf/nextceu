@@ -8,6 +8,7 @@ var cors = require('cors')
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var roles = require('./routes/roles');
 var students = require('./routes/students');
 var departments = require('./routes/department');
 var courses = require('./routes/course');
@@ -29,7 +30,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/api/users', users);
+app.use('/api/roles', roles);
 app.use('/api/students', students);
 app.use('/api/departments', departments);
 app.use('/api/courses', courses);
