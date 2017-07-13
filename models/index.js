@@ -17,7 +17,7 @@ var db        = {};
 config = {
   "username": process.env.RDS_USERNAME,
   "password": process.env.RDS_PASSWORD,
-  "database": "nextceu",
+  "database": "ebdb",
   "host": process.env.RDS_HOSTNAME,
   "port": process.env.RDS_PORT,
   "dialect": "postgres"
