@@ -1,4 +1,4 @@
-{
+module.exports = {
   "development": {
     "username": "myyusuf",
     "password": null,
@@ -16,4 +16,4 @@
   "production": {
     "use_env_variable": "RDS"
   }
-}
+};

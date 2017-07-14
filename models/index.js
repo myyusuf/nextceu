@@ -5,25 +5,15 @@ var path      = require('path');
 var Sequelize = require('sequelize');
 var basename  = path.basename(module.filename);
 var env       = process.env.NODE_ENV || 'development';
-var config    = require(__dirname + '/../config/config.json')[env];
+// var config    = require(__dirname + '/../config/config.json')[env];
+var config    = require(__dirname + '/../config/config.js')[env];
 var db        = {};
 
-// if (config.use_env_variable) {
-//   var sequelize = new Sequelize(process.env[config.use_env_variable]);
-// } else {
-//   var sequelize = new Sequelize(config.database, config.username, config.password, config);
-// }
-
-config = {
-  "username": process.env.RDS_USERNAME,
-  "password": process.env.RDS_PASSWORD,
-  "database": "ebdb",
-  "host": process.env.RDS_HOSTNAME,
-  "port": process.env.RDS_PORT,
-  "dialect": "postgres"
+if (config.use_env_variable) {
+  var sequelize = new Sequelize(process.env[config.use_env_variable]);
+} else {
+  var sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
-
-var sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 fs
   .readdirSync(__dirname)
