@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   User.associate = function (models) {
-    User.hasOne(models.Role);
+    User.belongsTo(models.Role);
   };
 
   return User;
