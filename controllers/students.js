@@ -4,8 +4,25 @@ const models = require('../models');
 const WEEK_BREAK_DURATION = 2;
 
 exports.findAll = function(req, res) {
+  const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
+  const level = req.query.level ? parseInt(req.query.level, 10) : 0;
+
+  const where = {
+    $or: [
+      { name: { $ilike: searchText } },
+      { oldSid: { $ilike: searchText } },
+      { newSid: { $ilike: searchText } },
+    ],
+  };
+
+  if (level !== 0) {
+    where.$and = [
+      { level },
+    ];
+  }
+
   models.Student.findAll({
-    where: {}
+    where,
   })
   .then((students) => {
     res.json(students);
