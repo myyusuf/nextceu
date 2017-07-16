@@ -62,3 +62,13 @@ exports.findCourseProblems = function(req, res) {
     });
   });
 };
+
+exports.delete = function(req, res) {
+  const courseId = req.params.courseId;
+  models.Course.destroy({
+    where: { id: courseId },
+  })
+  .then((result) => {
+    res.json(result);
+  });
+};
