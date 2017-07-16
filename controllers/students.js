@@ -1,11 +1,13 @@
 const moment = require('moment');
+const Sequelize = require('sequelize');
 const models = require('../models');
 
 const WEEK_BREAK_DURATION = 2;
 
 exports.findAll = function(req, res) {
-  const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
   const level = req.query.level ? parseInt(req.query.level, 10) : 0;
+  const status = req.query.status ? req.query.status : '';
+  const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
 
   const where = {
     $or: [
@@ -15,10 +17,13 @@ exports.findAll = function(req, res) {
     ],
   };
 
+  where.$and = [];
   if (level !== 0) {
-    where.$and = [
-      { level },
-    ];
+    where.$and.push({ level });
+  }
+
+  if (status !== '') {
+    where.$and.push({ status });
   }
 
   models.Student.findAll({
@@ -38,8 +43,20 @@ exports.findOne = function(req, res) {
   });
 };
 
+exports.getStatusCount = function(req, res) {
+  models.Student.findAll({
+    attributes: ['status', [Sequelize.fn('count', Sequelize.col('status')), 'statusCount']],
+    group: ['status'],
+  })
+  .then((result) => {
+    res.json(result);
+  });
+};
+
 exports.create = function(req, res) {
-  models.Student.create(req.body)
+  const stundetForm = req.body;
+  stundetForm.status = 'ACTIVE';
+  models.Student.create(stundetForm)
   .then((result) => {
     res.json(result);
   });

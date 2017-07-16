@@ -13,6 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     enrollYear: DataTypes.INTEGER,
     graduateYear: DataTypes.INTEGER,
     certificateNumber: DataTypes.STRING,
+    status: DataTypes.STRING,
     ipk: DataTypes.DOUBLE
   }, {
     classMethods: {
