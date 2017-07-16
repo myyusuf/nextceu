@@ -200,7 +200,13 @@ exports.addCourses = function(req, res) {
           .then(() => {
             course.setDepartment(department)
             .then(() => {
-              res.json(course);
+              models.Score.create({})
+              .then((score) => {
+                course.setScore(score)
+                .then(() => {
+                  res.json(course);
+                });
+              });
             });
           });
         })
