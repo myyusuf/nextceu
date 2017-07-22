@@ -14,6 +14,7 @@ var studentsStatus = require('./routes/students_status');
 var departments = require('./routes/department');
 var courses = require('./routes/course');
 var hospitals = require('./routes/hospital');
+var hospitalDepartments = require('./routes/hospitaldepartment');
 var seminars = require('./routes/seminar');
 var security = require('./routes/security');
 
@@ -40,6 +41,7 @@ app.use('/api/students_status', studentsStatus);
 app.use('/api/departments', departments);
 app.use('/api/courses', courses);
 app.use('/api/hospitals', hospitals);
+app.use('/api/hospitaldepartments', hospitalDepartments);
 app.use('/api/seminars', seminars);
 app.use('/api/security', security);
 

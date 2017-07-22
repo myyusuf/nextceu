@@ -7,11 +7,6 @@ const sendError = (err, res) => {
 exports.findAll = function findAll(req, res) {
   models.Hospital.findAll({
     where: {},
-    include: [
-      {
-        model: models.Department,
-      },
-    ],
   })
   .then((hospitals) => {
     res.json(hospitals);
@@ -24,11 +19,6 @@ exports.findAll = function findAll(req, res) {
 exports.findOne = function findOne(req, res) {
   models.Hospital.findOne({
     where: { id: req.params.hospitalId },
-    include: [
-      {
-        model: models.Department,
-      },
-    ],
   })
   .then((hospital) => {
     res.json(hospital);
@@ -41,16 +31,8 @@ exports.findOne = function findOne(req, res) {
 exports.create = function create(req, res) {
   const hospitalForm = req.body;
   models.Hospital.create(hospitalForm)
-  .then((hospital) => {
-    models.Department.findAll({
-      where: { id: hospitalForm.departments },
-    })
-    .then((foundDepartments) => {
-      hospital.setDepartments(foundDepartments)
-      .then((result) => {
-        res.json(result);
-      });
-    });
+  .then((result) => {
+    res.json(result);
   })
   .catch((err) => {
     sendError(err, res);
@@ -59,24 +41,13 @@ exports.create = function create(req, res) {
 
 exports.update = function update(req, res) {
   const hospitalForm = req.body;
-  models.Hospital.findOne({
-    where: { id: req.params.hospitalId },
-  })
-  .then((foundHospital) => {
-    models.Department.findAll({
-      where: { id: hospitalForm.departments },
+  models.Hospital.update(
+    hospitalForm,
+    {
+      where: { id: req.params.hospitalId },
     })
-    .then((foundDepartments) => {
-      foundHospital.code = hospitalForm.code;
-      foundHospital.name = hospitalForm.name;
-      foundHospital.save()
-      .then((saveResult) => {
-        foundHospital.setDepartments(foundDepartments)
-        .then((result) => {
-          res.json(result);
-        });
-      });
-    });
+  .then((result) => {
+    res.json(result);
   })
   .catch((err) => {
     sendError(err, res);
