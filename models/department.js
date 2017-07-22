@@ -3,6 +3,7 @@ module.exports = function(sequelize, DataTypes) {
   var Department = sequelize.define('Department', {
     code: DataTypes.STRING,
     name: DataTypes.STRING,
+    level: DataTypes.INTEGER,
     color: DataTypes.STRING,
     duration: DataTypes.INTEGER,
     duration1: DataTypes.INTEGER,
