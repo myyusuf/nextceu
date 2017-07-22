@@ -1,6 +1,6 @@
 const express = require('express');
 const HospitalController = require('../controllers/hospitals.js');
-const HospitalDepartmentController = require('../controllers/hospitals.js');
+const HospitalDepartmentController = require('../controllers/hospitaldepartments.js');
 
 const router = express.Router();
 

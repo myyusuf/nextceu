@@ -12,6 +12,9 @@ exports.findAll = function findAll(req, res) {
       {
         model: models.Hospital, where: { id: hospitalId },
       },
+      {
+        model: models.Department,
+      },
     ],
   })
   .then((hospitalDepartments) => {
@@ -54,7 +57,7 @@ exports.create = function create(req, res) {
           },
         })
         .then((foundHospital) => {
-          foundHospital.addHospitalDepartment()
+          foundHospital.addHospitalDepartment(createdHospitalDepartment)
           .then((result) => {
             res.json(result);
           });
