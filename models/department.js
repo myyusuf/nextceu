@@ -16,5 +16,10 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
+
+  Department.associate = function(models) {
+    Department.belongsToMany(models.Hospital, { through: 'HospitalDepartment' });
+  };
+
   return Department;
 };

@@ -12,7 +12,6 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Hospital.associate = function (models) {
-    Hospital.hasMany(models.Department);
   };
 
   return Hospital;
