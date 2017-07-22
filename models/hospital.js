@@ -12,6 +12,8 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Hospital.associate = function (models) {
+    Hospital.belongsToMany(models.Department, { through: 'HospitalDepartment' });
+    models.Department.belongsToMany(Hospital, { through: 'HospitalDepartment' });
   };
 
   return Hospital;
