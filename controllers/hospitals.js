@@ -1,4 +1,5 @@
 const sequelize = require('sequelize');
+const moment = require('moment');
 
 const models = require('../models');
 
@@ -73,6 +74,8 @@ exports.findSchedule = function findSchedule(req, res) {
 
   const departmentId = req.query.department;
   const studentId = req.query.student;
+  const startDate = moment(req.query.startDate);
+  const endDate = moment(req.query.endDate);
 
   models.Hospital.findAll({
     where: {},
@@ -109,6 +112,12 @@ exports.findSchedule = function findSchedule(req, res) {
     models.Course.findAll({
       where: {
         DepartmentId: departmentId,
+        planStartDate1: {
+          $gte: startDate.toDate(),
+        },
+        planEndDate1: {
+          $lte: endDate.toDate(),
+        },
       },
       group: ['hospital1Id'],
       attributes: ['hospital1Id', [sequelize.fn('COUNT', 'hospital1Id'), 'hospitalCount']],
