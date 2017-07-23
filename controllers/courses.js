@@ -40,14 +40,55 @@ exports.update = function(req, res, next) {
       })
     });
   } else {
-    models.Course.update(
-      req.body,
-      {
-        where: { id: req.params.courseId },
-      })
-      .then((result) => {
-        res.json(result);
-      });
+    // models.Course.update(
+    //   req.body,
+    //   {
+    //     where: { id: req.params.courseId },
+    //   })
+    //   .then((result) => {
+    //     res.json(result);
+    //   });
+    const courseForm = req.body;
+    models.Course.findOne({
+      where: { id: req.params.courseId },
+      include: [
+        { model: models.Score },
+      ],
+    })
+    .then((course) => {
+      if (courseForm.hospital1) {
+        models.Hospital.findOne({
+          where: { id: courseForm.hospital1}
+        })
+        .then((foundHospital) => {
+          course.setHospital1(foundHospital)
+          .then(() => {
+
+            course.save()
+            .then((result) => {
+              res.json(result);
+            })
+            .catch((err) => {
+              res.status(500).send('Error when doing operation.');
+            });
+
+          });
+        });
+      } else {
+        course.setHospital1(null)
+        .then(() => {
+
+          course.save()
+          .then((result) => {
+            res.json(result);
+          })
+          .catch((err) => {
+            res.status(500).send('Error when doing operation.');
+          });
+
+        });
+      }
+    });
   }
 };
 
