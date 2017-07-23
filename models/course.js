@@ -30,6 +30,9 @@ module.exports = function(sequelize, DataTypes) {
     Course.belongsTo(models.Department);
     Course.hasOne(models.Score);
     Course.hasMany(models.CourseProblem);
+    Course.belongsTo(models.Hospital, { as: 'hospital1' });
+    Course.belongsTo(models.Hospital, { as: 'hospital2' });
+    Course.belongsTo(models.Hospital, { as: 'clinic' });
   };
 
   return Course;

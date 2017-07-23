@@ -66,3 +66,15 @@ exports.destroy = function destroy(req, res) {
     sendError(err, res);
   });
 };
+
+exports.findSchedule = function findSchedule(req, res) {
+  models.Hospital.findAll({
+    where: {},
+  })
+  .then((hospitals) => {
+    res.json(hospitals);
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
+};
