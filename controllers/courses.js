@@ -7,6 +7,7 @@ exports.findOne = function(req, res) {
       { model: models.Student },
       { model: models.Department },
       { model: models.Score },
+      { model: models.Hospital, as: 'hospital1' },
     ],
   })
   .then((course) => {
