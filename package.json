@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
-    "dev": "nodemon ./bin/www",
+    "dev": "PORT=3300 nodemon ./bin/www",
     "test": "mocha"
   },
   "repository": {
