@@ -6,7 +6,10 @@ const sendError = (err, res) => {
 
 exports.findAll = function findAll(req, res) {
   const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
-  models.User.findAll({
+  const limit = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
+  const currentPage = req.query.currentPage ? parseInt(req.query.currentPage, 10) : 1;
+  const offset = (currentPage - 1) * limit;
+  models.User.findAndCountAll({
     where: {
       $or: [
         { username: { $ilike: searchText } },
@@ -16,9 +19,11 @@ exports.findAll = function findAll(req, res) {
     include: [
       { model: models.Role },
     ],
+    limit,
+    offset,
   })
-  .then((users) => {
-    res.json(users);
+  .then((result) => {
+    res.json(result);
   })
   .catch((err) => {
     sendError(err, res);
