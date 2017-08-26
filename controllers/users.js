@@ -1,3 +1,4 @@
+const generatePassword = require('password-generator');
 const models = require('../models');
 
 const sendError = (err, res) => {
@@ -50,6 +51,7 @@ exports.create = function create(req, res) {
     where: { id: roleId },
   })
   .then((role) => {
+    userForm.password = generatePassword();
     models.User.create(userForm)
     .then((user) => {
       user.setRole(role)
