@@ -1,7 +1,7 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Department = sequelize.define('Department', {
-    code: DataTypes.STRING,
+    code: { type: DataTypes.STRING, unique: true },
     name: DataTypes.STRING,
     level: DataTypes.INTEGER,
     color: DataTypes.STRING,
