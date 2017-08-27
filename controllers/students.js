@@ -161,6 +161,7 @@ exports.addCourses = function(req, res) {
             planStartDate3,
             planEndDate3,
             status: 0,
+            completion: 0,
           }, student, department);
 
           promises.push(createCoursePromise);
@@ -205,6 +206,7 @@ exports.addCourses = function(req, res) {
           planStartDate3,
           planEndDate3,
           status: 0,
+          completion: 0,
         })
         .then((course) => {
           course.setStudent(student)
