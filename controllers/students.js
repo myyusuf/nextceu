@@ -176,7 +176,8 @@ exports.addCourses = function(req, res) {
       });
     });
   } else if (form.formType === 'DEPARTMENT') {
-    const planStartDate = moment(form.formattedStartDate, 'DD/MM/YYYY');
+    // const planStartDate = moment(form.formattedStartDate, 'DD/MM/YYYY');
+    const planStartDate = moment(form.formattedStartDate);
     const planStartDate1 = planStartDate.clone();
     models.Student.findOne({
       where: { id: studentId },
