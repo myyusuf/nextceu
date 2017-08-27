@@ -132,7 +132,8 @@ exports.addCourses = function(req, res) {
           });
         };
 
-        let planStartDate = moment(form.formattedStartDate, 'DD/MM/YYYY');
+        // let planStartDate = moment(form.formattedStartDate, 'DD/MM/YYYY');
+        let planStartDate = moment(form.startDate);
 
         for (let i = 0; i < departments.length; i += 1) {
 
@@ -159,6 +160,7 @@ exports.addCourses = function(req, res) {
             planEndDate2,
             planStartDate3,
             planEndDate3,
+            status: 0,
           }, student, department);
 
           promises.push(createCoursePromise);
@@ -202,6 +204,7 @@ exports.addCourses = function(req, res) {
           planEndDate2,
           planStartDate3,
           planEndDate3,
+          status: 0,
         })
         .then((course) => {
           course.setStudent(student)
