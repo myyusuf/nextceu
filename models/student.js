@@ -2,10 +2,11 @@
 module.exports = function(sequelize, DataTypes) {
   var Student = sequelize.define('Student', {
     name: DataTypes.STRING,
-    oldSid: DataTypes.STRING,
-    newSid: DataTypes.STRING,
+    oldSid: { type: DataTypes.STRING, unique: true },
+    newSid: { type: DataTypes.STRING, unique: true },
     level: DataTypes.INTEGER,
     gender: DataTypes.STRING,
+    birthDate: DataTypes.DATE,
     address: DataTypes.STRING,
     phone: DataTypes.STRING,
     mobilePhone: DataTypes.STRING,

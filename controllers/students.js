@@ -4,10 +4,13 @@ const models = require('../models');
 
 const WEEK_BREAK_DURATION = 2;
 
-exports.findAll = function(req, res) {
+exports.findAll = function (req, res) {
   const level = req.query.level ? parseInt(req.query.level, 10) : 0;
   const status = req.query.status ? req.query.status : '';
   const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
+  const limit = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
+  const currentPage = req.query.currentPage ? parseInt(req.query.currentPage, 10) : 1;
+  const offset = (currentPage - 1) * limit;
 
   const where = {
     $or: [
@@ -26,11 +29,13 @@ exports.findAll = function(req, res) {
     where.$and.push({ status });
   }
 
-  models.Student.findAll({
+  models.Student.findAndCountAll({
     where,
+    limit,
+    offset,
   })
-  .then((students) => {
-    res.json(students);
+  .then((result) => {
+    res.json(result);
   });
 };
 
@@ -54,12 +59,13 @@ exports.getStatusCount = function(req, res) {
 };
 
 exports.create = function(req, res) {
-  const stundetForm = req.body;
-  stundetForm.status = 'ACTIVE';
-  models.Student.create(stundetForm)
+  const studentForm = req.body;
+  studentForm.status = 'ACTIVE';
+  models.Student.create(studentForm)
   .then((result) => {
     res.json(result);
-  });
+  })
+  .catch(err => res.status(500).send(err.message));
 };
 
 exports.update = function updateStudent(req, res) {
@@ -71,7 +77,8 @@ exports.update = function updateStudent(req, res) {
     })
   .then((result) => {
     res.json(result);
-  });
+  })
+  .catch(err => res.status(500).send(err.message));
 };
 
 exports.delete = function deleteStudent(req, res) {
@@ -81,7 +88,8 @@ exports.delete = function deleteStudent(req, res) {
     })
   .then((result) => {
     res.json(result);
-  });
+  })
+  .catch(err => res.status(500).send(err.message));
 };
 
 exports.addCourses = function(req, res) {
