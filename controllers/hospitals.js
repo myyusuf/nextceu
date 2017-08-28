@@ -74,8 +74,8 @@ exports.findSchedule = function findSchedule(req, res) {
 
   const departmentId = req.query.department;
   const studentId = req.query.student;
-  const startDate = moment(req.query.startDate);
-  const endDate = moment(req.query.endDate);
+  const startDate = moment(req.query.startDate.replace(/"/g, ''));
+  const endDate = moment(req.query.endDate.replace(/"/g, ''));
 
   models.Hospital.findAll({
     where: {},
