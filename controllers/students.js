@@ -245,7 +245,8 @@ exports.findCourses = function(req, res) {
       include: [
         { model: models.Student, where: { id: studentId } },
         { model: models.Department },
-      ]
+        { model: models.Score },
+      ],
     })
     .then((courses) => {
       res.json(courses);

@@ -74,9 +74,19 @@ exports.update = function(req, res, next) {
     course.realStartDate3 = courseForm.realStartDate3;
     course.realEndDate3 = courseForm.realEndDate3;
 
+    const score = course.Score;
+    score.preTest = courseForm.preTest;
+    score.research = courseForm.research;
+    score.weeklyDiscussion = courseForm.weeklyDiscussion;
+    score.test = courseForm.test;
+    score.postTest = courseForm.postTest;
+
     course.save()
-    .then((result) => {
-      res.json(result);
+    .then(() => {
+      score.save()
+      .then((scoreSaveResult) => {
+        res.json(scoreSaveResult);
+      });
     })
     .catch((err) => {
       console.log(err);
