@@ -16,8 +16,38 @@ exports.findOne = function(req, res) {
 };
 
 exports.update = function(req, res, next) {
-  // const title = req.body.title;
 
+  const courseForm = req.body;
+  models.Course.findOne({
+    where: { id: req.params.courseId },
+    include: [
+      { model: models.Score },
+    ],
+  })
+  .then((course) => {
+    course.title = courseForm.title;
+    course.completion = courseForm.completion;
+
+    if (course.status !== 3) {
+      if (course.completion === 0) {
+        course.status = 0;
+      } else if (course.completion > 0 && course.completion < 100) {
+        course.status = 1;
+      } else if (course.completion === 100) {
+        course.status = 2;
+      }
+    }
+    course.save()
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send('Error when doing operation.');
+    });
+  });
+  // const title = req.body.title;
+  /*
   if (req.body.editType && req.body.editType === 'SCORE') {
     models.Course.findOne({
       where: { id: req.params.courseId },
@@ -41,14 +71,6 @@ exports.update = function(req, res, next) {
       })
     });
   } else {
-    // models.Course.update(
-    //   req.body,
-    //   {
-    //     where: { id: req.params.courseId },
-    //   })
-    //   .then((result) => {
-    //     res.json(result);
-    //   });
     const courseForm = req.body;
     models.Course.findOne({
       where: { id: req.params.courseId },
@@ -125,6 +147,7 @@ exports.update = function(req, res, next) {
       }
     });
   }
+  */
 };
 
 exports.findCourseProblems = function(req, res) {
