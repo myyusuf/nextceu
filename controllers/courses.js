@@ -18,6 +18,7 @@ exports.findOne = function(req, res) {
 exports.update = function(req, res, next) {
 
   const courseForm = req.body;
+  console.log(JSON.stringify(courseForm));
   models.Course.findOne({
     where: { id: req.params.courseId },
     include: [
@@ -37,6 +38,42 @@ exports.update = function(req, res, next) {
         course.status = 2;
       }
     }
+
+    course.planStartDate = courseForm.planDate[0];
+    course.planEndDate = courseForm.planDate[1];
+    course.realStartDate = courseForm.realStartDate;
+    course.realEndDate = courseForm.realEndDate;
+
+    if (courseForm.planDate1.length > 0) {
+      course.planStartDate1 = courseForm.planDate1[0];
+      course.planEndDate1 = courseForm.planDate1[1];
+    } else {
+      course.planStartDate1 = null;
+      course.planEndDate1 = null;
+    }
+    course.realStartDate1 = courseForm.realStartDate1;
+    course.realEndDate1 = courseForm.realEndDate1;
+
+    if (courseForm.planDate2.length > 0) {
+      course.planStartDate2 = courseForm.planDate2[0];
+      course.planEndDate2 = courseForm.planDate2[1];
+    } else {
+      course.planStartDate2 = null;
+      course.planEndDate2 = null;
+    }
+    course.realStartDate2 = courseForm.realStartDate2;
+    course.realEndDate2 = courseForm.realEndDate2;
+
+    if (courseForm.planDate3.length > 0) {
+      course.planStartDate3 = courseForm.planDate3[0];
+      course.planEndDate3 = courseForm.planDate3[1];
+    } else {
+      course.planStartDate3 = null;
+      course.planEndDate3 = null;
+    }
+    course.realStartDate3 = courseForm.realStartDate3;
+    course.realEndDate3 = courseForm.realEndDate3;
+
     course.save()
     .then((result) => {
       res.json(result);
