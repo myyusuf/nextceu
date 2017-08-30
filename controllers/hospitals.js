@@ -161,7 +161,7 @@ exports.findSchedule = function findSchedule(req, res) {
   });
 };
 
-exports.hospitalSchedule = function findSchedule(req, res) {
+exports.hospitalSchedule = function hospitalSchedule(req, res) {
 
   const departmentId = req.query.hospitalDepartment || -1;
   const hospitalDateRange = req.query.hospitalDateRange;
@@ -243,4 +243,41 @@ exports.hospitalSchedule = function findSchedule(req, res) {
   .catch((err) => {
     sendError(err, res);
   });
+};
+
+exports.hospitalStudents = function hospitalStudents(req, res) {
+  const departmentId = req.query.hospitalDepartment || -1;
+  const hospitalId = req.params.hospitalId || -1;
+  const hospitalDateRange = req.query.hospitalDateRange;
+  let startDate = null;
+  let endDate = null;
+  if (hospitalDateRange) {
+    startDate = moment(hospitalDateRange[0].replace(/"/g, ''));
+    endDate = moment(hospitalDateRange[1].replace(/"/g, ''));
+  }
+  console.log('----->>>>', startDate);
+  console.log('----->>>>', endDate);
+  if (startDate && endDate) {
+    models.Course.findAll({
+      where: {
+        DepartmentId: departmentId,
+        $or: [
+          { hospital1Id: hospitalId },
+          { clinicId: hospitalId },
+        ],
+        planStartDate1: {
+          $gte: startDate.toDate(),
+        },
+        planEndDate1: {
+          $lte: endDate.toDate(),
+        },
+      },
+    }).then((courses) => {
+      // console.log(JSON.stringify(courseGroups));
+      const students = courses.map(course => (course.Student));
+      res.json(students);
+    });
+  } else {
+    res.json([]);
+  }
 };

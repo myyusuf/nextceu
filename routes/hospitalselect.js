@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.get('/', HospitalController.findSchedule);
 router.get('/hospitalschedules', HospitalController.hospitalSchedule);
+router.get('/hospitalstudents/:hospitalId', HospitalController.hospitalStudents);
 
 module.exports = router;
