@@ -246,6 +246,8 @@ exports.findCourses = function(req, res) {
         { model: models.Student, where: { id: studentId } },
         { model: models.Department },
         { model: models.Score },
+        { model: models.Hospital, as: 'hospital1' },
+        { model: models.Hospital, as: 'clinic' },
       ],
     })
     .then((courses) => {

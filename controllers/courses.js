@@ -81,6 +81,18 @@ exports.update = function(req, res, next) {
     score.test = courseForm.test;
     score.postTest = courseForm.postTest;
 
+    if (courseForm.hospital1) {
+      course.hospital1Id = parseInt(courseForm.hospital1, 10);
+    } else {
+      course.hospital1Id = null;
+    }
+
+    if (courseForm.clinic) {
+      course.clinicId = parseInt(courseForm.clinic, 10);
+    } else {
+      course.clinicId = null;
+    }
+
     course.save()
     .then(() => {
       score.save()
