@@ -1,3 +1,4 @@
+const Excel = require('exceljs');
 const models = require('../models');
 
 const sendError = (err, res) => {
@@ -98,5 +99,32 @@ exports.destroy = function destroy(req, res) {
   })
   .catch((err) => {
     sendError(err, res);
+  });
+};
+
+exports.fileUpload = function fileUpload(req, res) {
+  if (!req.files) {
+    return res.status(400).send('No files were uploaded.');
+  }
+
+  // The name of the input field (i.e. "seminarFile") is used to retrieve the uploaded file
+  const seminarFile = req.files.seminarFile;
+
+  // Use the mv() method to place the file somewhere on your server
+  const fileName = '/Users/myyusuf/Documents/Test/file_upload/seminar_file.xlsx';
+  seminarFile.mv(fileName, (err) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    const workbook = new Excel.Workbook();
+    workbook.xlsx.readFile(fileName)
+        .then(() => {
+          const worksheet = workbook.getWorksheet(1);
+          const cellValue = worksheet.getCell('B6').value;
+          console.log('==========> ', cellValue);
+
+          return res.send('File uploaded!');
+        });
   });
 };
