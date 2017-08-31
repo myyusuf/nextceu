@@ -109,9 +109,10 @@ exports.fileUpload = function fileUpload(req, res) {
 
   // The name of the input field (i.e. "seminarFile") is used to retrieve the uploaded file
   const seminarFile = req.files.seminarFile;
+  const seminarId = req.params.seminarId;
 
   // Use the mv() method to place the file somewhere on your server
-  const fileName = '/Users/myyusuf/Documents/Test/file_upload/seminar_file.xlsx';
+  const fileName = `/Users/myyusuf/Documents/Test/file_upload/seminar_file_${seminarId}.xlsx`;
   seminarFile.mv(fileName, (err) => {
     if (err) {
       return res.status(500).send(err);
@@ -120,11 +121,45 @@ exports.fileUpload = function fileUpload(req, res) {
     const workbook = new Excel.Workbook();
     workbook.xlsx.readFile(fileName)
         .then(() => {
-          const worksheet = workbook.getWorksheet(1);
-          const cellValue = worksheet.getCell('B6').value;
-          console.log('==========> ', cellValue);
+          models.Participant.destroy(
+            {
+              where: { SeminarId: seminarId },
+            })
+          .then(() => {
+            const worksheet = workbook.getWorksheet(1);
+            const promises = [];
+            for (let i = 6; i < 10; i += 1) {
+              const oldSid = worksheet.getCell(`C${i}`).value;
+              const promise = new Promise((resolve, reject) => {
+                models.Student.findOne({
+                  where: { oldSid },
+                })
+                .then((student) => {
+                  if (student) {
+                    models.Participant.create({
+                      StudentId: student.id,
+                      SeminarId: seminarId,
+                    })
+                    .then(() => {
+                      resolve();
+                    });
+                  } else {
+                    resolve();
+                  }
+                })
+                .catch((err2) => {
+                  reject(err2);
+                });
+              });
 
-          return res.send('File uploaded!');
+              promises.push(promise);
+            }
+
+            Promise.all(promises)
+            .then(() => {
+              return res.send('File uploaded!');
+            });
+          });
         });
   });
 };

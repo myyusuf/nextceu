@@ -3,6 +3,6 @@ const SeminarController = require('../controllers/seminars.js');
 
 const router = express.Router();
 
-router.post('/', SeminarController.fileUpload);
+router.post('/:seminarId', SeminarController.fileUpload);
 
 module.exports = router;
