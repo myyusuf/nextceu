@@ -5,11 +5,45 @@ const sendError = (err, res) => {
 };
 
 exports.findAll = function findAll(req, res) {
-  models.Seminar.findAll({
-    where: {},
+  const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
+  const limit = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
+  const currentPage = req.query.currentPage ? parseInt(req.query.currentPage, 10) : 1;
+  const offset = (currentPage - 1) * limit;
+  models.Seminar.findAndCountAll({
+    where: {
+      $or: [
+        { code: { $ilike: searchText } },
+        { name: { $ilike: searchText } },
+      ],
+    },
+    limit,
+    offset,
   })
-  .then((seminars) => {
-    res.json(seminars);
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
+};
+
+exports.findAllParticipants = function findAllParticipants(req, res) {
+  const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
+  const limit = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
+  const currentPage = req.query.currentPage ? parseInt(req.query.currentPage, 10) : 1;
+  const offset = (currentPage - 1) * limit;
+  models.Participant.findAndCountAll({
+    where: {
+      $or: [
+        { code: { $ilike: searchText } },
+        { name: { $ilike: searchText } },
+      ],
+    },
+    limit,
+    offset,
+  })
+  .then((result) => {
+    res.json(result);
   })
   .catch((err) => {
     sendError(err, res);

@@ -1,9 +1,9 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Seminar = sequelize.define('Seminar', {
-    code: DataTypes.STRING,
+    code: { type: DataTypes.STRING, unique: true },
     name: DataTypes.STRING,
-    aventDate: DataTypes.DATE,
+    eventDate: DataTypes.DATE,
     description: DataTypes.STRING
   }, {
     classMethods: {
@@ -12,5 +12,10 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
+
+  Seminar.associate = function (models) {
+    Seminar.hasMany(models.Participant);
+  };
+
   return Seminar;
 };
