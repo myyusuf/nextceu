@@ -232,7 +232,7 @@ exports.hospitalSchedule = function hospitalSchedule(req, res) {
         group: ['hospital1Id'],
         attributes: ['hospital1Id', [sequelize.fn('COUNT', 'hospital1Id'), 'hospitalCount']],
       }).then((courseGroups) => {
-        // console.log(JSON.stringify(courseGroups));
+        console.log('>>>>>>>>>>>>', JSON.stringify(courseGroups));
         for (let i = 0; i < courseGroups.length; i += 1) {
           const courseGroup = courseGroups[i].dataValues;
           for (let j = 0; j < hospitals.length; j += 1) {
