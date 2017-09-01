@@ -181,6 +181,7 @@ exports.hospitalSchedule = function hospitalSchedule(req, res) {
   }
   console.log('----->>>>', startDate);
   console.log('----->>>>', endDate);
+  console.log('----->>>>', departmentId);
 
   models.Hospital.findAll({
     where: {},
@@ -209,8 +210,7 @@ exports.hospitalSchedule = function hospitalSchedule(req, res) {
 
           if (hospital.HospitalDepartments[x].Department.id === parseInt(departmentId, 10)) {
             hospital.departmentQuota = hospital.HospitalDepartments[x].quota;
-          } else {
-            hospital.departmentQuota = 0;
+            break;
           }
         }
       }
