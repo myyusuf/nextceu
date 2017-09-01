@@ -244,38 +244,38 @@ exports.hospitalSchedule = function hospitalSchedule(req, res) {
               hospital.studentsInDepartmentCount = courseGroup.hospitalCount;
             }
           }
+        }
 
-          //-------------
-          models.Course.findAll({
-            where: {
-              DepartmentId: departmentId,
-              planStartDate1: {
-                $gte: startDate.toDate(),
-              },
-              planEndDate1: {
-                $lte: endDate.toDate(),
-              },
+        //-------------
+        models.Course.findAll({
+          where: {
+            DepartmentId: departmentId,
+            planStartDate1: {
+              $gte: startDate.toDate(),
             },
-            group: ['clinicId'],
-            attributes: ['clinicId', [sequelize.fn('COUNT', 'clinicId'), 'hospitalCount']],
-          }).then((courseGroupsX) => {
-            // console.log(JSON.stringify(courseGroupsX));
-            for (let x = 0; x < courseGroupsX.length; x += 1) {
-              const courseGroup2 = courseGroupsX[x].dataValues;
-              for (let y = 0; y < hospitals.length; y += 1) {
-                const hospital = hospitals[y];
+            planEndDate1: {
+              $lte: endDate.toDate(),
+            },
+          },
+          group: ['clinicId'],
+          attributes: ['clinicId', [sequelize.fn('COUNT', 'clinicId'), 'hospitalCount']],
+        }).then((courseGroupsX) => {
+          console.log(JSON.stringify(courseGroupsX));
+          for (let x = 0; x < courseGroupsX.length; x += 1) {
+            const courseGroup2 = courseGroupsX[x].dataValues;
+            for (let y = 0; y < hospitals.length; y += 1) {
+              const hospitalX = hospitals[y];
 
-                // For clinics
-                if (hospital.id === parseInt(courseGroup2.clinicId, 10)
-                && hospital.hospitalType === 2) {
-                  hospital.studentsInDepartmentCount = courseGroup2.hospitalCount;
-                }
+              // For clinics
+              if (hospitalX.id === parseInt(courseGroup2.clinicId, 10)
+              && hospitalX.hospitalType === 2) {
+                hospitalX.studentsInDepartmentCount = courseGroup2.hospitalCount;
               }
             }
-            res.json(hospitals);
-          });
-          //-------------
-        }
+          }
+          res.json(hospitals);
+        });
+        //-------------
       });
     } else {
       res.json(hospitals);
