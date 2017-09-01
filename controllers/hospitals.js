@@ -313,8 +313,13 @@ exports.hospitalStudents = function hospitalStudents(req, res) {
           $lte: endDate.toDate(),
         },
       },
+      include: [
+        {
+          model: models.Student,
+        },
+      ],
     }).then((courses) => {
-      // console.log(JSON.stringify(courseGroups));
+      console.log(JSON.stringify(courses));
       const students = courses.map(course => (course.Student));
       res.json(students);
     });
