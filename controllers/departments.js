@@ -6,12 +6,14 @@ const sendError = (err, res) => {
 
 exports.findAll = function findAll(req, res) {
   const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
+  const searchLevel = req.query.searchLevel ? parseInt(req.query.searchLevel, 10) : 1;
   models.Department.findAll({
     where: {
       $or: [
         { code: { $ilike: searchText } },
         { name: { $ilike: searchText } },
       ],
+      level: searchLevel,
     },
     order: ['id'],
   })
