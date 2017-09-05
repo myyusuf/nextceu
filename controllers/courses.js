@@ -27,17 +27,17 @@ exports.update = function(req, res, next) {
   })
   .then((course) => {
     course.title = courseForm.title;
-    course.completion = courseForm.completion;
-
-    if (course.status !== 3) {
-      if (course.completion === 0) {
-        course.status = 0;
-      } else if (course.completion > 0 && course.completion < 100) {
-        course.status = 1;
-      } else if (course.completion === 100) {
-        course.status = 2;
-      }
-    }
+    // course.completion = courseForm.completion;
+    //
+    // if (course.status !== 3) {
+    //   if (course.completion === 0) {
+    //     course.status = 0;
+    //   } else if (course.completion > 0 && course.completion < 100) {
+    //     course.status = 1;
+    //   } else if (course.completion === 100) {
+    //     course.status = 2;
+    //   }
+    // }
 
     course.planStartDate = courseForm.planDate[0];
     course.planEndDate = courseForm.planDate[1];
@@ -73,6 +73,17 @@ exports.update = function(req, res, next) {
     }
     course.realStartDate3 = courseForm.realStartDate3;
     course.realEndDate3 = courseForm.realEndDate3;
+
+    // You can not change pending status
+    if (course.status !== 4) {
+      if (course.realStartDate && course.realEndDate) {
+        course.status = 2;
+      } else if (course.realStartDate) {
+        course.status = 1;
+      } else {
+        course.status = 0;
+      }
+    }
 
     const score = course.Score;
     score.preTest = courseForm.preTest;
@@ -207,6 +218,40 @@ exports.update = function(req, res, next) {
     });
   }
   */
+};
+
+exports.pending = function(req, res, next) {
+  models.Course.findOne({
+    where: { id: req.params.courseId },
+  })
+  .then((course) => {
+    course.status = 4;
+    course.save()
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send('Error when doing operation.');
+    });
+  });
+};
+
+exports.unPending = function(req, res, next) {
+  models.Course.findOne({
+    where: { id: req.params.courseId },
+  })
+  .then((course) => {
+    course.status = 0;
+    course.save()
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send('Error when doing operation.');
+    });
+  });
 };
 
 exports.findCourseProblems = function(req, res) {
