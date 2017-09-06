@@ -12,6 +12,7 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Score.associate = function (models) {
+    Score.belongsTo(models.Course);
     Score.belongsTo(models.ScoreType);
   };
 

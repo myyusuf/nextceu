@@ -102,27 +102,22 @@ exports.addCourses = function(req, res) {
     })
     .then((student) => {
       models.Department.findAll({
-        where: {},
+        where: {
+          level: parseInt(form.level, 10),
+        },
       })
       .then((departments) => {
         const promises = [];
 
         const createCourse = function (courseParam, studentParam, departmentParam) {
           return new Promise((resolve, reject) => {
-
-            models.Score.create({})
-            .then((score) => {
-              models.Course.create(courseParam)
-              .then((course) => {
-                course.setStudent(studentParam)
+            models.Course.create(courseParam)
+            .then((course) => {
+              course.setStudent(studentParam)
+              .then(() => {
+                course.setDepartment(departmentParam)
                 .then(() => {
-                  course.setDepartment(departmentParam)
-                  .then(() => {
-                    course.setScore(score)
-                    .then(() => {
-                      resolve(course);
-                    });
-                  });
+                  resolve(course);
                 });
               });
             })
@@ -136,7 +131,6 @@ exports.addCourses = function(req, res) {
         let planStartDate = moment(form.startDate);
 
         for (let i = 0; i < departments.length; i += 1) {
-
           const department = departments[i];
 
           const planStartDate1 = planStartDate.clone();
@@ -214,13 +208,7 @@ exports.addCourses = function(req, res) {
           .then(() => {
             course.setDepartment(department)
             .then(() => {
-              models.Score.create({})
-              .then((score) => {
-                course.setScore(score)
-                .then(() => {
-                  res.json(course);
-                });
-              });
+              res.json(course);
             });
           });
         })
@@ -248,6 +236,25 @@ exports.findCourses = function(req, res) {
         { model: models.Score },
         { model: models.Hospital, as: 'hospital1' },
         { model: models.Hospital, as: 'clinic' },
+      ],
+    })
+    .then((courses) => {
+      res.json(courses);
+    });
+  });
+};
+
+exports.findScores = function(req, res) {
+  const studentId = req.params.studentId;
+  models.Student.findOne({
+    where: { id: studentId }
+  })
+  .then((student) => {
+    models.Score.findAll({
+      where: {},
+      include: [
+        { model: models.Student, where: { id: studentId } },
+        { model: models.ScoreType },
       ],
     })
     .then((courses) => {

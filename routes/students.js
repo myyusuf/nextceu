@@ -12,5 +12,6 @@ router.delete('/:studentId', StudentController.delete);
 router.post('/:studentId/courses', StudentController.addCourses);
 router.get('/:studentId/courses', StudentController.findCourses);
 router.delete('/:studentId/courses/:courseId', StudentController.deleteCourse);
+router.get('/:studentId/scores', StudentController.findScores);
 
 module.exports = router;
