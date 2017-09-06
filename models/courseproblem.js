@@ -16,6 +16,7 @@ module.exports = function(sequelize, DataTypes) {
 
   CourseProblem.associate = function (models) {
     CourseProblem.belongsTo(models.Course);
+    CourseProblem.belongsTo(models.CourseProblemType);
   };
   return CourseProblem;
 };

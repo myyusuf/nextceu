@@ -14,8 +14,8 @@ exports.findAll = function findAll(req, res) {
       ],
     },
   })
-  .then((courseProblems) => {
-    res.json(courseProblems);
+  .then((courseProblemTypes) => {
+    res.json(courseProblemTypes);
   })
   .catch((err) => {
     sendError(err, res);
@@ -24,10 +24,10 @@ exports.findAll = function findAll(req, res) {
 
 exports.findOne = function findOne(req, res) {
   models.CourseProblemType.findOne({
-    where: { id: req.params.courseProblemId },
+    where: { id: req.params.courseProblemTypeId },
   })
-  .then((courseProblem) => {
-    res.json(courseProblem);
+  .then((courseProblemType) => {
+    res.json(courseProblemType);
   })
   .catch((err) => {
     sendError(err, res);
@@ -35,10 +35,10 @@ exports.findOne = function findOne(req, res) {
 };
 
 exports.create = function create(req, res) {
-  const courseProblemForm = req.body;
-  models.CourseProblemType.create(courseProblemForm)
-  .then((courseProblem) => {
-    res.json(courseProblem);
+  const courseProblemTypeForm = req.body;
+  models.CourseProblemType.create(courseProblemTypeForm)
+  .then((courseProblemType) => {
+    res.json(courseProblemType);
   })
   .catch((err) => {
     sendError(err, res);
@@ -46,11 +46,11 @@ exports.create = function create(req, res) {
 };
 
 exports.update = function update(req, res) {
-  const courseProblemForm = req.body;
+  const courseProblemTypeForm = req.body;
   models.CourseProblemType.update(
-    courseProblemForm,
+    courseProblemTypeForm,
     {
-      where: { id: req.params.courseProblemId },
+      where: { id: req.params.courseProblemTypeId },
     })
   .then((result) => {
     res.json(result);
@@ -63,7 +63,7 @@ exports.update = function update(req, res) {
 exports.destroy = function destroy(req, res) {
   models.CourseProblemType.destroy(
     {
-      where: { id: req.params.courseProblemId },
+      where: { id: req.params.courseProblemTypeId },
     })
   .then((result) => {
     res.json(result);
