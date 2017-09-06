@@ -38,11 +38,19 @@ exports.findAllParticipants = function findAllParticipants(req, res) {
   models.Participant.findAndCountAll({
     where: {
       SeminarId: parseInt(seminarId, 10),
-      $or: [
-        { code: { $ilike: searchText } },
-        { name: { $ilike: searchText } },
-      ],
     },
+    include: [
+      {
+        model: models.Student,
+        where: {
+          $or: [
+            { name: { $ilike: searchText } },
+            { oldSid: { $ilike: searchText } },
+            { newSid: { $ilike: searchText } },
+          ],
+        },
+      },
+    ],
     limit,
     offset,
   })
@@ -143,40 +151,14 @@ exports.fileUpload = function fileUpload(req, res) {
 
                 const participant = participants[oldSid];
                 const seminarTimeMoment = moment(seminarTime, 'DD/MM/YYYY HH:mm:ss');
-                const seminarDateMoment = moment(seminarTime, 'DD/MM/YYYY');
                 if (participant) {
                   participant.rows.push(seminarTimeMoment);
                 } else {
                   participants[oldSid] = {
                     rows: [seminarTimeMoment],
-                    date: seminarDateMoment,
                   };
                 }
               }
-
-              // const promise = new Promise((resolve, reject) => {
-              //   models.Student.findOne({
-              //     where: { oldSid },
-              //   })
-              //   .then((student) => {
-              //     if (student) {
-              //       models.Participant.create({
-              //         StudentId: student.id,
-              //         SeminarId: seminarId,
-              //       })
-              //       .then(() => {
-              //         resolve();
-              //       });
-              //     } else {
-              //       resolve();
-              //     }
-              //   })
-              //   .catch((err2) => {
-              //     reject(err2);
-              //   });
-              // });
-              //
-              // promises.push(promise);
             }
 
             const filteredParticipants = [];
@@ -189,7 +171,6 @@ exports.fileUpload = function fileUpload(req, res) {
               if (delta >= 60) {
                 filteredParticipants.push({
                   oldSid: particpantKeys[i],
-                  date: participant.date,
                 });
               }
             }
