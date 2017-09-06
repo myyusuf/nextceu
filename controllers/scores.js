@@ -46,19 +46,9 @@ exports.findOne = function findOne(req, res) {
   });
 };
 
-exports.create = function create(req, res) {
-  const scoreForm = req.body;
-  models.Score.create(scoreForm)
-  .then((score) => {
-    res.json(score);
-  })
-  .catch((err) => {
-    sendError(err, res);
-  });
-};
-
 exports.update = function update(req, res) {
   const scoreForm = req.body;
+  scoreForm.ScoreTypeId = parseInt(scoreForm.scoreType, 10);
   models.Score.update(
     scoreForm,
     {

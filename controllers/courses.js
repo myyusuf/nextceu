@@ -290,3 +290,16 @@ exports.addScore = function(req, res) {
     res.status(500).send('Error when doing operation.');
   });
 };
+
+exports.findScores = function(req, res) {
+  models.Score.findAll({
+    where: {},
+    include: [
+      { model: models.Course, where: { id: req.params.courseId } },
+      { model: models.ScoreType },
+    ],
+  })
+  .then((scores) => {
+    res.json(scores);
+  });
+};

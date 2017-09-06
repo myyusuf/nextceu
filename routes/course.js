@@ -11,5 +11,6 @@ router.put('/:courseId/pending', CourseController.pending);
 router.put('/:courseId/unpending', CourseController.unPending);
 router.delete('/:courseId', CourseController.delete);
 router.post('/:courseId/scores', CourseController.addScore);
+router.get('/:courseId/scores', CourseController.findScores);
 
 module.exports = router;
