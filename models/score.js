@@ -1,11 +1,8 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Score = sequelize.define('Score', {
-    preTest: DataTypes.FLOAT,
-    research: DataTypes.FLOAT,
-    weeklyDiscussion: DataTypes.FLOAT,
-    test: DataTypes.FLOAT,
-    postTest: DataTypes.FLOAT
+    scoreValue: DataTypes.FLOAT,
+    scoreDate: DataTypes.DATE,
   }, {
     classMethods: {
       associate: function(models) {
@@ -13,5 +10,10 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
+
+  Score.associate = function (models) {
+    Score.belongsTo(models.ScoreType);
+  };
+
   return Score;
 };
