@@ -30,12 +30,14 @@ exports.findAll = function findAll(req, res) {
 };
 
 exports.findAllParticipants = function findAllParticipants(req, res) {
+  const seminarId = req.params.seminarId;
   const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
   const limit = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
   const currentPage = req.query.currentPage ? parseInt(req.query.currentPage, 10) : 1;
   const offset = (currentPage - 1) * limit;
   models.Participant.findAndCountAll({
     where: {
+      SeminarId: parseInt(seminarId, 10),
       $or: [
         { code: { $ilike: searchText } },
         { name: { $ilike: searchText } },

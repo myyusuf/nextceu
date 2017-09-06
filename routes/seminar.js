@@ -9,4 +9,6 @@ router.post('/', SeminarController.create);
 router.put('/:seminarId', SeminarController.update);
 router.delete('/:seminarId', SeminarController.destroy);
 
+router.get('/:seminarId/participants', SeminarController.findAllParticipants);
+
 module.exports = router;
