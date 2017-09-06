@@ -1,5 +1,6 @@
 const Excel = require('exceljs');
 const models = require('../models');
+const moment = require('moment');
 
 const sendError = (err, res) => {
   res.status(500).send(`Error while doing operation: ${err.name}, ${err.message}`);
@@ -128,11 +129,74 @@ exports.fileUpload = function fileUpload(req, res) {
           .then(() => {
             const worksheet = workbook.getWorksheet(1);
             const promises = [];
-            for (let i = 6; i < 10; i += 1) {
-              const oldSid = worksheet.getCell(`C${i}`).value;
+            const participants = {};
+
+            for (let i = 2; i < 10; i += 1) {
+              const cellA = worksheet.getCell(`A${i}`).value;
+              if (cellA === null) {
+                break;
+              } else {
+                const oldSid = cellA; // .replace(/\s/, '');
+                const seminarTime = worksheet.getCell(`C${i}`).value;
+
+                const participant = participants[oldSid];
+                const seminarTimeMoment = moment(seminarTime, 'DD/MM/YYYY HH:mm:ss');
+                const seminarDateMoment = moment(seminarTime, 'DD/MM/YYYY');
+                if (participant) {
+                  participant.rows.push(seminarTimeMoment);
+                } else {
+                  participants[oldSid] = {
+                    rows: [seminarTimeMoment],
+                    date: seminarDateMoment,
+                  };
+                }
+              }
+
+              // const promise = new Promise((resolve, reject) => {
+              //   models.Student.findOne({
+              //     where: { oldSid },
+              //   })
+              //   .then((student) => {
+              //     if (student) {
+              //       models.Participant.create({
+              //         StudentId: student.id,
+              //         SeminarId: seminarId,
+              //       })
+              //       .then(() => {
+              //         resolve();
+              //       });
+              //     } else {
+              //       resolve();
+              //     }
+              //   })
+              //   .catch((err2) => {
+              //     reject(err2);
+              //   });
+              // });
+              //
+              // promises.push(promise);
+            }
+
+            const filteredParticipants = [];
+            const particpantKeys = Object.keys(participants);
+            for (let i = 0; i < particpantKeys.length; i += 1) {
+              const participant = participants[particpantKeys[i]];
+              const firstSeminarTime = participant.rows[0];
+              const lastSeminarTime = participant.rows[participant.rows.length - 1];
+              const delta = lastSeminarTime.diff(firstSeminarTime, 'minutes');
+              if (delta >= 60) {
+                filteredParticipants.push({
+                  oldSid: particpantKeys[i],
+                  date: participant.date,
+                });
+              }
+            }
+
+            for (let i = 0; i < filteredParticipants.length; i += 1) {
+              const filteredParticipant = filteredParticipants[i];
               const promise = new Promise((resolve, reject) => {
                 models.Student.findOne({
-                  where: { oldSid },
+                  where: { oldSid: filteredParticipant.oldSid },
                 })
                 .then((student) => {
                   if (student) {
@@ -147,18 +211,17 @@ exports.fileUpload = function fileUpload(req, res) {
                     resolve();
                   }
                 })
-                .catch((err2) => {
-                  reject(err2);
+                .catch((createParticipantErr) => {
+                  reject(createParticipantErr);
                 });
               });
-
               promises.push(promise);
             }
 
             Promise.all(promises)
-            .then(() => {
-              return res.send('File uploaded!');
-            });
+            .then(() => (
+              res.send(`${filteredParticipants.length} created`)
+            ));
           });
         });
   });
