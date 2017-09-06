@@ -4,25 +4,13 @@ const sendError = (err, res) => {
   res.status(500).send(`Error while doing operation: ${err.name}, ${err.message}`);
 };
 
-exports.scoreTypes = function findAll(req, res) {
-  models.ScoreType.findAll({
-    where: {},
-  })
-  .then((scores) => {
-    res.json(scores);
-  })
-  .catch((err) => {
-    sendError(err, res);
-  });
-};
-
 exports.update = function update(req, res) {
-  const scoreForm = req.body;
-  scoreForm.ScoreTypeId = parseInt(scoreForm.scoreType, 10);
-  models.Score.update(
-    scoreForm,
+  const courseProblemForm = req.body;
+  courseProblemForm.CourseProblemTypeId = parseInt(courseProblemForm.courseProblemType, 10);
+  models.CourseProblem.update(
+    courseProblemForm,
     {
-      where: { id: req.params.scoreId },
+      where: { id: req.params.courseProblemId },
     })
   .then((result) => {
     res.json(result);
@@ -33,9 +21,9 @@ exports.update = function update(req, res) {
 };
 
 exports.destroy = function destroy(req, res) {
-  models.Score.destroy(
+  models.CourseProblem.destroy(
     {
-      where: { id: req.params.scoreId },
+      where: { id: req.params.courseProblemId },
     })
   .then((result) => {
     res.json(result);

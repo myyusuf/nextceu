@@ -3,7 +3,9 @@ module.exports = function(sequelize, DataTypes) {
   var CourseProblem = sequelize.define('CourseProblem', {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
-    problemDate: DataTypes.DATE
+    problemDate: DataTypes.DATE,
+    comment: DataTypes.STRING,
+    completed: DataTypes.BOOLEAN,
   }, {
     classMethods: {
       associate: function(models) {
@@ -11,5 +13,9 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
+
+  CourseProblem.associate = function (models) {
+    CourseProblem.belongsTo(models.Course);
+  };
   return CourseProblem;
 };
