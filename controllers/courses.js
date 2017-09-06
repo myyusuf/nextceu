@@ -275,3 +275,18 @@ exports.delete = function(req, res) {
     res.json(result);
   });
 };
+
+exports.addScore = function(req, res) {
+  const courseId = req.params.courseId;
+  const scoreForm = req.body;
+  scoreForm.CourseId = parseInt(courseId, 10);
+  scoreForm.ScoreTypeId = parseInt(scoreForm.scoreType, 10);
+  models.Score.create(scoreForm)
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).send('Error when doing operation.');
+  });
+};
