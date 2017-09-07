@@ -1,9 +1,9 @@
 const express = require('express');
-const CourseProblemController = require('../controllers/course_problems.js');
+const ScoreController = require('../controllers/scores.js');
 
 const router = express.Router();
 
-router.put('/:courseProblemId', CourseProblemController.update);
-router.delete('/:courseProblemId', CourseProblemController.destroy);
+router.put('/:scoreId', ScoreController.update);
+router.delete('/:scoreId', ScoreController.destroy);
 
 module.exports = router;
