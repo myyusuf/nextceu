@@ -16,6 +16,73 @@ exports.findOne = function(req, res) {
   });
 };
 
+const checkProblems = (course) => {
+  const courseProblems = course.CourseProblems;
+  let hasProblem = false;
+  for (let i = 0; i < courseProblems.length; i += 1) {
+    const courseProblem = courseProblems[i];
+    if (!courseProblem.completed) {
+      hasProblem = true;
+      break;
+    }
+  }
+
+  if (hasProblem) {
+    return {
+      valid: false,
+      message: 'Course has pending problems. ',
+    };
+  }
+
+  return {
+    valid: true,
+    message: '',
+  };
+};
+
+const checkSeminars = course => (
+  new Promise((resolve, reject) => {
+    const startDate = course.realStartDate;
+    const endDate = course.realEndDate;
+    const where = {
+      eventDate: {},
+    };
+
+    if (startDate) {
+      where.eventDate.$gte = startDate;
+    }
+
+    if (endDate) {
+      where.eventDate.$lte = endDate;
+    }
+    models.Participant.findAll({
+      where: {},
+      include: [
+        { model: models.Seminar,
+          where,
+        },
+        { model: models.Student, where: { id: course.Student.id } },
+      ],
+    })
+    .then((participants) => {
+      const seminars = participants.map(participant => participant.Seminar);
+      const minimumSeminarCount = course.Department.seminarsCount * 0.8;
+
+      if (seminars.length < minimumSeminarCount) {
+        resolve({
+          valid: false,
+          message: 'Course seminars below minimum. ',
+        });
+      } else {
+        resolve({
+          valid: true,
+          message: '',
+        });
+      }
+    });
+  })
+);
+
 exports.update = function(req, res, next) {
 
   const courseForm = req.body;
@@ -23,7 +90,9 @@ exports.update = function(req, res, next) {
   models.Course.findOne({
     where: { id: req.params.courseId },
     include: [
-      { model: models.Score },
+      { model: models.Department },
+      { model: models.Student },
+      { model: models.CourseProblem },
     ],
   })
   .then((course) => {
@@ -75,17 +144,6 @@ exports.update = function(req, res, next) {
     course.realStartDate3 = courseForm.realStartDate3;
     course.realEndDate3 = courseForm.realEndDate3;
 
-    // You can not change pending status
-    if (course.status !== 4) {
-      if (course.realStartDate && course.realEndDate) {
-        course.status = 2;
-      } else if (course.realStartDate) {
-        course.status = 1;
-      } else {
-        course.status = 0;
-      }
-    }
-
     if (courseForm.hospital1) {
       course.hospital1Id = parseInt(courseForm.hospital1, 10);
     } else {
@@ -98,14 +156,46 @@ exports.update = function(req, res, next) {
       course.clinicId = null;
     }
 
-    course.save()
-    .then((courseSaveResult) => {
-      res.json(courseSaveResult);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).send('Error when doing operation.');
-    });
+    // You can not change pending status
+    if (course.status !== 4) {
+      if (course.realStartDate && course.realEndDate) {
+        const checkProblemsResult = checkProblems(course);
+        let problemDescription = '';
+        checkSeminars(course)
+        .then((checkSeminarsResult) => {
+          if (!checkSeminarsResult.valid || !checkProblemsResult.valid) {
+            course.status = 3;
+            problemDescription += checkSeminarsResult.message;
+            problemDescription += checkProblemsResult.message;
+            course.problemDescription = problemDescription;
+          } else {
+            course.status = 2;
+          }
+          course.save()
+          .then((courseSaveResult) => {
+            res.json(courseSaveResult);
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(500).send('Error when doing operation.');
+          });
+        });
+      } else {
+        if (course.realStartDate) {
+          course.status = 1;
+        } else {
+          course.status = 0;
+        }
+        course.save()
+        .then((courseSaveResult) => {
+          res.json(courseSaveResult);
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500).send('Error when doing operation.');
+        });
+      }
+    }
   });
 };
 

@@ -20,6 +20,7 @@ module.exports = function(sequelize, DataTypes) {
     realEndDate3: DataTypes.DATE,
     status: DataTypes.INTEGER,
     completion: DataTypes.INTEGER,
+    problemDescription: DataTypes.STRING,
   }, {
     classMethods: {
       associate: function(models) {
