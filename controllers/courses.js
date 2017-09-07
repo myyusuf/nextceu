@@ -67,7 +67,6 @@ const checkSeminars = course => (
     .then((participants) => {
       const seminars = participants.map(participant => participant.Seminar);
       const minimumSeminarCount = course.Department.seminarsCount * 0.8;
-
       if (seminars.length < minimumSeminarCount) {
         resolve({
           valid: false,
