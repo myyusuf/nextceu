@@ -1,3 +1,4 @@
+const moment = require('moment');
 const models = require('../models');
 
 exports.findOne = function(req, res) {
@@ -205,5 +206,44 @@ exports.findCourseProblems = function(req, res) {
   })
   .then((courseProblems) => {
     res.json(courseProblems);
+  });
+};
+
+exports.findCourseSeminars = function(req, res) {
+  const startDate = req.query.startDate ? moment(req.query.startDate.replace(/"/g, '')) : null;
+  const endDate = req.query.endDate ? moment(req.query.endDate.replace(/"/g, '')) : null;
+  const courseId = parseInt(req.params.courseId, 10);
+
+  models.Course.findOne({
+    where: { id: courseId },
+    include: [
+      { model: models.Student },
+    ],
+  })
+  .then((course) => {
+    const where = {
+      eventDate: {},
+    };
+
+    if (startDate) {
+      where.eventDate.$gte = startDate.toDate();
+    }
+
+    if (endDate) {
+      where.eventDate.$lte = endDate.toDate();
+    }
+
+    models.Participant.findAll({
+      where: {},
+      include: [
+        { model: models.Seminar,
+          where,
+        },
+        { model: models.Student, where: { id: course.Student.id } },
+      ],
+    })
+    .then((courseProblems) => {
+      res.json(courseProblems);
+    });
   });
 };

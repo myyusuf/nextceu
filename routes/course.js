@@ -14,5 +14,6 @@ router.post('/:courseId/scores', CourseController.addScore);
 router.get('/:courseId/scores', CourseController.findScores);
 router.post('/:courseId/courseproblems', CourseController.addCourseProblem);
 router.get('/:courseId/courseproblems', CourseController.findCourseProblems);
+router.get('/:courseId/courseseminars', CourseController.findCourseSeminars);
 
 module.exports = router;
