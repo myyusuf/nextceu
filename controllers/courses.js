@@ -242,8 +242,8 @@ exports.findCourseSeminars = function(req, res) {
         { model: models.Student, where: { id: course.Student.id } },
       ],
     })
-    .then((courseProblems) => {
-      res.json(courseProblems);
+    .then((participants) => {
+      res.json(participants.map(participant => participant.Seminar));
     });
   });
 };
