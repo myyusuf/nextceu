@@ -85,13 +85,6 @@ exports.update = function(req, res, next) {
       }
     }
 
-    const score = course.Score;
-    score.preTest = courseForm.preTest;
-    score.research = courseForm.research;
-    score.weeklyDiscussion = courseForm.weeklyDiscussion;
-    score.test = courseForm.test;
-    score.postTest = courseForm.postTest;
-
     if (courseForm.hospital1) {
       course.hospital1Id = parseInt(courseForm.hospital1, 10);
     } else {
@@ -105,11 +98,8 @@ exports.update = function(req, res, next) {
     }
 
     course.save()
-    .then(() => {
-      score.save()
-      .then((scoreSaveResult) => {
-        res.json(scoreSaveResult);
-      });
+    .then((courseSaveResult) => {
+      res.json(courseSaveResult);
     })
     .catch((err) => {
       console.log(err);
