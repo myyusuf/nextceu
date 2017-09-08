@@ -62,17 +62,25 @@ exports.exportToPreTest = function(req, res) {
   for (let i = 0; i < courseIds.length; i += 1) {
     const courseId = courseIds[i];
     const promise = new Promise((resolve, reject) => {
-      models.Course.update(
-        { preTestDate },
-        {
-          where: { id: courseId },
-        })
-      .then((result) => {
-        resolve(result);
+      models.Course.findOne({
+        where: { id: courseId },
+        include: [
+          { model: models.Student },
+        ],
       })
-      .catch((err) => {
-        reject(err);
-      });
+      .then((foundCourse) => {
+        models.Course.update(
+          { preTestDate },
+          {
+            where: { StudentId: foundCourse.Student.id, courseIndex: foundCourse.courseIndex + 1 },
+          })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+      })
     });
 
     promises.push(promise);
@@ -110,7 +118,7 @@ exports.findPreTests = function(req, res) {
         $gte: preTestDate.toDate(),
         $lte: preTestDate.toDate(),
       },
-      status: 2,
+      status: 0,
     },
     include: [
       {
