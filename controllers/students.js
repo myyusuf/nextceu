@@ -251,6 +251,9 @@ exports.findCourses = function(req, res) {
         { model: models.Hospital, as: 'hospital1' },
         { model: models.Hospital, as: 'clinic' },
       ],
+      order: [
+        ['planStartDate'],
+      ],
     })
     .then((courses) => {
       res.json(courses);
