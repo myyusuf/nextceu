@@ -142,3 +142,35 @@ exports.findPreTests = function(req, res) {
     sendError(err, res);
   });
 };
+
+exports.removeCoursesFormPreTest = function(req, res) {
+  const form = req.body;
+  const courseIds = form.courseIds;
+  const promises = [];
+  for (let i = 0; i < courseIds.length; i += 1) {
+    const courseId = courseIds[i];
+    const promise = new Promise((resolve, reject) => {
+      models.Course.update(
+        { preTestDate: null },
+        {
+          where: { id: courseId },
+        })
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+    });
+
+    promises.push(promise);
+  }
+
+  Promise.all(promises)
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
+};
