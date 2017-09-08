@@ -85,12 +85,52 @@ exports.exportToPreTest = function(req, res) {
   .catch((err) => {
     sendError(err, res);
   });
+};
 
-  // models.Role.create(roleForm)
-  // .then((role) => {
-  //   res.json(role);
-  // })
-  // .catch((err) => {
-  //   sendError(err, res);
-  // });
+exports.findPreTests = function(req, res) {
+  const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
+  const dateSelect = req.query.dateSelect;
+  let preTestDate = null;
+  if (dateSelect) {
+    preTestDate = moment(dateSelect.replace(/"/g, ''));
+  } else {
+    res.json({
+      count: 0,
+      rows: [],
+    });
+    return;
+  }
+  const limit = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
+  const currentPage = req.query.currentPage ? parseInt(req.query.currentPage, 10) : 1;
+  const offset = (currentPage - 1) * limit;
+  models.Course.findAndCountAll({
+    where: {
+      // preTestDate: preTestDate.toDate(),
+      preTestDate: {
+        $gte: preTestDate.toDate(),
+        $lte: preTestDate.toDate(),
+      },
+      status: 2,
+    },
+    include: [
+      {
+        model: models.Student,
+        where: {
+          $or: [
+            { name: { $ilike: searchText } },
+            { oldSid: { $ilike: searchText } },
+            { newSid: { $ilike: searchText } },
+          ],
+        },
+      },
+    ],
+    limit,
+    offset,
+  })
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
 };
