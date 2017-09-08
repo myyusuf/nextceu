@@ -168,6 +168,7 @@ exports.update = function(req, res, next) {
             problemDescription += checkProblemsResult.message;
             course.problemDescription = problemDescription;
           } else {
+            course.problemDescription = '';
             course.status = 2;
           }
           course.save()

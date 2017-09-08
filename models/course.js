@@ -21,6 +21,7 @@ module.exports = function(sequelize, DataTypes) {
     status: DataTypes.INTEGER,
     completion: DataTypes.INTEGER,
     problemDescription: DataTypes.STRING,
+    preTestDate: DataTypes.DATE,
   }, {
     classMethods: {
       associate: function(models) {

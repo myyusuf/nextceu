@@ -5,7 +5,7 @@ const sendError = (err, res) => {
   res.status(500).send(`Error while doing operation: ${err.name}, ${err.message}`);
 };
 
-exports.findCompletedCourses = function findAll(req, res) {
+exports.findCompletedCourses = function(req, res) {
   const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
   const dateRange = req.query.dateRange;
   let startDate = null;
@@ -52,4 +52,45 @@ exports.findCompletedCourses = function findAll(req, res) {
   .catch((err) => {
     sendError(err, res);
   });
+};
+
+exports.exportToPreTest = function(req, res) {
+  const exportToPreTestForm = req.body;
+  const preTestDate = exportToPreTestForm.preTestDate;
+  const courseIds = exportToPreTestForm.courseIds;
+  const promises = [];
+  for (let i = 0; i < courseIds.length; i += 1) {
+    const courseId = courseIds[i];
+    const promise = new Promise((resolve, reject) => {
+      models.Course.update(
+        { preTestDate },
+        {
+          where: { id: courseId },
+        })
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+    });
+
+    promises.push(promise);
+  }
+
+  Promise.all(promises)
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
+
+  // models.Role.create(roleForm)
+  // .then((role) => {
+  //   res.json(role);
+  // })
+  // .catch((err) => {
+  //   sendError(err, res);
+  // });
 };
