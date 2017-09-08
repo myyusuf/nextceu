@@ -82,6 +82,36 @@ const checkSeminars = course => (
   })
 );
 
+const orderingCourses = course => (
+  new Promise((resolve, reject) => {
+    models.Course.findAll({
+      where: { StudentId: course.Student.id },
+      order: [
+        ['planStartDate'],
+      ],
+    })
+    .then((courses) => {
+      const promises = [];
+      for (let i = 0; i < courses.length; i += 1) {
+        const course = courses[i];
+        course.courseIndex = i + 1;
+        course.finalCourse = (i === courses.length - 1);
+        promises.push(new Promise((resolveInner, rejectInner) => {
+          course.save()
+          .then(() => {
+            resolveInner();
+          });
+        }));
+      }
+
+      Promise.all(promises)
+      .then((result) => {
+        resolve(result);
+      });
+    });
+  })
+);
+
 exports.update = function(req, res, next) {
 
   const courseForm = req.body;
@@ -173,7 +203,11 @@ exports.update = function(req, res, next) {
           }
           course.save()
           .then((courseSaveResult) => {
-            res.json(courseSaveResult);
+            // res.json(courseSaveResult);
+            orderingCourses(course)
+            .then(() => {
+              res.json(courseSaveResult);
+            });
           })
           .catch((err) => {
             console.log(err);
@@ -188,7 +222,10 @@ exports.update = function(req, res, next) {
         }
         course.save()
         .then((courseSaveResult) => {
-          res.json(courseSaveResult);
+          orderingCourses(course)
+          .then(() => {
+            res.json(courseSaveResult);
+          });
         })
         .catch((err) => {
           console.log(err);
