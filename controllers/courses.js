@@ -85,7 +85,7 @@ const checkSeminars = course => (
 const orderingCourses = course => (
   new Promise((resolve, reject) => {
     models.Course.findAll({
-      where: { StudentId: course.Student.id },
+      where: { StudentId: course.Student.id, status: { $ne: 4 } },
       order: [
         ['planStartDate'],
       ],
