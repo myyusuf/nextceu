@@ -1,5 +1,6 @@
 const moment = require('moment');
 const Sequelize = require('sequelize');
+const _ = require('lodash');
 const models = require('../models');
 
 const WEEK_BREAK_DURATION = 2;
@@ -106,7 +107,7 @@ exports.addCourses = function(req, res) {
           level: parseInt(form.level, 10),
         },
       })
-      .then((departments) => {
+      .then((theDepartments) => {
         const promises = [];
 
         const createCourse = function (courseParam, studentParam, departmentParam) {
@@ -127,22 +128,33 @@ exports.addCourses = function(req, res) {
           });
         };
 
+        const departments = _.shuffle(theDepartments);
+
         // let planStartDate = moment(form.formattedStartDate, 'DD/MM/YYYY');
         let planStartDate = moment(form.startDate);
 
         for (let i = 0; i < departments.length; i += 1) {
+          const finalCourse = (i === departments.length - 1);
           const department = departments[i];
 
           const planStartDate1 = planStartDate.clone();
 
           const planEndDate = planStartDate.clone().add(parseInt(department.duration, 10), 'weeks');
+
           const planEndDate1 = planStartDate1.clone().add(parseInt(department.duration1, 10), 'weeks');
 
-          const planStartDate2 = planEndDate1.clone();
-          const planEndDate2 = planStartDate2.clone().add(parseInt(department.duration2, 10), 'weeks');
+          let planStartDate2 = null;
+          let planEndDate2 = null;
+          let planStartDate3 = null;
+          let planEndDate3 = null;
 
-          const planStartDate3 = planEndDate2.clone();
-          const planEndDate3 = planStartDate3.clone().add(parseInt(department.duration3, 10), 'weeks');
+          if (department.duration2 && department.duration3) {
+            planStartDate2 = planEndDate1.clone();
+            planEndDate2 = planStartDate2.clone().add(parseInt(department.duration2, 10), 'weeks');
+
+            planStartDate3 = planEndDate2.clone();
+            planEndDate3 = planStartDate3.clone().add(parseInt(department.duration3, 10), 'weeks');
+          }
 
           const createCoursePromise = createCourse({
             title: `${department.name} ${form.suffix}`,
@@ -156,6 +168,8 @@ exports.addCourses = function(req, res) {
             planEndDate3,
             status: 0,
             completion: 0,
+            courseIndex: i + 1,
+            finalCourse,
           }, student, department);
 
           promises.push(createCoursePromise);

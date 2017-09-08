@@ -205,6 +205,7 @@ exports.pending = function(req, res, next) {
   })
   .then((course) => {
     course.status = 4;
+    course.courseIndex = -1;
     course.save()
     .then((result) => {
       res.json(result);
