@@ -337,6 +337,38 @@ exports.findCourseProblems = function(req, res) {
   });
 };
 
+//-----
+
+exports.addPortofolio = function(req, res) {
+  const courseId = req.params.courseId;
+  const portofolioForm = req.body;
+  portofolioForm.CourseId = parseInt(courseId, 10);
+  portofolioForm.PortofolioTypeId = parseInt(portofolioForm.portofolioType, 10);
+  models.Portofolio.create(portofolioForm)
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).send('Error when doing operation.');
+  });
+};
+
+exports.findPortofolios = function(req, res) {
+  models.Portofolio.findAll({
+    where: {},
+    include: [
+      { model: models.Course, where: { id: req.params.courseId } },
+      { model: models.PortofolioType },
+    ],
+  })
+  .then((portofolios) => {
+    res.json(portofolios);
+  });
+};
+
+//-----
+
 exports.findCourseSeminars = function(req, res) {
   const startDate = req.query.startDate ? moment(req.query.startDate.replace(/"/g, '')) : null;
   const endDate = req.query.endDate ? moment(req.query.endDate.replace(/"/g, '')) : null;
