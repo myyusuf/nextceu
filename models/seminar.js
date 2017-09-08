@@ -3,7 +3,7 @@ module.exports = function(sequelize, DataTypes) {
   var Seminar = sequelize.define('Seminar', {
     code: { type: DataTypes.STRING, unique: true },
     name: DataTypes.STRING,
-    eventDate: DataTypes.DATE,
+    eventDate: DataTypes.DATEONLY,
     description: DataTypes.STRING
   }, {
     classMethods: {

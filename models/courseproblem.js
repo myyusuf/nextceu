@@ -3,7 +3,7 @@ module.exports = function(sequelize, DataTypes) {
   var CourseProblem = sequelize.define('CourseProblem', {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
-    problemDate: DataTypes.DATE,
+    problemDate: DataTypes.DATEONLY,
     comment: DataTypes.STRING,
     completed: DataTypes.BOOLEAN,
   }, {

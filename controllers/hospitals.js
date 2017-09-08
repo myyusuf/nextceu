@@ -120,11 +120,17 @@ exports.findSchedule = function findSchedule(req, res) {
     models.Course.findAll({
       where: {
         DepartmentId: departmentId,
+        // planStartDate1: {
+        //   $gte: startDate.toDate(),
+        // },
+        // planEndDate1: {
+        //   $lte: endDate.toDate(),
+        // },
         planStartDate1: {
           $gte: startDate.toDate(),
         },
         planEndDate1: {
-          $lte: endDate.toDate(),
+          $gte: endDate.toDate(),
         },
       },
       group: [groupName],
@@ -222,11 +228,17 @@ exports.hospitalSchedule = function hospitalSchedule(req, res) {
       models.Course.findAll({
         where: {
           DepartmentId: departmentId,
+          // planStartDate1: {
+          //   $gte: startDate.toDate(),
+          // },
+          // planEndDate1: {
+          //   $lte: endDate.toDate(),
+          // },
           planStartDate1: {
             $gte: startDate.toDate(),
           },
           planEndDate1: {
-            $lte: endDate.toDate(),
+            $gte: endDate.toDate(),
           },
         },
         group: ['hospital1Id'],
@@ -250,11 +262,17 @@ exports.hospitalSchedule = function hospitalSchedule(req, res) {
         models.Course.findAll({
           where: {
             DepartmentId: departmentId,
+            // planStartDate1: {
+            //   $gte: startDate.toDate(),
+            // },
+            // planEndDate1: {
+            //   $lte: endDate.toDate(),
+            // },
             planStartDate1: {
               $gte: startDate.toDate(),
             },
             planEndDate1: {
-              $lte: endDate.toDate(),
+              $gte: endDate.toDate(),
             },
           },
           group: ['clinicId'],

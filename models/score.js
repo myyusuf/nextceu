@@ -2,7 +2,7 @@
 module.exports = function(sequelize, DataTypes) {
   var Score = sequelize.define('Score', {
     scoreValue: DataTypes.FLOAT,
-    scoreDate: DataTypes.DATE,
+    scoreDate: DataTypes.DATEONLY,
   }, {
     classMethods: {
       associate: function(models) {

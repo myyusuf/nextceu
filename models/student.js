@@ -6,7 +6,7 @@ module.exports = function(sequelize, DataTypes) {
     newSid: { type: DataTypes.STRING, unique: true },
     level: DataTypes.INTEGER,
     gender: DataTypes.STRING,
-    birthDate: DataTypes.DATE,
+    birthDate: DataTypes.DATEONLY,
     address: DataTypes.STRING,
     phone: DataTypes.STRING,
     mobilePhone: DataTypes.STRING,
