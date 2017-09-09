@@ -15,7 +15,7 @@ exports.findAll = function findAll(req, res) {
       { model: models.User,
         where: {
           $or: [
-            { hospitalUsername: { $ilike: searchText } },
+            { username: { $ilike: searchText } },
             { name: { $ilike: searchText } },
           ],
         } },
@@ -76,18 +76,6 @@ exports.update = function update(req, res) {
     .then((saveResult) => {
       res.json(saveResult);
     });
-  })
-  .catch((err) => {
-    sendError(err, res);
-  });
-
-  models.HospitalUser.update(
-    hospitalUserForm,
-    {
-      where: { id: req.params.hospitalUserId },
-    })
-  .then((result) => {
-    res.json(result);
   })
   .catch((err) => {
     sendError(err, res);
