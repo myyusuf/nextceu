@@ -31,6 +31,24 @@ exports.findAll = function findAll(req, res) {
   });
 };
 
+exports.docentsByHD = function findAll(req, res) {
+  const hospitalId = req.query.hospital ? parseInt(req.query.hospital, 10) : -1;
+  const departmentId = req.query.department ? parseInt(req.query.department, 10) : -1;
+  models.Docent.findAll({
+    where: {},
+    include: [
+      { model: models.Hospital, where: { id: hospitalId } },
+      { model: models.Department, where: { id: departmentId } },
+    ],
+  })
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
+};
+
 exports.findOne = function findOne(req, res) {
   models.Docent.findOne({
     where: { id: req.params.docentId },
