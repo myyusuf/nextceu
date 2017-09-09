@@ -30,6 +30,7 @@ var seminars = require('./routes/seminar');
 var seminarFileUpload = require('./routes/seminar_fileupload');
 var security = require('./routes/security');
 var reports = require('./routes/reports');
+var docents = require('./routes/docents');
 
 var app = express();
 
@@ -70,6 +71,7 @@ app.use('/api/seminars', seminars);
 app.use('/api/seminarupload', seminarFileUpload);
 app.use('/api/security', security);
 app.use('/api/reports', reports);
+app.use('/api/docents', docents);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
