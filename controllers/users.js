@@ -31,6 +31,22 @@ exports.findAll = function findAll(req, res) {
   });
 };
 
+exports.usersByRole = function findAll(req, res) {
+  const roleCode = req.query.role;
+  models.User.findAll({
+    where: {},
+    include: [
+      { model: models.Role, where: { code: roleCode } },
+    ],
+  })
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
+};
+
 exports.findOne = function findOne(req, res) {
   models.User.findOne({
     where: { id: req.params.userId },

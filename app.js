@@ -9,7 +9,9 @@ var fileUpload = require('express-fileupload');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var usersByRole = require('./routes/users_by_role');
 var roles = require('./routes/roles');
+var hospitalUsers = require('./routes/hospital_users');
 var appProps = require('./routes/app_props');
 var students = require('./routes/students');
 var studentsStatus = require('./routes/students_status');
@@ -47,7 +49,9 @@ app.use(fileUpload());
 
 app.use('/', index);
 app.use('/api/users', users);
+app.use('/api/usersbyrole', usersByRole);
 app.use('/api/roles', roles);
+app.use('/api/hospitalusers', hospitalUsers);
 app.use('/api/appprops', appProps);
 app.use('/api/students', students);
 app.use('/api/students_status', studentsStatus);
