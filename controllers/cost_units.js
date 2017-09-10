@@ -47,14 +47,14 @@ exports.costUnits = function(req, res) {
       let courseDuration1 = 0;
       if (course.realStartDate1 && course.realEndDate1) {
         const realStartDate1 = moment(course.realStartDate1);
-        const realEndDate1 = moment(course.realEndDate1);
+        const realEndDate1 = moment(course.realEndDate1).add(1, 'days');
         courseDuration1 = realEndDate1.diff(realStartDate1, 'weeks');
       }
 
       let courseDuration2 = 0;
       if (course.realStartDate3 && course.realEndDate3) {
         const realStartDate3 = moment(course.realStartDate3);
-        const realEndDate3 = moment(course.realEndDate3);
+        const realEndDate3 = moment(course.realEndDate3).add(1, 'days');
         courseDuration2 = realEndDate3.diff(realStartDate3, 'weeks');
       }
 
@@ -133,7 +133,7 @@ exports.costUnitsClinic = function(req, res) {
       let courseDuration = 0;
       if (course.realStartDate2 && course.realEndDate2) {
         const realStartDate2 = moment(course.realStartDate2);
-        const realEndDate2 = moment(course.realEndDate2);
+        const realEndDate2 = moment(course.realEndDate2).add(1, 'days');
         courseDuration = realEndDate2.diff(realStartDate2, 'weeks');
       }
 
