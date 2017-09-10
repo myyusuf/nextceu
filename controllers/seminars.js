@@ -146,15 +146,15 @@ exports.fileUpload = function fileUpload(req, res) {
               if (cellA === null) {
                 break;
               } else {
-                const oldSid = cellA; // .replace(/\s/, '');
+                const newSid = cellA; // .replace(/\s/, '');
                 const seminarTime = worksheet.getCell(`C${i}`).value;
 
-                const participant = participants[oldSid];
+                const participant = participants[newSid];
                 const seminarTimeMoment = moment(seminarTime, 'DD/MM/YYYY HH:mm:ss');
                 if (participant) {
                   participant.rows.push(seminarTimeMoment);
                 } else {
-                  participants[oldSid] = {
+                  participants[newSid] = {
                     rows: [seminarTimeMoment],
                   };
                 }
@@ -170,7 +170,7 @@ exports.fileUpload = function fileUpload(req, res) {
               const delta = lastSeminarTime.diff(firstSeminarTime, 'minutes');
               if (delta >= 60) {
                 filteredParticipants.push({
-                  oldSid: particpantKeys[i],
+                  newSid: particpantKeys[i],
                 });
               }
             }
@@ -179,7 +179,7 @@ exports.fileUpload = function fileUpload(req, res) {
               const filteredParticipant = filteredParticipants[i];
               const promise = new Promise((resolve, reject) => {
                 models.Student.findOne({
-                  where: { oldSid: filteredParticipant.oldSid },
+                  where: { newSid: filteredParticipant.newSid },
                 })
                 .then((student) => {
                   if (student) {
