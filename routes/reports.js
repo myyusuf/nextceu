@@ -9,5 +9,6 @@ router.post('/exporttopretest', ReportController.exportToPreTest);
 router.get('/pretests', ReportController.findPreTests);
 router.put('/pretests/remove', ReportController.removeCoursesFormPreTest);
 router.get('/costunits', CostUnitController.costUnits);
+router.get('/costunitsclinic', CostUnitController.costUnitsClinic);
 
 module.exports = router;
