@@ -137,11 +137,30 @@ exports.addCourses = function(req, res) {
           const finalCourse = (i === departments.length - 1);
           const department = departments[i];
 
+          // const planStartDate1 = planStartDate.clone();
+          //
+          // const planEndDate = planStartDate.clone().add(parseInt(department.duration, 10), 'weeks');
+          //
+          // const planEndDate1 = planStartDate1.clone().add(parseInt(department.duration1, 10), 'weeks');
+          //
+          // let planStartDate2 = null;
+          // let planEndDate2 = null;
+          // let planStartDate3 = null;
+          // let planEndDate3 = null;
+          //
+          // if (department.duration2 && department.duration3) {
+          //   planStartDate2 = planEndDate1.clone();
+          //   planEndDate2 = planStartDate2.clone().add(parseInt(department.duration2, 10), 'weeks');
+          //
+          //   planStartDate3 = planEndDate2.clone();
+          //   planEndDate3 = planStartDate3.clone().add(parseInt(department.duration3, 10), 'weeks');
+          // }
+
           const planStartDate1 = planStartDate.clone();
 
-          const planEndDate = planStartDate.clone().add(parseInt(department.duration, 10), 'weeks');
+          const planEndDate = planStartDate.clone().add(parseInt(department.duration, 10), 'weeks').subtract(1, 'days');
 
-          const planEndDate1 = planStartDate1.clone().add(parseInt(department.duration1, 10), 'weeks');
+          const planEndDate1 = planStartDate1.clone().add(parseInt(department.duration1, 10), 'weeks').subtract(1, 'days');
 
           let planStartDate2 = null;
           let planEndDate2 = null;
@@ -149,11 +168,11 @@ exports.addCourses = function(req, res) {
           let planEndDate3 = null;
 
           if (department.duration2 && department.duration3) {
-            planStartDate2 = planEndDate1.clone();
-            planEndDate2 = planStartDate2.clone().add(parseInt(department.duration2, 10), 'weeks');
+            planStartDate2 = planEndDate1.clone().add(1, 'days');
+            planEndDate2 = planStartDate2.clone().add(parseInt(department.duration2, 10), 'weeks').subtract(1, 'days');
 
-            planStartDate3 = planEndDate2.clone();
-            planEndDate3 = planStartDate3.clone().add(parseInt(department.duration3, 10), 'weeks');
+            planStartDate3 = planEndDate2.clone().add(1, 'days');
+            planEndDate3 = planStartDate3.clone().add(parseInt(department.duration3, 10), 'weeks').subtract(1, 'days');
           }
 
           const createCoursePromise = createCourse({
@@ -174,7 +193,7 @@ exports.addCourses = function(req, res) {
 
           promises.push(createCoursePromise);
 
-          planStartDate = planEndDate.clone().add(WEEK_BREAK_DURATION, 'weeks');
+          planStartDate = planEndDate.clone().add(1, 'days').add(WEEK_BREAK_DURATION, 'weeks');
         }
 
         Promise.all(promises)

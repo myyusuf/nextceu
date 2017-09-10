@@ -82,6 +82,32 @@ const checkSeminars = course => (
   })
 );
 
+const checkPortofolio = course => (
+  new Promise((resolve, reject) => {
+    models.Score.findOne({
+      where: {},
+      include: [
+        { model: models.ScoreType,
+          where: { code: 'T04' },
+        },
+      ],
+    })
+    .then((score) => {
+      if (score.scoreValue < 80) {
+        resolve({
+          valid: false,
+          message: 'Portofolio score below minimum. ',
+        });
+      } else {
+        resolve({
+          valid: true,
+          message: '',
+        });
+      }
+    });
+  })
+);
+
 const orderingCourses = course => (
   new Promise((resolve, reject) => {
     models.Course.findAll({
@@ -213,26 +239,30 @@ exports.update = function(req, res, next) {
         let problemDescription = '';
         checkSeminars(course)
         .then((checkSeminarsResult) => {
-          if (!checkSeminarsResult.valid || !checkProblemsResult.valid) {
-            course.status = 3;
-            problemDescription += checkSeminarsResult.message;
-            problemDescription += checkProblemsResult.message;
-            course.problemDescription = problemDescription;
-          } else {
-            course.problemDescription = '';
-            course.status = 2;
-          }
-          course.save()
-          .then((courseSaveResult) => {
-            // res.json(courseSaveResult);
-            orderingCourses(course)
-            .then(() => {
-              res.json(courseSaveResult);
+          checkPortofolio(course)
+          .then((checkPortofolioResult) => {
+            if (!checkSeminarsResult.valid || !checkProblemsResult.valid || !checkPortofolioResult.valid) {
+              course.status = 3;
+              problemDescription += checkSeminarsResult.message;
+              problemDescription += checkProblemsResult.message;
+              problemDescription += checkPortofolioResult.message;
+              course.problemDescription = problemDescription;
+            } else {
+              course.problemDescription = '';
+              course.status = 2;
+            }
+            course.save()
+            .then((courseSaveResult) => {
+              // res.json(courseSaveResult);
+              orderingCourses(course)
+              .then(() => {
+                res.json(courseSaveResult);
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(500).send('Error when doing operation.');
             });
-          })
-          .catch((err) => {
-            console.log(err);
-            res.status(500).send('Error when doing operation.');
           });
         });
       } else {
