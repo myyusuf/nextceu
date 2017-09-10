@@ -115,6 +115,7 @@ exports.costUnitsClinic = function(req, res) {
       { model: models.Student },
       { model: models.Department },
       { model: models.Hospital, as: 'clinic', where: { id: hospitalId } },
+      { model: models.Docent, as: 'dpk' },
     ],
   })
   .then((courses) => {
