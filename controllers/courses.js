@@ -85,10 +85,10 @@ const checkSeminars = course => (
 const checkPortofolio = course => (
   new Promise((resolve, reject) => {
     models.Score.findOne({
-      where: {},
+      where: { CourseId: course.id },
       include: [
         { model: models.ScoreType,
-          where: { code: 'T04' },
+          where: { name: 'Portofolio' },
         },
       ],
     })
