@@ -36,6 +36,8 @@ exports.costUnits = function(req, res) {
     const FEE_CONSTANT6 = 50000;
     const FEE_CONSTANT7 = 100000;
 
+    const result = [];
+
     for (let i = 0; i < courses.length; i += 1) {
       const course = courses[i];
       const tmpStartDate = moment(course.realStartDate);
@@ -54,16 +56,21 @@ exports.costUnits = function(req, res) {
       const fee7 = courseDuration * FEE_CONSTANT7;
       const total = fee1 + fee2 + fee3 + fee4 + fee5 + fee6 + fee7;
 
-      course.courseDuration = courseDuration;
-      course.fee1 = fee1;
-      course.fee2 = fee2;
-      course.fee3 = fee3;
-      course.fee4 = fee4;
-      course.fee5 = fee5;
-      course.fee6 = fee6;
-      course.fee7 = fee7;
-      course.total = total;
+      const tempCourse = {};
+      tempCourse.Department = course.Department;
+      tempCourse.Student = course.Student;
+      tempCourse.courseDuration = courseDuration;
+      tempCourse.fee1 = fee1;
+      tempCourse.fee2 = fee2;
+      tempCourse.fee3 = fee3;
+      tempCourse.fee4 = fee4;
+      tempCourse.fee5 = fee5;
+      tempCourse.fee6 = fee6;
+      tempCourse.fee7 = fee7;
+      tempCourse.total = total;
+
+      result.push(tempCourse);
     }
-    res.json(courses);
+    res.json(result);
   });
 };
