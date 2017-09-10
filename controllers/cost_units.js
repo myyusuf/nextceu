@@ -2,8 +2,17 @@ const moment = require('moment');
 const models = require('../models');
 
 exports.costUnits = function(req, res) {
-  const startDate = moment(req.query.startDate.replace(/"/g, ''));
-  const endDate = moment(req.query.endDate.replace(/"/g, ''));
+  let startDate = null;
+  let endDate = null;
+  const dateRange = req.query.dateRange;
+  if (dateRange) {
+    startDate = moment(dateRange[0].replace(/"/g, ''));
+    endDate = moment(dateRange[1].replace(/"/g, ''));
+  } else {
+    res.json([]);
+    return;
+  }
+
   const hospitalId = req.query.hospital ? parseInt(req.query.hospital, 10) : -1;
   models.Course.findAll({
     where: {
