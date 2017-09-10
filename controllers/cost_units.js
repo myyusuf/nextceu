@@ -25,6 +25,9 @@ exports.costUnits = function(req, res) {
       { model: models.Student },
       { model: models.Department },
       { model: models.Hospital, as: 'hospital1', where: { id: hospitalId } },
+      { model: models.Docent, as: 'adviser' },
+      { model: models.Docent, as: 'examiner' },
+      { model: models.Docent, as: 'dpk' },
     ],
   })
   .then((courses) => {
@@ -70,6 +73,9 @@ exports.costUnits = function(req, res) {
       tempCourse.Department = course.Department;
       tempCourse.Student = course.Student;
       tempCourse.courseDuration = courseDuration;
+      tempCourse.adviser = course.adviser;
+      tempCourse.examiner = course.examiner;
+      tempCourse.dpk = course.dpk;
       tempCourse.fee1 = fee1;
       tempCourse.fee2 = fee2;
       tempCourse.fee3 = fee3;
