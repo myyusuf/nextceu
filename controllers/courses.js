@@ -185,6 +185,24 @@ exports.update = function(req, res, next) {
       course.clinicId = null;
     }
 
+    if (courseForm.adviser) {
+      course.adviserId = parseInt(courseForm.adviser, 10);
+    } else {
+      course.adviserId = null;
+    }
+
+    if (courseForm.examiner) {
+      course.examinerId = parseInt(courseForm.examiner, 10);
+    } else {
+      course.examinerId = null;
+    }
+
+    if (courseForm.dpk) {
+      course.dpkId = parseInt(courseForm.dpk, 10);
+    } else {
+      course.dpkId = null;
+    }
+
     // You can not change pending status
     if (course.status !== 4) {
       if (course.realStartDate && course.realEndDate) {
