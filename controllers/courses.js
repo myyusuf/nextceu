@@ -86,6 +86,9 @@ const orderingCourses = course => (
   new Promise((resolve, reject) => {
     models.Course.findAll({
       where: { StudentId: course.Student.id, status: { $ne: 4 } },
+      include: [
+        { model: models.Department, where: { level: course.Department.level } },
+      ],
       order: [
         ['planStartDate'],
       ],
