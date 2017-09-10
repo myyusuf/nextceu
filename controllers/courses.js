@@ -260,13 +260,21 @@ exports.update = function(req, res, next) {
 exports.pending = function(req, res, next) {
   models.Course.findOne({
     where: { id: req.params.courseId },
+    include: [
+      { model: models.Student },
+      { model: models.Department },
+    ],
   })
   .then((course) => {
     course.status = 4;
     course.courseIndex = -1;
+    course.finalCourse = false;
     course.save()
     .then((result) => {
-      res.json(result);
+      orderingCourses(course)
+      .then(() => {
+        res.json(result);
+      });
     })
     .catch((err) => {
       console.log(err);
