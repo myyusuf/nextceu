@@ -13,5 +13,7 @@ router.post('/:studentId/courses', StudentController.addCourses);
 router.get('/:studentId/courses', StudentController.findCourses);
 router.delete('/:studentId/courses/:courseId', StudentController.deleteCourse);
 router.get('/:studentId/scores', StudentController.findScores);
+router.post('/:studentId/kompres', StudentController.addKompre);
+router.get('/:studentId/kompres', StudentController.findKompres);
 
 module.exports = router;

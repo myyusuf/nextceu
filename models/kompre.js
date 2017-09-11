@@ -11,5 +11,11 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
+
+  Kompre.associate = function (models) {
+    Kompre.belongsTo(models.Student);
+    Kompre.belongsTo(models.KompreType);
+  };
+
   return Kompre;
 };

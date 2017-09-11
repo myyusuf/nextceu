@@ -17,7 +17,5 @@ router.get('/:courseId/courseproblems', CourseController.findCourseProblems);
 router.post('/:courseId/portofolios', CourseController.addPortofolio);
 router.get('/:courseId/portofolios', CourseController.findPortofolios);
 router.get('/:courseId/courseseminars', CourseController.findCourseSeminars);
-router.post('/:courseId/kompres', CourseController.addKompre);
-router.get('/:courseId/kompres', CourseController.findKompres);
 
 module.exports = router;

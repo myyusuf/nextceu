@@ -312,3 +312,31 @@ exports.deleteCourse = function(req, res) {
     res.json(result);
   });
 };
+
+exports.addKompre = function(req, res) {
+  const studentId = req.params.studentId;
+  const kompreForm = req.body;
+  kompreForm.StudentId = parseInt(studentId, 10);
+  kompreForm.KompreTypeId = parseInt(kompreForm.kompreType, 10);
+  models.Kompre.create(kompreForm)
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).send('Error when doing operation.');
+  });
+};
+
+exports.findKompres = function(req, res) {
+  const studentId = req.params.studentId;
+  models.Kompre.findAll({
+    where: { StudentId: studentId },
+    include: [
+      { model: models.KompreType },
+    ],
+  })
+  .then((kompres) => {
+    res.json(kompres);
+  });
+};
