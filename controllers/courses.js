@@ -428,6 +428,34 @@ exports.findPortofolios = function(req, res) {
 
 //-----
 
+exports.addKompre = function(req, res) {
+  const courseId = req.params.courseId;
+  const kompreForm = req.body;
+  kompreForm.CourseId = parseInt(courseId, 10);
+  kompreForm.KompreTypeId = parseInt(kompreForm.kompreType, 10);
+  models.Kompre.create(kompreForm)
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).send('Error when doing operation.');
+  });
+};
+
+exports.findKompres = function(req, res) {
+  models.Kompre.findAll({
+    where: {},
+    include: [
+      { model: models.Course, where: { id: req.params.courseId } },
+      { model: models.KompreType },
+    ],
+  })
+  .then((kompres) => {
+    res.json(kompres);
+  });
+};
+
 exports.findCourseSeminars = function(req, res) {
   const startDate = req.query.startDate ? moment(req.query.startDate.replace(/"/g, '')) : null;
   const endDate = req.query.endDate ? moment(req.query.endDate.replace(/"/g, '')) : null;
