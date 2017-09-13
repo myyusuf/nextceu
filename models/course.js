@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
 
   Course.associate = function (models) {
     Course.belongsTo(models.Student);
-    Course.belongsTo(models.Department);
+    Course.belongsTo(models.Department, { onDelete: 'restrict' });
     Course.hasMany(models.Score);
     Course.hasMany(models.CourseProblem);
     Course.belongsTo(models.Hospital, { as: 'hospital1' });
