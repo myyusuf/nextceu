@@ -5,6 +5,62 @@ const sendError = (err, res) => {
   res.status(500).send(`Error while doing operation: ${err.name}, ${err.message}`);
 };
 
+exports.findInitiateCourses = function(req, res) {
+  const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
+  const dateRange = req.query.dateRange;
+  let startDate = null;
+  let endDate = null;
+  if (dateRange) {
+    startDate = moment(dateRange[0].replace(/"/g, ''));
+    endDate = moment(dateRange[1].replace(/"/g, ''));
+  } else {
+    res.json({
+      count: 0,
+      rows: [],
+    });
+    return;
+  }
+  const limit = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
+  const currentPage = req.query.currentPage ? parseInt(req.query.currentPage, 10) : 1;
+  const offset = (currentPage - 1) * limit;
+  models.Course.findAndCountAll({
+    where: {
+      planStartDate: {
+        $gte: startDate.toDate(),
+        $lte: endDate.toDate(),
+      },
+      status: 0,
+      courseIndex: 1,
+    },
+    include: [
+      {
+        model: models.Student,
+        where: {
+          $or: [
+            { name: { $ilike: searchText } },
+            { oldSid: { $ilike: searchText } },
+            { newSid: { $ilike: searchText } },
+          ],
+        },
+      },
+      {
+        model: models.Department,
+        where: {
+          level: 1,
+        },
+      },
+    ],
+    limit,
+    offset,
+  })
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
+};
+
 exports.findCompletedCourses = function(req, res) {
   const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
   const dateRange = req.query.dateRange;
@@ -54,6 +110,44 @@ exports.findCompletedCourses = function(req, res) {
   });
 };
 
+exports.initiateXpt = function(req, res) {
+  const exportToPreTestForm = req.body;
+  const preTestDate = exportToPreTestForm.preTestDate;
+  const courseIds = exportToPreTestForm.courseIds;
+  const promises = [];
+  for (let i = 0; i < courseIds.length; i += 1) {
+    const courseId = courseIds[i];
+    const promise = new Promise((resolve, reject) => {
+      models.Course.findOne({
+        where: { id: courseId },
+        include: [
+          { model: models.Student },
+        ],
+      })
+      .then((foundCourse) => {
+        foundCourse.preTestDate = preTestDate;
+        foundCourse.save()
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+      });
+    });
+
+    promises.push(promise);
+  }
+
+  Promise.all(promises)
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
+};
+
 exports.exportToPreTest = function(req, res) {
   const exportToPreTestForm = req.body;
   const preTestDate = exportToPreTestForm.preTestDate;
@@ -72,7 +166,10 @@ exports.exportToPreTest = function(req, res) {
         models.Course.update(
           { preTestDate },
           {
-            where: { StudentId: foundCourse.Student.id, courseIndex: foundCourse.courseIndex + 1 },
+            where: {
+              StudentId: foundCourse.Student.id,
+              courseIndex: foundCourse.courseIndex + 1,
+            },
           })
         .then((result) => {
           resolve(result);
@@ -80,7 +177,7 @@ exports.exportToPreTest = function(req, res) {
         .catch((err) => {
           reject(err);
         });
-      })
+      });
     });
 
     promises.push(promise);

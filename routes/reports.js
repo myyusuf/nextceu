@@ -4,7 +4,9 @@ const CostUnitController = require('../controllers/cost_units.js');
 
 const router = express.Router();
 
+router.get('/initiatecourses', ReportController.findInitiateCourses);
 router.get('/completedcourses', ReportController.findCompletedCourses);
+router.post('/initiatexpt', ReportController.initiateXpt);
 router.post('/exporttopretest', ReportController.exportToPreTest);
 router.get('/pretests', ReportController.findPreTests);
 router.put('/pretests/remove', ReportController.removeCoursesFormPreTest);
