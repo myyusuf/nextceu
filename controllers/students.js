@@ -370,7 +370,8 @@ exports.krsUpload = function krsUpload(req, res) {
         where: { id: studentId },
       })
       .then((student) => {
-        const fileKey = `student/krs/krs_${student.email}.jpg`;
+        const fileId = shortid.generate();
+        const fileKey = `student/krs/${fileId}.jpg`;
         s3.putObject({
           Bucket: 'ceufkumifiles',
           Key: fileKey,
@@ -378,7 +379,11 @@ exports.krsUpload = function krsUpload(req, res) {
           ACL: 'public-read',
         }, () => {
           console.log('Successfully uploaded krs.');
-          res.send('Successfully uploaded krs.');
+          student.krsFileId = fileId;
+          student.save()
+          .then(() => {
+            res.send(fileId);
+          });
         });
       });
     });

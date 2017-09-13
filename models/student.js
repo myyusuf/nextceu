@@ -15,7 +15,10 @@ module.exports = function(sequelize, DataTypes) {
     graduateYear: DataTypes.INTEGER,
     certificateNumber: DataTypes.STRING,
     status: DataTypes.STRING,
-    ipk: DataTypes.DOUBLE
+    ipk: DataTypes.DOUBLE,
+    krs: DataTypes.BOOLEAN,
+    krsFileId: DataTypes.STRING,
+    spp: DataTypes.BOOLEAN
   }, {
     classMethods: {
       associate: function(models) {
