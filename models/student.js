@@ -18,7 +18,13 @@ module.exports = function(sequelize, DataTypes) {
     ipk: DataTypes.DOUBLE,
     krs: DataTypes.BOOLEAN,
     krsFileId: DataTypes.STRING,
-    spp: DataTypes.BOOLEAN
+    spp: DataTypes.BOOLEAN,
+    fatherName: DataTypes.STRING,
+    motherName: DataTypes.STRING,
+    parentAddress: DataTypes.STRING,
+    parentPhone: DataTypes.STRING,
+    parentMobilePhone: DataTypes.STRING,
+
   }, {
     classMethods: {
       associate: function(models) {
