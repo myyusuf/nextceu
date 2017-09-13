@@ -15,5 +15,6 @@ router.delete('/:studentId/courses/:courseId', StudentController.deleteCourse);
 router.get('/:studentId/scores', StudentController.findScores);
 router.post('/:studentId/kompres', StudentController.addKompre);
 router.get('/:studentId/kompres', StudentController.findKompres);
+router.post('/:studentId/uploadfile/krs', StudentController.krsUpload);
 
 module.exports = router;

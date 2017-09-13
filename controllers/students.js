@@ -1,5 +1,8 @@
 const moment = require('moment');
 const Sequelize = require('sequelize');
+const AWS = require('aws-sdk');
+const fs = require('fs');
+const shortid = require('shortid');
 const _ = require('lodash');
 const models = require('../models');
 
@@ -338,5 +341,46 @@ exports.findKompres = function(req, res) {
   })
   .then((kompres) => {
     res.json(kompres);
+  });
+};
+
+exports.krsUpload = function krsUpload(req, res) {
+  if (!req.files) {
+    return res.status(400).send('No files were uploaded.');
+  }
+
+  // The name of the input field (i.e. "seminarFile") is used to retrieve the uploaded file
+  const krsFile = req.files.krsFile;
+  const studentId = req.params.studentId;
+
+  // Use the mv() method to place the file somewhere on your server
+  const fileName = `/Users/myyusuf/Documents/Test/file_upload/krs_file_${studentId}.jpg`;
+  krsFile.mv(fileName, (err) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    fs.readFile(fileName, (errReadFile, data) => {
+      if (errReadFile) { throw errReadFile; }
+
+      const base64data = new Buffer(data, 'binary');
+      const s3 = new AWS.S3();
+
+      models.Student.findOne({
+        where: { id: studentId },
+      })
+      .then((student) => {
+        const fileKey = `student/krs/krs_${student.email}.jpg`;
+        s3.putObject({
+          Bucket: 'ceufkumifiles',
+          Key: fileKey,
+          Body: base64data,
+          ACL: 'public-read',
+        }, () => {
+          console.log('Successfully uploaded krs.');
+          res.send('Successfully uploaded krs.');
+        });
+      });
+    });
   });
 };
