@@ -11,8 +11,8 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Participant.associate = function (models) {
-    Participant.belongsTo(models.Student);
-    Participant.belongsTo(models.Seminar);
+    Participant.belongsTo(models.Student, { onDelete: 'restrict' });
+    Participant.belongsTo(models.Seminar, { onDelete: 'restrict' });
   };
 
   return Participant;

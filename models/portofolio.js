@@ -12,8 +12,8 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Portofolio.associate = function (models) {
-    Portofolio.belongsTo(models.Course);
-    Portofolio.belongsTo(models.PortofolioType);
+    Portofolio.belongsTo(models.Course, { onDelete: 'restrict' });
+    Portofolio.belongsTo(models.PortofolioType, { onDelete: 'restrict' });
   };
   return Portofolio;
 };

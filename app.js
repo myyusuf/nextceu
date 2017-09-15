@@ -32,6 +32,7 @@ var seminars = require('./routes/seminar');
 var seminarFileUpload = require('./routes/seminar_fileupload');
 var security = require('./routes/security');
 var reports = require('./routes/reports');
+var bakordik = require('./routes/bakordik');
 var docents = require('./routes/docents');
 var docentsByHD = require('./routes/docents_by_hd');
 
@@ -76,6 +77,7 @@ app.use('/api/seminars', seminars);
 app.use('/api/seminarupload', seminarFileUpload);
 app.use('/api/security', security);
 app.use('/api/reports', reports);
+app.use('/api/bakordik', bakordik);
 app.use('/api/docents', docents);
 app.use('/api/docentsbyhd', docentsByHD);
 

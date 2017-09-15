@@ -15,8 +15,8 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   CourseProblem.associate = function (models) {
-    CourseProblem.belongsTo(models.Course);
-    CourseProblem.belongsTo(models.CourseProblemType);
+    CourseProblem.belongsTo(models.Course, { onDelete: 'restrict' });
+    CourseProblem.belongsTo(models.CourseProblemType, { onDelete: 'restrict' });
   };
   return CourseProblem;
 };

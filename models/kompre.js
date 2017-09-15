@@ -13,8 +13,8 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Kompre.associate = function (models) {
-    Kompre.belongsTo(models.Student);
-    Kompre.belongsTo(models.KompreType);
+    Kompre.belongsTo(models.Student, { onDelete: 'restrict' });
+    Kompre.belongsTo(models.KompreType, { onDelete: 'restrict' });
   };
 
   return Kompre;

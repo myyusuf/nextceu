@@ -11,8 +11,8 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   HospitalDepartment.associate = function (models) {
-    HospitalDepartment.belongsTo(models.Hospital);
-    HospitalDepartment.belongsTo(models.Department);
+    HospitalDepartment.belongsTo(models.Hospital, { onDelete: 'restrict' });
+    HospitalDepartment.belongsTo(models.Department, { onDelete: 'restrict' });
   };
 
   return HospitalDepartment;

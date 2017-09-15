@@ -12,8 +12,8 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Score.associate = function (models) {
-    Score.belongsTo(models.Course);
-    Score.belongsTo(models.ScoreType);
+    Score.belongsTo(models.Course, { onDelete: 'restrict' });
+    Score.belongsTo(models.ScoreType, { onDelete: 'restrict' });
   };
 
   return Score;

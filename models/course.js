@@ -32,16 +32,16 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Course.associate = function (models) {
-    Course.belongsTo(models.Student);
+    Course.belongsTo(models.Student, { onDelete: 'restrict' });
     Course.belongsTo(models.Department, { onDelete: 'restrict' });
     Course.hasMany(models.Score);
     Course.hasMany(models.CourseProblem);
-    Course.belongsTo(models.Hospital, { as: 'hospital1' });
-    Course.belongsTo(models.Hospital, { as: 'hospital2' });
-    Course.belongsTo(models.Hospital, { as: 'clinic' });
-    Course.belongsTo(models.Docent, { as: 'adviser' });
-    Course.belongsTo(models.Docent, { as: 'examiner' });
-    Course.belongsTo(models.Docent, { as: 'dpk' });
+    Course.belongsTo(models.Hospital, { as: 'hospital1', onDelete: 'restrict' });
+    Course.belongsTo(models.Hospital, { as: 'hospital2', onDelete: 'restrict' });
+    Course.belongsTo(models.Hospital, { as: 'clinic', onDelete: 'restrict' });
+    Course.belongsTo(models.Docent, { as: 'adviser', onDelete: 'restrict' });
+    Course.belongsTo(models.Docent, { as: 'examiner', onDelete: 'restrict' });
+    Course.belongsTo(models.Docent, { as: 'dpk', onDelete: 'restrict' });
   };
 
   return Course;

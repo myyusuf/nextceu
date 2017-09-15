@@ -15,7 +15,7 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   User.associate = function (models) {
-    User.belongsTo(models.Role);
+    User.belongsTo(models.Role, { onDelete: 'restrict' });
   };
 
   return User;
