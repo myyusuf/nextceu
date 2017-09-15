@@ -31,13 +31,15 @@ exports.preTestUpload = function (req, res) {
         .then(() => {
           const worksheet = workbook.getWorksheet(1);
           const promises = [];
+          const scoreDate = moment().toDate();
           for (let i = 6; i <= Constant.MAX_SCORE_UPLOADED_ROW + 6; i += 1) {
             const departmentCode = worksheet.getCell(`B${i}`).value;
             const newSid = worksheet.getCell(`C${i}`).value;
-            const scoreValue = parseFloat(worksheet.getCell(`G${i}`).value);
             if (departmentCode === null) {
               break;
             }
+
+            const scoreValue = parseFloat(worksheet.getCell(`G${i}`).value.result);
 
             const promise = new Promise((resolve, reject) => {
               models.Score.findOne({
@@ -73,6 +75,7 @@ exports.preTestUpload = function (req, res) {
               }).then((foundScore) => {
                 if (foundScore) {
                   foundScore.scoreValue = scoreValue;
+                  foundScore.scoreDate = scoreDate;
                   foundScore.save()
                   .then(() => {
                     resolve({ newSid, found: true });
@@ -107,6 +110,7 @@ exports.preTestUpload = function (req, res) {
                       .then((foundScoreType) => {
                         models.Score.create({
                           scoreValue,
+                          scoreDate,
                           CourseId: foundCourse.id,
                           ScoreTypeId: foundScoreType.id,
                         })
