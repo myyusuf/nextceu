@@ -40,6 +40,7 @@ exports.signIn = function(req, res) {
         res.json({
           status: 'OK',
           token,
+          role: user.Role.code,
         });
       } else {
         sendLoginFailedMessage(req, res);

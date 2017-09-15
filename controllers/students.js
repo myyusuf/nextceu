@@ -35,6 +35,9 @@ exports.findAll = function (req, res) {
 
   models.Student.findAndCountAll({
     where,
+    order: [
+      ['name'],
+    ],
     limit,
     offset,
   })
