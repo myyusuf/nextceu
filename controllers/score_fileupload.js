@@ -21,8 +21,17 @@ const processUpload = (req, res, uploadType) => {
 
   // Use the mv() method to place the file somewhere on your server
   let uploadFolder = 'pre_test';
+  let firstLineIndex = 6;
+  let newSidIndex = 'C';
+  let departmentCodeIndex = 'B';
+  let scoreValueIndex = 'G';
+
   if (uploadType === 'POSTTEST') {
     uploadFolder = 'post_test';
+    firstLineIndex = 8;
+    newSidIndex = 'B';
+    departmentCodeIndex = 'D';
+    scoreValueIndex = 'G';
   }
 
   const fileName = `${FILE_UPLOAD_FOLDER}/${uploadFolder}/${shortid.generate()}.xlsx`;
@@ -37,14 +46,14 @@ const processUpload = (req, res, uploadType) => {
           const worksheet = workbook.getWorksheet(1);
           const promises = [];
           const scoreDate = moment().toDate();
-          for (let i = 6; i <= Constant.MAX_SCORE_UPLOADED_ROW + 6; i += 1) {
-            const departmentCode = worksheet.getCell(`B${i}`).value;
-            const newSid = worksheet.getCell(`C${i}`).value;
+          for (let i = firstLineIndex; i <= Constant.MAX_SCORE_UPLOADED_ROW + firstLineIndex; i += 1) {
+            const departmentCode = worksheet.getCell(`${departmentCodeIndex}${i}`).value;
+            const newSid = worksheet.getCell(`${newSidIndex}${i}`).value;
             if (departmentCode === null) {
               break;
             }
 
-            const scoreValue = parseFloat(worksheet.getCell(`G${i}`).value.result);
+            const scoreValue = parseFloat(worksheet.getCell(`${scoreValueIndex}${i}`).value.result);
 
             const promise = new Promise((resolve, reject) => {
               models.Score.findOne({
