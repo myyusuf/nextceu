@@ -29,14 +29,13 @@ exports.preTestUpload = function (req, res) {
     const workbook = new Excel.Workbook();
     workbook.xlsx.readFile(fileName)
         .then(() => {
-          const worksheet = workbook.getWorksheet(2);
-
+          const worksheet = workbook.getWorksheet(1);
           const promises = [];
           for (let i = 6; i <= Constant.MAX_SCORE_UPLOADED_ROW + 6; i += 1) {
-            const courseCode = worksheet.getCell(`B${i}`).value;
+            const departmentCode = worksheet.getCell(`B${i}`).value;
             const newSid = worksheet.getCell(`C${i}`).value;
             const scoreValue = parseFloat(worksheet.getCell(`G${i}`).value);
-            if (courseCode === null) {
+            if (departmentCode === null) {
               break;
             }
 
@@ -47,7 +46,6 @@ exports.preTestUpload = function (req, res) {
                   {
                     model: models.Course,
                     where: {
-                      code: courseCode,
                       status: 1,
                     },
                     include: [
@@ -55,6 +53,12 @@ exports.preTestUpload = function (req, res) {
                         model: models.Student,
                         where: {
                           newSid,
+                        },
+                      },
+                      {
+                        model: models.Department,
+                        where: {
+                          code: departmentCode,
                         },
                       },
                     ],
@@ -71,12 +75,11 @@ exports.preTestUpload = function (req, res) {
                   foundScore.scoreValue = scoreValue;
                   foundScore.save()
                   .then(() => {
-                    resolve({ courseCode, found: true });
+                    resolve({ newSid, found: true });
                   });
                 } else {
                   models.Course.findOne({
                     where: {
-                      code: courseCode,
                       status: 1,
                     },
                     include: [
@@ -84,6 +87,12 @@ exports.preTestUpload = function (req, res) {
                         model: models.Student,
                         where: {
                           newSid,
+                        },
+                      },
+                      {
+                        model: models.Department,
+                        where: {
+                          code: departmentCode,
                         },
                       },
                     ],
@@ -102,14 +111,17 @@ exports.preTestUpload = function (req, res) {
                           ScoreTypeId: foundScoreType.id,
                         })
                         .then(() => {
-                          resolve({ courseCode, found: true });
+                          resolve({ newSid, found: true });
                         });
                       });
                     } else {
-                      resolve({ courseCode, found: false });
+                      resolve({ newSid, found: false });
                     }
                   });
                 }
+              })
+              .catch((errFindCourse) => {
+                reject(errFindCourse);
               });
             });
 
