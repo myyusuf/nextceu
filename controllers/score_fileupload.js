@@ -11,7 +11,7 @@ const sendError = (err, res) => {
 
 const FILE_UPLOAD_FOLDER = process.env.FILE_UPLOAD_FOLDER || Constant.FILE_UPLOAD_FOLDER;
 
-exports.preTestUpload = function (req, res) {
+const processUpload = (req, res, uploadType) => {
   if (!req.files) {
     return res.status(400).send('No files were uploaded.');
   }
@@ -20,7 +20,12 @@ exports.preTestUpload = function (req, res) {
   const scoreFile = req.files.scoreFile;
 
   // Use the mv() method to place the file somewhere on your server
-  const fileName = `${FILE_UPLOAD_FOLDER}/pre_test/${shortid.generate()}.xlsx`;
+  let uploadFolder = 'pre_test';
+  if (uploadType === 'POSTTEST') {
+    uploadFolder = 'post_test';
+  }
+
+  const fileName = `${FILE_UPLOAD_FOLDER}/${uploadFolder}/${shortid.generate()}.xlsx`;
   scoreFile.mv(fileName, (err) => {
     if (err) {
       return res.status(500).send(err);
@@ -68,7 +73,7 @@ exports.preTestUpload = function (req, res) {
                   {
                     model: models.ScoreType,
                     where: {
-                      code: 'PRETEST',
+                      code: uploadType,
                     },
                   },
                 ],
@@ -104,7 +109,7 @@ exports.preTestUpload = function (req, res) {
                     if (foundCourse) {
                       models.ScoreType.findOne({
                         where: {
-                          code: 'PRETEST',
+                          code: uploadType,
                         },
                       })
                       .then((foundScoreType) => {
@@ -147,4 +152,12 @@ exports.preTestUpload = function (req, res) {
           });
         });
   });
+};
+
+exports.preTestUpload = function (req, res) {
+  processUpload(req, res, 'PRETEST');
+};
+
+exports.postTestUpload = function (req, res) {
+  processUpload(req, res, 'POSTTEST');
 };
