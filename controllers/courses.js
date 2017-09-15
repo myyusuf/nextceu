@@ -88,7 +88,7 @@ const checkPortofolio = course => (
       where: { CourseId: course.id },
       include: [
         { model: models.ScoreType,
-          where: { name: 'Portofolio' },
+          where: { code: 'PORTOFOLIO' },
         },
       ],
     })

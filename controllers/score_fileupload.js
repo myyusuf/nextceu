@@ -30,12 +30,98 @@ exports.preTestUpload = function (req, res) {
     workbook.xlsx.readFile(fileName)
         .then(() => {
           const worksheet = workbook.getWorksheet(2);
-          const cell = worksheet.getCell('B12').value;
-          console.log('========>', cell);
 
-          fs.unlink(fileName, (errDeleteFile) => {
-            if (errDeleteFile) throw errDeleteFile;
-            res.send('OK');
+          const promises = [];
+          for (let i = 6; i <= Constant.MAX_SCORE_UPLOADED_ROW + 6; i += 1) {
+            const courseCode = worksheet.getCell(`B${i}`).value;
+            const newSid = worksheet.getCell(`C${i}`).value;
+            const scoreValue = parseFloat(worksheet.getCell(`G${i}`).value);
+            if (courseCode === null) {
+              break;
+            }
+
+            const promise = new Promise((resolve, reject) => {
+              models.Score.findOne({
+                where: {},
+                include: [
+                  {
+                    model: models.Course,
+                    where: {
+                      code: courseCode,
+                      status: 1,
+                    },
+                    include: [
+                      {
+                        model: models.Student,
+                        where: {
+                          newSid,
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    model: models.ScoreType,
+                    where: {
+                      code: 'PRETEST',
+                    },
+                  },
+                ],
+              }).then((foundScore) => {
+                if (foundScore) {
+                  foundScore.scoreValue = scoreValue;
+                  foundScore.save()
+                  .then(() => {
+                    resolve({ courseCode, found: true });
+                  });
+                } else {
+                  models.Course.findOne({
+                    where: {
+                      code: courseCode,
+                      status: 1,
+                    },
+                    include: [
+                      {
+                        model: models.Student,
+                        where: {
+                          newSid,
+                        },
+                      },
+                    ],
+                  })
+                  .then((foundCourse) => {
+                    if (foundCourse) {
+                      models.ScoreType.findOne({
+                        where: {
+                          code: 'PRETEST',
+                        },
+                      })
+                      .then((foundScoreType) => {
+                        models.Score.create({
+                          scoreValue,
+                          CourseId: foundCourse.id,
+                          ScoreTypeId: foundScoreType.id,
+                        })
+                        .then(() => {
+                          resolve({ courseCode, found: true });
+                        });
+                      });
+                    } else {
+                      resolve({ courseCode, found: false });
+                    }
+                  });
+                }
+              });
+            });
+
+            promises.push(promise);
+          }
+
+          Promise.all(promises)
+          .then((uploadResult) => {
+            fs.unlink(fileName, (errDeleteFile) => {
+              if (errDeleteFile) throw errDeleteFile;
+              res.json(uploadResult);
+            });
           });
         })
         .catch((errReadExcel) => {

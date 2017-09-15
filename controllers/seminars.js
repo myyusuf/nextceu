@@ -1,6 +1,7 @@
 const Excel = require('exceljs');
 const models = require('../models');
 const moment = require('moment');
+const Constant = require('../Constant');
 
 const sendError = (err, res) => {
   res.status(500).send(`Error while doing operation: ${err.name}, ${err.message}`);
@@ -141,7 +142,7 @@ exports.fileUpload = function fileUpload(req, res) {
             const promises = [];
             const participants = {};
 
-            for (let i = 2; i < 10; i += 1) {
+            for (let i = 2; i <= Constant.MAX_SEMINAR_UPLOADED_ROW; i += 1) {
               const cellA = worksheet.getCell(`A${i}`).value;
               if (cellA === null) {
                 break;
