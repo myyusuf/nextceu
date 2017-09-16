@@ -10,5 +10,10 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
+
+  PortofolioType.associate = function (models) {
+    PortofolioType.belongsTo(models.Department, { onDelete: 'restrict' });
+  };
+
   return PortofolioType;
 };

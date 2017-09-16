@@ -13,6 +13,11 @@ exports.findAll = function findAll(req, res) {
         { name: { $ilike: searchText } },
       ],
     },
+    include: [
+      {
+        model: models.Department,
+      },
+    ],
   })
   .then((portofolioTypes) => {
     res.json(portofolioTypes);
@@ -36,6 +41,7 @@ exports.findOne = function findOne(req, res) {
 
 exports.create = function create(req, res) {
   const portofolioTypeForm = req.body;
+  portofolioTypeForm.DepartmentId = parseInt(portofolioTypeForm.department, 10);
   models.PortofolioType.create(portofolioTypeForm)
   .then((portofolioType) => {
     res.json(portofolioType);
@@ -47,6 +53,7 @@ exports.create = function create(req, res) {
 
 exports.update = function update(req, res) {
   const portofolioTypeForm = req.body;
+  portofolioTypeForm.DepartmentId = parseInt(portofolioTypeForm.department, 10);
   models.PortofolioType.update(
     portofolioTypeForm,
     {
