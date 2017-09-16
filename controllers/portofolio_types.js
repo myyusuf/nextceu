@@ -18,6 +18,7 @@ exports.findAll = function findAll(req, res) {
         model: models.Department,
       },
     ],
+    order: ['code'],
   })
   .then((portofolioTypes) => {
     res.json(portofolioTypes);
