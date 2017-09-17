@@ -14,6 +14,7 @@ module.exports = function(sequelize, DataTypes) {
   Sgl.associate = function (models) {
     Sgl.belongsTo(models.Course, { onDelete: 'restrict' });
     Sgl.belongsTo(models.SglType, { onDelete: 'restrict' });
+    Sgl.belongsTo(models.Pengampu, { onDelete: 'restrict' });
   };
 
   return Sgl;

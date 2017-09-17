@@ -7,6 +7,7 @@ const sendError = (err, res) => {
 exports.update = function update(req, res) {
   const sglForm = req.body;
   sglForm.SglTypeId = parseInt(sglForm.sglType, 10);
+  sglForm.PengampuId = parseInt(sglForm.pengampu, 10);
   models.Sgl.update(
     sglForm,
     {
