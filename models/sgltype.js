@@ -2,7 +2,8 @@
 module.exports = function(sequelize, DataTypes) {
   var SglType = sequelize.define('SglType', {
     code: DataTypes.STRING,
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    active: DataTypes.BOOLEAN
   }, {
     classMethods: {
       associate: function(models) {
