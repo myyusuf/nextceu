@@ -426,6 +426,34 @@ exports.findPortofolios = function(req, res) {
   });
 };
 
+exports.addSgl = function(req, res) {
+  const courseId = req.params.courseId;
+  const sglForm = req.body;
+  sglForm.CourseId = parseInt(courseId, 10);
+  sglForm.SglTypeId = parseInt(sglForm.sglType, 10);
+  models.Sgl.create(sglForm)
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).send('Error when doing operation.');
+  });
+};
+
+exports.findSgls = function(req, res) {
+  models.Sgl.findAll({
+    where: {},
+    include: [
+      { model: models.Course, where: { id: req.params.courseId } },
+      { model: models.SglType },
+    ],
+  })
+  .then((sgls) => {
+    res.json(sgls);
+  });
+};
+
 //-----
 
 exports.findCourseSeminars = function(req, res) {

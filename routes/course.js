@@ -16,6 +16,8 @@ router.post('/:courseId/courseproblems', CourseController.addCourseProblem);
 router.get('/:courseId/courseproblems', CourseController.findCourseProblems);
 router.post('/:courseId/portofolios', CourseController.addPortofolio);
 router.get('/:courseId/portofolios', CourseController.findPortofolios);
+router.post('/:courseId/sgls', CourseController.addSgl);
+router.get('/:courseId/sgls', CourseController.findSgls);
 router.get('/:courseId/courseseminars', CourseController.findCourseSeminars);
 
 module.exports = router;
