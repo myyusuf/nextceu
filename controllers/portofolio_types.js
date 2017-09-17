@@ -6,13 +6,21 @@ const sendError = (err, res) => {
 
 exports.findAll = function findAll(req, res) {
   const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
+  const departmentId = req.query.searchDepartment;
+
+  const where = {
+    $or: [
+      { code: { $ilike: searchText } },
+      { name: { $ilike: searchText } },
+    ],
+  };
+
+  if (departmentId) {
+    where.DepartmentId = departmentId;
+  }
+
   models.PortofolioType.findAll({
-    where: {
-      $or: [
-        { code: { $ilike: searchText } },
-        { name: { $ilike: searchText } },
-      ],
-    },
+    where,
     include: [
       {
         model: models.Department,
