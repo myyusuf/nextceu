@@ -36,6 +36,22 @@ exports.findAll = function findAll(req, res) {
   });
 };
 
+exports.sglTypesByDepartment = function (req, res) {
+  const departmentId = req.query.department ? parseInt(req.query.department, 10) : -1;
+  models.SglType.findAll({
+    where: {},
+    include: [
+      { model: models.Department, where: { id: departmentId } },
+    ],
+  })
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
+};
+
 exports.findOne = function findOne(req, res) {
   models.SglType.findOne({
     where: { id: req.params.sglTypeId },
