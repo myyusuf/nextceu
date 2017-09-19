@@ -70,7 +70,12 @@ exports.create = function(req, res) {
   studentForm.status = 'ACTIVE';
   models.Student.create(studentForm)
   .then((result) => {
-    res.json(result);
+    models.YudisiumChecklist.create({
+      StudentId: result.id,
+    })
+    .then(() => {
+      res.json(result);
+    });
   })
   .catch(err => res.status(500).send(err.message));
 };

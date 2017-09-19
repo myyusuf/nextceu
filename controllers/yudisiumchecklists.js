@@ -6,7 +6,7 @@ const sendError = (err, res) => {
 
 exports.findByStudent = function findOne(req, res) {
   models.YudisiumChecklist.findOne({
-    where: { StudentId: req.params.student },
+    where: { StudentId: req.params.studentId },
   })
   .then((role) => {
     res.json(role);
