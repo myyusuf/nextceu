@@ -16,6 +16,52 @@ exports.findByStudent = function findOne(req, res) {
   });
 };
 
+exports.findPortofolios = (req, res) => {
+  models.Course.findAll({
+    where: {
+      StudentId: req.params.studentId,
+      status: { $ne: 4 },
+    },
+    include: [
+      {
+        model: models.Department,
+        where: {
+          level: 1,
+        },
+      },
+    ],
+  })
+  .then((courses) => {
+    const promises = [];
+    for (let i = 0; i < courses.length; i += 1) {
+      const course = courses[i];
+      const promise = new Promise((resolve, reject) => {
+        models.Portofolio.findAll({
+          where: { CourseId: course.id },
+        })
+        .then((portofolios) => {
+          resolve({
+            course,
+            portofolios,
+          });
+        })
+        .catch((err) => {
+          reject(err);
+        });
+      });
+      promises.push(promise);
+    }
+
+    Promise.all(promises)
+    .then((result) => {
+      res.json(result);
+    });
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
+};
+
 exports.update = function update(req, res) {
   const yscForm = req.body;
   models.YudisiumChecklist.update(
