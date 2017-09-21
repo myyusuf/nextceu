@@ -9,6 +9,22 @@ const sendError = (err, res) => {
 
 exports.findAll = function findAll(req, res) {
   const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
+  const dateRange = req.query.dateRange;
+  let startDate = null;
+  let endDate = null;
+  if (dateRange) {
+    startDate = moment(dateRange[0].replace(/"/g, ''));
+    endDate = moment(dateRange[1].replace(/"/g, ''));
+  } else {
+    const date = new Date();
+    const y = date.getFullYear();
+    const m = date.getMonth();
+    const firstDay = new Date(y, m, 1);
+    const lastDay = new Date(y, m + 1, 0);
+
+    startDate = moment(firstDay);
+    endDate = moment(lastDay);
+  }
   const limit = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
   const currentPage = req.query.currentPage ? parseInt(req.query.currentPage, 10) : 1;
   const offset = (currentPage - 1) * limit;
@@ -18,6 +34,10 @@ exports.findAll = function findAll(req, res) {
         { code: { $ilike: searchText } },
         { name: { $ilike: searchText } },
       ],
+      eventDate: {
+        $gte: startDate.toDate(),
+        $lte: endDate.toDate(),
+      },
     },
     limit,
     offset,
