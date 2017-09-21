@@ -4,6 +4,7 @@ module.exports = function(sequelize, DataTypes) {
     code: DataTypes.STRING,
     name: DataTypes.STRING,
     eventDate: DataTypes.DATEONLY,
+    eventTime: DataTypes.TIME,
     description: DataTypes.STRING
   }, {
     classMethods: {

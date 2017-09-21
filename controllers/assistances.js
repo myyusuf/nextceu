@@ -97,6 +97,7 @@ exports.findOne = function findOne(req, res) {
 
 exports.create = function create(req, res) {
   const assistanceForm = req.body;
+  assistanceForm.eventTime = moment(assistanceForm.eventTime).format('hh:mm:ss a');
   models.Assistance.create(assistanceForm)
   .then((assistance) => {
     res.json(assistance);
@@ -108,6 +109,7 @@ exports.create = function create(req, res) {
 
 exports.update = function update(req, res) {
   const assistanceForm = req.body;
+  assistanceForm.eventTime = moment(assistanceForm.eventTime).format('hh:mm:ss a');
   models.Assistance.update(
     assistanceForm,
     {
