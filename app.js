@@ -45,6 +45,8 @@ var docents = require('./routes/docents');
 var docentsByHD = require('./routes/docents_by_hd');
 var pengampus = require('./routes/pengampus');
 var pengampusByDepartment = require('./routes/pengampus_by_department');
+var tutors = require('./routes/tutors');
+var supervisors = require('./routes/supervisors');
 
 var app = express();
 
@@ -100,6 +102,8 @@ app.use('/api/docents', docents);
 app.use('/api/docentsbyhd', docentsByHD);
 app.use('/api/pengampus', pengampus);
 app.use('/api/pengampusbydepartment', pengampusByDepartment);
+app.use('/api/tutors', tutors);
+app.use('/api/supervisors', supervisors);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
