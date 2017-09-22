@@ -5,7 +5,11 @@ module.exports = function(sequelize, DataTypes) {
     name: DataTypes.STRING,
     eventDate: DataTypes.DATEONLY,
     eventTime: DataTypes.TIME,
-    description: DataTypes.STRING
+    description: DataTypes.STRING,
+    mainTutorPresent: DataTypes.BOOLEAN,
+    secondTutorPresent: DataTypes.BOOLEAN,
+    thirdTutorPresent: DataTypes.BOOLEAN,
+    facilitatorPresent: DataTypes.BOOLEAN,
   }, {
     classMethods: {
       associate: function(models) {
@@ -16,6 +20,10 @@ module.exports = function(sequelize, DataTypes) {
 
   Assistance.associate = function (models) {
     Assistance.hasMany(models.AssistanceParticipant);
+    Assistance.belongsTo(models.Tutor, { as: 'mainTutor', onDelete: 'restrict' });
+    Assistance.belongsTo(models.Tutor, { as: 'secondTutor', onDelete: 'restrict' });
+    Assistance.belongsTo(models.Tutor, { as: 'thirdTutor', onDelete: 'restrict' });
+    Assistance.belongsTo(models.Tutor, { as: 'facilitator', onDelete: 'restrict' });
   };
 
   return Assistance;

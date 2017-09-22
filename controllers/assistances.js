@@ -98,6 +98,18 @@ exports.findOne = function findOne(req, res) {
 exports.create = function create(req, res) {
   const assistanceForm = req.body;
   assistanceForm.eventTime = moment(assistanceForm.eventTime).format('hh:mm:ss a');
+  if (assistanceForm.mainTutor) {
+    assistanceForm.mainTutorId = parseInt(assistanceForm.mainTutor, 10);
+  }
+  if (assistanceForm.secondTutor) {
+    assistanceForm.secondTutorId = parseInt(assistanceForm.secondTutor, 10);
+  }
+  if (assistanceForm.thirdTutor) {
+    assistanceForm.thirdTutorId = parseInt(assistanceForm.thirdTutor, 10);
+  }
+  if (assistanceForm.facilitator) {
+    assistanceForm.facilitatorId = parseInt(assistanceForm.facilitator, 10);
+  }
   models.Assistance.create(assistanceForm)
   .then((assistance) => {
     res.json(assistance);
@@ -110,6 +122,18 @@ exports.create = function create(req, res) {
 exports.update = function update(req, res) {
   const assistanceForm = req.body;
   assistanceForm.eventTime = moment(assistanceForm.eventTime).format('hh:mm:ss a');
+  if (assistanceForm.mainTutor) {
+    assistanceForm.mainTutorId = parseInt(assistanceForm.mainTutor, 10);
+  }
+  if (assistanceForm.secondTutor) {
+    assistanceForm.secondTutorId = parseInt(assistanceForm.secondTutor, 10);
+  }
+  if (assistanceForm.thirdTutor) {
+    assistanceForm.thirdTutorId = parseInt(assistanceForm.thirdTutor, 10);
+  }
+  if (assistanceForm.facilitator) {
+    assistanceForm.facilitatorId = parseInt(assistanceForm.facilitator, 10);
+  }
   models.Assistance.update(
     assistanceForm,
     {
