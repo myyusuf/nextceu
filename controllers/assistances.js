@@ -124,15 +124,23 @@ exports.update = function update(req, res) {
   assistanceForm.eventTime = moment(assistanceForm.eventTime).format('hh:mm:ss a');
   if (assistanceForm.mainTutor) {
     assistanceForm.mainTutorId = parseInt(assistanceForm.mainTutor, 10);
+  } else {
+    assistanceForm.mainTutorId = null;
   }
   if (assistanceForm.secondTutor) {
     assistanceForm.secondTutorId = parseInt(assistanceForm.secondTutor, 10);
+  } else {
+    assistanceForm.secondTutorId = null;
   }
   if (assistanceForm.thirdTutor) {
     assistanceForm.thirdTutorId = parseInt(assistanceForm.thirdTutor, 10);
+  } else {
+    assistanceForm.thirdTutorId = null;
   }
   if (assistanceForm.facilitator) {
     assistanceForm.facilitatorId = parseInt(assistanceForm.facilitator, 10);
+  } else {
+    assistanceForm.facilitatorId = null;
   }
   models.Assistance.update(
     assistanceForm,
