@@ -97,6 +97,13 @@ exports.findOne = function findOne(req, res) {
 
 exports.create = function create(req, res) {
   const seminarForm = req.body;
+  seminarForm.eventTime = moment(seminarForm.eventTime).format('hh:mm:ss a');
+  if (seminarForm.speaker) {
+    seminarForm.speakerId = parseInt(seminarForm.speaker, 10);
+  }
+  if (seminarForm.moderator) {
+    seminarForm.moderatorId = parseInt(seminarForm.moderator, 10);
+  }
   models.Seminar.create(seminarForm)
   .then((seminar) => {
     res.json(seminar);
@@ -108,6 +115,13 @@ exports.create = function create(req, res) {
 
 exports.update = function update(req, res) {
   const seminarForm = req.body;
+  seminarForm.eventTime = moment(seminarForm.eventTime).format('hh:mm:ss a');
+  if (seminarForm.speaker) {
+    seminarForm.speakerId = parseInt(seminarForm.speaker, 10);
+  }
+  if (seminarForm.moderator) {
+    seminarForm.moderatorId = parseInt(seminarForm.moderator, 10);
+  }
   models.Seminar.update(
     seminarForm,
     {

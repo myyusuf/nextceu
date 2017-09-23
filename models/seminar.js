@@ -4,6 +4,7 @@ module.exports = function(sequelize, DataTypes) {
     code: { type: DataTypes.STRING, unique: true },
     name: DataTypes.STRING,
     eventDate: DataTypes.DATEONLY,
+    eventTime: DataTypes.TIME,
     description: DataTypes.STRING
   }, {
     classMethods: {
@@ -15,6 +16,8 @@ module.exports = function(sequelize, DataTypes) {
 
   Seminar.associate = function (models) {
     Seminar.hasMany(models.Participant);
+    Seminar.belongsTo(models.Supervisor, { as: 'speaker', onDelete: 'restrict' });
+    Seminar.belongsTo(models.Supervisor, { as: 'moderator', onDelete: 'restrict' });
   };
 
   return Seminar;
