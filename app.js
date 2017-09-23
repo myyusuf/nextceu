@@ -48,6 +48,7 @@ var pengampusByDepartment = require('./routes/pengampus_by_department');
 var tutors = require('./routes/tutors');
 var tutorsForSelect = require('./routes/tutors_for_select');
 var supervisors = require('./routes/supervisors');
+var supervisorsForSelect = require('./routes/supervisors_for_select');
 
 var app = express();
 
@@ -106,6 +107,7 @@ app.use('/api/pengampusbydepartment', pengampusByDepartment);
 app.use('/api/tutors', tutors);
 app.use('/api/tutorsforselect', tutorsForSelect);
 app.use('/api/supervisors', supervisors);
+app.use('/api/supervisorsforselect', supervisorsForSelect);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

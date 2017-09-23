@@ -3,7 +3,7 @@ const SupervisorController = require('../controllers/supervisors.js');
 
 const router = express.Router();
 
-router.get('/', SupervisorController.findAll);
+router.get('/', SupervisorController.findAndCountAll);
 router.get('/:supervisorId', SupervisorController.findOne);
 router.post('/', SupervisorController.create);
 router.put('/:supervisorId', SupervisorController.update);
