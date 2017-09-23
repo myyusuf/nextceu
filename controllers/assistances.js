@@ -168,6 +168,28 @@ exports.destroy = function destroy(req, res) {
   });
 };
 
+exports.findAssistanceParticipantsByStudent = (req, res) => {
+  const studentId = req.params.studentId;
+  models.AssistanceParticipant.findAll({
+    where: {
+      StudentId: studentId,
+    },
+    include: [
+      {
+        model: models.Assistance,
+      },
+    ],
+    limit: 500,
+    offset: 0,
+  })
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
+};
+
 exports.fileUpload = (req, res) => {
   if (!req.files) {
     return res.status(400).send('No files were uploaded.');
