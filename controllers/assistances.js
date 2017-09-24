@@ -56,7 +56,7 @@ exports.findAllParticipants = function findAllParticipants(req, res) {
   const limit = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
   const currentPage = req.query.currentPage ? parseInt(req.query.currentPage, 10) : 1;
   const offset = (currentPage - 1) * limit;
-  models.Participant.findAndCountAll({
+  models.AssistanceParticipant.findAndCountAll({
     where: {
       AssistanceId: parseInt(assistanceId, 10),
     },
@@ -209,7 +209,7 @@ exports.fileUpload = (req, res) => {
     const workbook = new Excel.Workbook();
     workbook.xlsx.readFile(fileName)
         .then(() => {
-          models.Participant.destroy(
+          models.AssistanceParticipant.destroy(
             {
               where: { AssistanceId: assistanceId },
             })
@@ -218,13 +218,13 @@ exports.fileUpload = (req, res) => {
             const promises = [];
             const participants = {};
 
-            for (let i = 2; i <= Constant.MAX_SEMINAR_UPLOADED_ROW; i += 1) {
-              const cellA = worksheet.getCell(`A${i}`).value;
+            for (let i = 2; i <= Constant.MAX_ASSISTANCE_UPLOADED_ROW; i += 1) {
+              const cellA = worksheet.getCell(`B${i}`).value;
               if (cellA === null) {
                 break;
               } else {
                 const newSid = cellA; // .replace(/\s/, '');
-                const assistanceTime = worksheet.getCell(`C${i}`).value;
+                const assistanceTime = worksheet.getCell(`D${i}`).value;
 
                 const participant = participants[newSid];
                 const assistanceTimeMoment = moment(assistanceTime, 'DD/MM/YYYY HH:mm:ss');
@@ -260,7 +260,7 @@ exports.fileUpload = (req, res) => {
                 })
                 .then((student) => {
                   if (student) {
-                    models.Participant.create({
+                    models.AssistanceParticipant.create({
                       StudentId: student.id,
                       AssistanceId: assistanceId,
                     })
