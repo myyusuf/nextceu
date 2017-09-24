@@ -158,7 +158,7 @@ exports.fileUpload = function fileUpload(req, res) {
   const seminarId = req.params.seminarId;
 
   // Use the mv() method to place the file somewhere on your server
-  const fileName = `/Users/myyusuf/Documents/Test/file_upload/seminar_file_${seminarId}.xlsx`;
+  const fileName = `${Constant.FILE_UPLOAD_FOLDER}/seminar_file_${seminarId}.xlsx`;
   seminarFile.mv(fileName, (err) => {
     if (err) {
       return res.status(500).send(err);

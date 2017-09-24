@@ -84,27 +84,31 @@ const checkSeminars = course => (
 
 const checkPortofolio = course => (
   new Promise((resolve, reject) => {
-    models.Score.findOne({
-      where: { CourseId: course.id },
-      include: [
-        { model: models.ScoreType,
-          where: { code: 'PORTOFOLIO' },
-        },
-      ],
-    })
-    .then((score) => {
-      if (score.scoreValue < 80) {
-        resolve({
-          valid: false,
-          message: 'Portofolio score below minimum. ',
-        });
-      } else {
-        resolve({
-          valid: true,
-          message: '',
-        });
-      }
+    resolve({
+      valid: true,
+      message: '',
     });
+    // models.Score.findOne({
+    //   where: { CourseId: course.id },
+    //   include: [
+    //     { model: models.ScoreType,
+    //       where: { code: 'PORTOFOLIO' },
+    //     },
+    //   ],
+    // })
+    // .then((score) => {
+    //   if (score.scoreValue < 80) {
+    //     resolve({
+    //       valid: false,
+    //       message: 'Portofolio score below minimum. ',
+    //     });
+    //   } else {
+    //     resolve({
+    //       valid: true,
+    //       message: '',
+    //     });
+    //   }
+    // });
   })
 );
 
