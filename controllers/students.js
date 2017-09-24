@@ -104,39 +104,71 @@ exports.delete = function deleteStudent(req, res) {
   .catch(err => res.status(500).send(err.message));
 };
 
+const createPortofolios = (courseId, departmentId) => {
+  return new Promise((resolve, reject) => {
+    models.PortofolioType.findAll({
+      where: {
+        DepartmentId: departmentId,
+        active: true,
+      },
+    })
+    .then((portofolioTypes) => {
+      const promises2 = [];
+      for (let i = 0; i < portofolioTypes.length; i += 1) {
+        const portofolioType = portofolioTypes[i];
+        const promise2 = new Promise((resolve2, reject2) => {
+          models.Portofolio.create({
+            CourseId: courseId,
+            PortofolioTypeId: portofolioType.id,
+          })
+          .then((createdPortofolio) => {
+            resolve2(createdPortofolio);
+          });
+        });
+        promises2.push(promise2);
+      }
+      Promise.all(promises2)
+      .then((result) => {
+        resolve(result);
+      });
+    });
+  });
+};
+
+const createSgls = (courseId, departmentId) => {
+  return new Promise((resolve, reject) => {
+    models.SglType.findAll({
+      where: {
+        DepartmentId: departmentId,
+        active: true,
+      },
+    })
+    .then((sglTypes) => {
+      const promises2 = [];
+      for (let i = 0; i < sglTypes.length; i += 1) {
+        const sglType = sglTypes[i];
+        const promise2 = new Promise((resolve2, reject2) => {
+          models.Sgl.create({
+            CourseId: courseId,
+            SglTypeId: sglType.id,
+          })
+          .then((createdSgl) => {
+            resolve2(createdSgl);
+          });
+        });
+        promises2.push(promise2);
+      }
+      Promise.all(promises2)
+      .then((result) => {
+        resolve(result);
+      });
+    });
+  });
+};
+
 exports.addCourses = function(req, res) {
   const studentId = req.params.studentId;
   const form = req.body;
-
-  const createPortofolios = (courseId, departmentId) => {
-    return new Promise((resolve, reject) => {
-      models.PortofolioType.findAll({
-        where: {
-          DepartmentId: departmentId,
-        },
-      })
-      .then((portofolioTypes) => {
-        const promises2 = [];
-        for (let i = 0; i < portofolioTypes.length; i += 1) {
-          const portofolioType = portofolioTypes[i];
-          const promise2 = new Promise((resolve2, reject2) => {
-            models.Portofolio.create({
-              CourseId: courseId,
-              PortofolioTypeId: portofolioType.id,
-            })
-            .then((createdPortofolio) => {
-              resolve2(createdPortofolio);
-            });
-          });
-          promises2.push(promise2);
-        }
-        Promise.all(promises2)
-        .then((result) => {
-          resolve(result);
-        });
-      });
-    });
-  };
 
   if (form.formType === 'LEVEL') {
     models.Student.findOne({
@@ -161,7 +193,10 @@ exports.addCourses = function(req, res) {
                 .then(() => {
                   createPortofolios(course.id, departmentParam.id)
                   .then(() => {
-                    resolve(course);
+                    createSgls(course.id, departmentParam.id)
+                    .then(() => {
+                      resolve(course);
+                    });
                   });
                 });
               });
@@ -287,7 +322,10 @@ exports.addCourses = function(req, res) {
             .then(() => {
               createPortofolios(course.id, department.id)
               .then(() => {
-                res.json(course);
+                createSgls(course.id, department.id)
+                .then(() => {
+                  res.json(course);
+                });
               });
             });
           });
