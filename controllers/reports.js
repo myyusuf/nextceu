@@ -131,7 +131,7 @@ exports.findLevelCourses = function(req, res) {
   const offset = (currentPage - 1) * limit;
   models.Course.findAndCountAll({
     where: {
-      planStartDate: {
+      realEndDate: {
         $gte: startDate.toDate(),
         $lte: endDate.toDate(),
       },
@@ -147,6 +147,7 @@ exports.findLevelCourses = function(req, res) {
             { oldSid: { $ilike: searchText } },
             { newSid: { $ilike: searchText } },
           ],
+          yudisiumCheck: true,
         },
       },
       {

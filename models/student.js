@@ -24,6 +24,7 @@ module.exports = function(sequelize, DataTypes) {
     parentAddress: DataTypes.STRING,
     parentPhone: DataTypes.STRING,
     parentMobilePhone: DataTypes.STRING,
+    yudisiumCheck: DataTypes.BOOLEAN,
 
   }, {
     classMethods: {
