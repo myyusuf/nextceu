@@ -1,5 +1,6 @@
 const moment = require('moment');
 const models = require('../models');
+const mathjs = require('mathjs');
 
 exports.findOne = function(req, res) {
   models.Course.findOne({
@@ -84,31 +85,52 @@ const checkSeminars = course => (
 
 const checkPortofolio = course => (
   new Promise((resolve, reject) => {
-    resolve({
-      valid: true,
-      message: '',
+    models.Score.findAll({
+      where: { CourseId: course.id },
+      include: [
+        { model: models.ScoreType,
+        },
+      ],
+    })
+    .then((scores) => {
+      let scorePercentageTotal = 0;
+      for (let i = 0; i < scores.length; i += 1) {
+        const score = scores[i];
+        const scoreValue = score.scoreValue;
+        const scoreTypeCode = score.ScoreType.code;
+        let percentage = 0;
+        switch (scoreValue) {
+          case (scoreTypeCode === 'CASEREPORT'):
+            percentage = 0.1;
+            break;
+          case (scoreTypeCode === 'WEEKLYDISCUSSION'):
+            percentage = 0.2;
+            break;
+          case (scoreTypeCode === 'CASETEST'):
+            percentage = 0.35;
+            break;
+          case (scoreTypeCode === 'POSTTEST'):
+            percentage = 0.35;
+            break;
+          default:
+            break;
+        }
+        scorePercentageTotal += (scoreValue * percentage);
+      }
+      const roundScorePercentageTotal = mathjs.round(scorePercentageTotal, 2);
+      const scoresValid = roundScorePercentageTotal >= 80;
+      if (!scoresValid) {
+        resolve({
+          valid: false,
+          message: 'Scores below minimum. ',
+        });
+      } else {
+        resolve({
+          valid: true,
+          message: '',
+        });
+      }
     });
-    // models.Score.findOne({
-    //   where: { CourseId: course.id },
-    //   include: [
-    //     { model: models.ScoreType,
-    //       where: { code: 'PORTOFOLIO' },
-    //     },
-    //   ],
-    // })
-    // .then((score) => {
-    //   if (score.scoreValue < 80) {
-    //     resolve({
-    //       valid: false,
-    //       message: 'Portofolio score below minimum. ',
-    //     });
-    //   } else {
-    //     resolve({
-    //       valid: true,
-    //       message: '',
-    //     });
-    //   }
-    // });
   })
 );
 
