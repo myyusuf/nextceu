@@ -25,6 +25,19 @@ exports.findAll = function findAll(req, res) {
   });
 };
 
+exports.all = (req, res) => {
+  models.Department.findAll({
+    where: {},
+    order: ['name'],
+  })
+  .then((departments) => {
+    res.json(departments);
+  })
+  .catch((err) => {
+    sendError(err, res);
+  });
+};
+
 exports.findOne = function findOne(req, res) {
   models.Department.findOne({
     where: { id: req.params.departmentId },
