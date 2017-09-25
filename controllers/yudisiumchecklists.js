@@ -126,14 +126,13 @@ exports.update = function update(req, res) {
             }
           }
 
-          const yudisiumCheck = foundYudisium.checkList1 && foundYudisium.checkList2
-          && foundYudisium.checkList3
+          const yudisiumCheck = foundYudisium.checklist1 && foundYudisium.checklist2
+          && foundYudisium.checklist3
           && portofolioAllCompleted;
-
           models.Student.update(
             { yudisiumCheck },
             {
-              where: { id: yudisiumChecklistId },
+              where: { id: studentId },
             })
           .then((updateStudentResult) => {
             res.json(updateStudentResult);
