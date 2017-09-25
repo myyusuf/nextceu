@@ -64,13 +64,83 @@ exports.findPortofolios = (req, res) => {
 
 exports.update = function update(req, res) {
   const yscForm = req.body;
+  const yudisiumChecklistId = req.params.yscId;
   models.YudisiumChecklist.update(
     yscForm,
     {
-      where: { id: req.params.yscId },
+      where: { id: yudisiumChecklistId },
     })
-  .then((result) => {
-    res.json(result);
+  .then(() => {
+    models.YudisiumChecklist.findOne({
+      where: { id: yudisiumChecklistId },
+    })
+    .then((foundYudisium) => {
+      const studentId = foundYudisium.StudentId;
+      models.Course.findAll({
+        where: {
+          StudentId: studentId,
+          status: { $ne: 4 },
+        },
+        include: [
+          {
+            model: models.Department,
+            where: {
+              level: 1,
+            },
+          },
+        ],
+      })
+      .then((courses) => {
+        const promises = [];
+        for (let i = 0; i < courses.length; i += 1) {
+          const course = courses[i];
+          const promise = new Promise((resolve, reject) => {
+            models.Portofolio.findAll({
+              where: { CourseId: course.id },
+            })
+            .then((portofolios) => {
+              const portofolioCount = portofolios.length;
+              const completedPortofolioCount =
+              portofolios.filter(portofolio => portofolio.completed).length;
+              if (portofolioCount === completedPortofolioCount) {
+                resolve(true);
+              } else {
+                resolve(false);
+              }
+            })
+            .catch((err) => {
+              reject(err);
+            });
+          });
+          promises.push(promise);
+        }
+
+        Promise.all(promises)
+        .then((portofolioChecks) => {
+          let portofolioAllCompleted = true;
+          for (let i = 0; i < portofolioChecks.length; i += 1) {
+            const portofolioCheck = portofolioChecks[i];
+            if (!portofolioCheck) {
+              portofolioAllCompleted = false;
+              break;
+            }
+          }
+
+          const yudisiumCheck = foundYudisium.checkList1 && foundYudisium.checkList2
+          && foundYudisium.checkList3
+          && portofolioAllCompleted;
+
+          models.Student.update(
+            { yudisiumCheck },
+            {
+              where: { id: yudisiumChecklistId },
+            })
+          .then((updateStudentResult) => {
+            res.json(updateStudentResult);
+          });
+        });
+      });
+    });
   })
   .catch((err) => {
     sendError(err, res);
