@@ -85,6 +85,35 @@ const checkSeminars = course => (
 
 const checkPortofolio = course => (
   new Promise((resolve, reject) => {
+    models.Portofolio.findAll({
+      where: { CourseId: course.id },
+    })
+    .then((portofolios) => {
+      const portofolioCount = portofolios.length;
+      const completedPortofolioCount =
+      portofolios.filter(portofolio => portofolio.completed).length;
+      let completedPercentage = 0;
+      if (portofolioCount > 0) {
+        completedPercentage = mathjs.round((completedPortofolioCount / portofolioCount), 2) * 100;
+      }
+      const portofolioValid = completedPercentage >= 80;
+      if (!portofolioValid) {
+        resolve({
+          valid: false,
+          message: 'Portofolio below minimum. ',
+        });
+      } else {
+        resolve({
+          valid: true,
+          message: '',
+        });
+      }
+    });
+  })
+);
+
+const checkScores = course => (
+  new Promise((resolve, reject) => {
     models.Score.findAll({
       where: { CourseId: course.id },
       include: [
@@ -117,7 +146,7 @@ const checkPortofolio = course => (
         }
         scorePercentageTotal += (scoreValue * percentage);
       }
-      const roundScorePercentageTotal = mathjs.round(scorePercentageTotal, 2);
+      const roundScorePercentageTotal = mathjs.round(scorePercentageTotal, 2) * 100;
       const scoresValid = roundScorePercentageTotal >= 80;
       if (!scoresValid) {
         resolve({
@@ -267,27 +296,35 @@ exports.update = function(req, res, next) {
         .then((checkSeminarsResult) => {
           checkPortofolio(course)
           .then((checkPortofolioResult) => {
-            if (!checkSeminarsResult.valid || !checkProblemsResult.valid || !checkPortofolioResult.valid) {
-              course.status = 3;
-              problemDescription += checkSeminarsResult.message;
-              problemDescription += checkProblemsResult.message;
-              problemDescription += checkPortofolioResult.message;
-              course.problemDescription = problemDescription;
-            } else {
-              course.problemDescription = '';
-              course.status = 2;
-            }
-            course.save()
-            .then((courseSaveResult) => {
-              // res.json(courseSaveResult);
-              orderingCourses(course)
-              .then(() => {
-                res.json(courseSaveResult);
+            checkScores(course)
+            .then((checkScoreResult) => {
+              if (!checkSeminarsResult.valid
+                || !checkProblemsResult.valid
+                || !checkPortofolioResult.valid
+                || !checkScoreResult.valid
+              ) {
+                course.status = 3;
+                problemDescription += checkSeminarsResult.message;
+                problemDescription += checkProblemsResult.message;
+                problemDescription += checkPortofolioResult.message;
+                problemDescription += checkScoreResult.message;
+                course.problemDescription = problemDescription;
+              } else {
+                course.problemDescription = '';
+                course.status = 2;
+              }
+              course.save()
+              .then((courseSaveResult) => {
+                // res.json(courseSaveResult);
+                orderingCourses(course)
+                .then(() => {
+                  res.json(courseSaveResult);
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+                res.status(500).send('Error when doing operation.');
               });
-            })
-            .catch((err) => {
-              console.log(err);
-              res.status(500).send('Error when doing operation.');
             });
           });
         });
