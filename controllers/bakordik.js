@@ -29,7 +29,6 @@ exports.findInitiateStudentCourses = function(req, res) {
         $gte: startDate.toDate(),
         $lte: endDate.toDate(),
       },
-      status: 0,
     },
     include: [
       {
