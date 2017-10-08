@@ -435,38 +435,26 @@ exports.krsUpload = function krsUpload(req, res) {
   const krsFile = req.files.krsFile;
   const studentId = req.params.studentId;
 
-  // Use the mv() method to place the file somewhere on your server
-  const fileName = `/Users/myyusuf/Documents/Test/file_upload/krs_file_${studentId}.jpg`;
-  krsFile.mv(fileName, (err) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
+  const base64data = new Buffer(krsFile.data, 'binary');
+  const s3 = new AWS.S3();
 
-    fs.readFile(fileName, (errReadFile, data) => {
-      if (errReadFile) { throw errReadFile; }
-
-      const base64data = new Buffer(data, 'binary');
-      const s3 = new AWS.S3();
-
-      models.Student.findOne({
-        where: { id: studentId },
-      })
-      .then((student) => {
-        const fileId = shortid.generate();
-        const fileKey = `student/krs/${fileId}.jpg`;
-        s3.putObject({
-          Bucket: 'ceufkumifiles',
-          Key: fileKey,
-          Body: base64data,
-          ACL: 'public-read',
-        }, () => {
-          console.log('Successfully uploaded krs.');
-          student.krsFileId = fileId;
-          student.save()
-          .then(() => {
-            res.send(fileId);
-          });
-        });
+  models.Student.findOne({
+    where: { id: studentId },
+  })
+  .then((student) => {
+    const fileId = shortid.generate();
+    const fileKey = `student/krs/${fileId}.jpg`;
+    s3.putObject({
+      Bucket: 'ceufkumifiles',
+      Key: fileKey,
+      Body: base64data,
+      ACL: 'public-read',
+    }, () => {
+      console.log('Successfully uploaded krs.');
+      student.krsFileId = fileId;
+      student.save()
+      .then(() => {
+        res.send(fileId);
       });
     });
   });
