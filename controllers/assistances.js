@@ -1,6 +1,7 @@
 const Excel = require('exceljs');
 const models = require('../models');
 const moment = require('moment');
+const Readable = require('stream').Readable;
 const Constant = require('../Constant');
 
 const sendError = (err, res) => {
@@ -199,90 +200,86 @@ exports.fileUpload = (req, res) => {
   const assistanceFile = req.files.assistanceFile;
   const assistanceId = req.params.assistanceId;
 
-  // Use the mv() method to place the file somewhere on your server
-  const fileName = `/Users/myyusuf/Documents/Test/file_upload/assistance_file_${assistanceId}.xlsx`;
-  assistanceFile.mv(fileName, (err) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-
-    const workbook = new Excel.Workbook();
-    workbook.xlsx.readFile(fileName)
+  const workbook = new Excel.Workbook();
+  const stream = new Readable();
+  stream._read = function noop() {};
+  stream.push(assistanceFile.data);
+  stream.push(null);
+  workbook.xlsx.readFile(stream)
+      .then(() => {
+        models.AssistanceParticipant.destroy(
+          {
+            where: { AssistanceId: assistanceId },
+          })
         .then(() => {
-          models.AssistanceParticipant.destroy(
-            {
-              where: { AssistanceId: assistanceId },
-            })
-          .then(() => {
-            const worksheet = workbook.getWorksheet(1);
-            const promises = [];
-            const participants = {};
+          const worksheet = workbook.getWorksheet(1);
+          const promises = [];
+          const participants = {};
 
-            for (let i = 2; i <= Constant.MAX_ASSISTANCE_UPLOADED_ROW; i += 1) {
-              const cellA = worksheet.getCell(`B${i}`).value;
-              if (cellA === null) {
-                break;
+          for (let i = 2; i <= Constant.MAX_ASSISTANCE_UPLOADED_ROW; i += 1) {
+            const cellA = worksheet.getCell(`B${i}`).value;
+            if (cellA === null) {
+              break;
+            } else {
+              const newSid = cellA; // .replace(/\s/, '');
+              const assistanceTime = worksheet.getCell(`D${i}`).value;
+
+              const participant = participants[newSid];
+              const assistanceTimeMoment = moment(assistanceTime, 'DD/MM/YYYY HH:mm:ss');
+              if (participant) {
+                participant.rows.push(assistanceTimeMoment);
               } else {
-                const newSid = cellA; // .replace(/\s/, '');
-                const assistanceTime = worksheet.getCell(`D${i}`).value;
-
-                const participant = participants[newSid];
-                const assistanceTimeMoment = moment(assistanceTime, 'DD/MM/YYYY HH:mm:ss');
-                if (participant) {
-                  participant.rows.push(assistanceTimeMoment);
-                } else {
-                  participants[newSid] = {
-                    rows: [assistanceTimeMoment],
-                  };
-                }
+                participants[newSid] = {
+                  rows: [assistanceTimeMoment],
+                };
               }
             }
+          }
 
-            const filteredParticipants = [];
-            const particpantKeys = Object.keys(participants);
-            for (let i = 0; i < particpantKeys.length; i += 1) {
-              const participant = participants[particpantKeys[i]];
-              const firstAssistanceTime = participant.rows[0];
-              const lastAssistanceTime = participant.rows[participant.rows.length - 1];
-              const delta = lastAssistanceTime.diff(firstAssistanceTime, 'minutes');
-              if (delta >= 60) {
-                filteredParticipants.push({
-                  newSid: particpantKeys[i],
-                });
-              }
-            }
-
-            for (let i = 0; i < filteredParticipants.length; i += 1) {
-              const filteredParticipant = filteredParticipants[i];
-              const promise = new Promise((resolve, reject) => {
-                models.Student.findOne({
-                  where: { newSid: filteredParticipant.newSid },
-                })
-                .then((student) => {
-                  if (student) {
-                    models.AssistanceParticipant.create({
-                      StudentId: student.id,
-                      AssistanceId: assistanceId,
-                    })
-                    .then(() => {
-                      resolve();
-                    });
-                  } else {
-                    resolve();
-                  }
-                })
-                .catch((createParticipantErr) => {
-                  reject(createParticipantErr);
-                });
+          const filteredParticipants = [];
+          const particpantKeys = Object.keys(participants);
+          for (let i = 0; i < particpantKeys.length; i += 1) {
+            const participant = participants[particpantKeys[i]];
+            const firstAssistanceTime = participant.rows[0];
+            const lastAssistanceTime = participant.rows[participant.rows.length - 1];
+            const delta = lastAssistanceTime.diff(firstAssistanceTime, 'minutes');
+            if (delta >= 60) {
+              filteredParticipants.push({
+                newSid: particpantKeys[i],
               });
-              promises.push(promise);
             }
+          }
 
-            Promise.all(promises)
-            .then(() => (
-              res.send(`${filteredParticipants.length} created`)
-            ));
-          });
+          for (let i = 0; i < filteredParticipants.length; i += 1) {
+            const filteredParticipant = filteredParticipants[i];
+            const promise = new Promise((resolve, reject) => {
+              models.Student.findOne({
+                where: { newSid: filteredParticipant.newSid },
+              })
+              .then((student) => {
+                if (student) {
+                  models.AssistanceParticipant.create({
+                    StudentId: student.id,
+                    AssistanceId: assistanceId,
+                  })
+                  .then(() => {
+                    resolve();
+                  });
+                } else {
+                  resolve();
+                }
+              })
+              .catch((createParticipantErr) => {
+                reject(createParticipantErr);
+              });
+            });
+            promises.push(promise);
+          }
+
+          Promise.all(promises)
+          .then(() => (
+            res.send(`${filteredParticipants.length} created`)
+          ));
         });
-  });
+      });
 };
