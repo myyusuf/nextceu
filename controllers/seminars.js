@@ -1,6 +1,7 @@
 const Excel = require('exceljs');
 const models = require('../models');
 const moment = require('moment');
+const Readable = require('stream').Readable;
 const Constant = require('../Constant');
 
 const sendError = (err, res) => {
@@ -147,9 +148,6 @@ exports.destroy = function destroy(req, res) {
     sendError(err, res);
   });
 };
-
-const Readable = require('stream').Readable;
-
 
 exports.fileUpload = (req, res) => {
   if (!req.files) {
