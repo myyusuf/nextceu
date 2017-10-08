@@ -494,7 +494,15 @@ exports.addSgl = function(req, res) {
   const sglForm = req.body;
   sglForm.CourseId = parseInt(courseId, 10);
   sglForm.SglTypeId = parseInt(sglForm.sglType, 10);
-  sglForm.PengampuId = parseInt(sglForm.pengampu, 10);
+  if (sglForm.mainTutor) {
+    sglForm.mainTutorId = parseInt(sglForm.mainTutor, 10);
+  }
+  if (sglForm.secondTutor) {
+    sglForm.secondTutorId = parseInt(sglForm.secondTutor, 10);
+  }
+  if (sglForm.thirdTutor) {
+    sglForm.thirdTutorId = parseInt(sglForm.thirdTutor, 10);
+  }
   models.Sgl.create(sglForm)
   .then((result) => {
     res.json(result);
@@ -511,7 +519,6 @@ exports.findSgls = function(req, res) {
     include: [
       { model: models.Course, where: { id: req.params.courseId } },
       { model: models.SglType },
-      { model: models.Pengampu },
     ],
   })
   .then((sgls) => {
