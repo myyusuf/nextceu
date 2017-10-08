@@ -148,7 +148,10 @@ exports.destroy = function destroy(req, res) {
   });
 };
 
-exports.fileUpload = function fileUpload(req, res) {
+const Readable = require('stream').Readable;
+
+
+exports.fileUpload = (req, res) => {
   if (!req.files) {
     return res.status(400).send('No files were uploaded.');
   }
@@ -157,90 +160,86 @@ exports.fileUpload = function fileUpload(req, res) {
   const seminarFile = req.files.seminarFile;
   const seminarId = req.params.seminarId;
 
-  // Use the mv() method to place the file somewhere on your server
-  const fileName = `${Constant.FILE_UPLOAD_FOLDER}/seminar_file_${seminarId}.xlsx`;
-  seminarFile.mv(fileName, (err) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-
-    const workbook = new Excel.Workbook();
-    workbook.xlsx.readFile(fileName)
+  const workbook = new Excel.Workbook();
+  const stream = new Readable();
+  stream._read = function noop() {};
+  stream.push(seminarFile.data);
+  stream.push(null);
+  workbook.xlsx.read(stream)
+      .then(() => {
+        models.Participant.destroy(
+          {
+            where: { SeminarId: seminarId },
+          })
         .then(() => {
-          models.Participant.destroy(
-            {
-              where: { SeminarId: seminarId },
-            })
-          .then(() => {
-            const worksheet = workbook.getWorksheet(1);
-            const promises = [];
-            const participants = {};
+          const worksheet = workbook.getWorksheet(1);
+          const promises = [];
+          const participants = {};
 
-            for (let i = 2; i <= Constant.MAX_SEMINAR_UPLOADED_ROW; i += 1) {
-              const cellA = worksheet.getCell(`A${i}`).value;
-              if (cellA === null) {
-                break;
+          for (let i = 2; i <= Constant.MAX_SEMINAR_UPLOADED_ROW; i += 1) {
+            const cellA = worksheet.getCell(`A${i}`).value;
+            if (cellA === null) {
+              break;
+            } else {
+              const newSid = cellA; // .replace(/\s/, '');
+              const seminarTime = worksheet.getCell(`C${i}`).value;
+
+              const participant = participants[newSid];
+              const seminarTimeMoment = moment(seminarTime, 'DD/MM/YYYY HH:mm:ss');
+              if (participant) {
+                participant.rows.push(seminarTimeMoment);
               } else {
-                const newSid = cellA; // .replace(/\s/, '');
-                const seminarTime = worksheet.getCell(`C${i}`).value;
-
-                const participant = participants[newSid];
-                const seminarTimeMoment = moment(seminarTime, 'DD/MM/YYYY HH:mm:ss');
-                if (participant) {
-                  participant.rows.push(seminarTimeMoment);
-                } else {
-                  participants[newSid] = {
-                    rows: [seminarTimeMoment],
-                  };
-                }
+                participants[newSid] = {
+                  rows: [seminarTimeMoment],
+                };
               }
             }
+          }
 
-            const filteredParticipants = [];
-            const particpantKeys = Object.keys(participants);
-            for (let i = 0; i < particpantKeys.length; i += 1) {
-              const participant = participants[particpantKeys[i]];
-              const firstSeminarTime = participant.rows[0];
-              const lastSeminarTime = participant.rows[participant.rows.length - 1];
-              const delta = lastSeminarTime.diff(firstSeminarTime, 'minutes');
-              if (delta >= 60) {
-                filteredParticipants.push({
-                  newSid: particpantKeys[i],
-                });
-              }
-            }
-
-            for (let i = 0; i < filteredParticipants.length; i += 1) {
-              const filteredParticipant = filteredParticipants[i];
-              const promise = new Promise((resolve, reject) => {
-                models.Student.findOne({
-                  where: { newSid: filteredParticipant.newSid },
-                })
-                .then((student) => {
-                  if (student) {
-                    models.Participant.create({
-                      StudentId: student.id,
-                      SeminarId: seminarId,
-                    })
-                    .then(() => {
-                      resolve();
-                    });
-                  } else {
-                    resolve();
-                  }
-                })
-                .catch((createParticipantErr) => {
-                  reject(createParticipantErr);
-                });
+          const filteredParticipants = [];
+          const particpantKeys = Object.keys(participants);
+          for (let i = 0; i < particpantKeys.length; i += 1) {
+            const participant = participants[particpantKeys[i]];
+            const firstSeminarTime = participant.rows[0];
+            const lastSeminarTime = participant.rows[participant.rows.length - 1];
+            const delta = lastSeminarTime.diff(firstSeminarTime, 'minutes');
+            if (delta >= 60) {
+              filteredParticipants.push({
+                newSid: particpantKeys[i],
               });
-              promises.push(promise);
             }
+          }
 
-            Promise.all(promises)
-            .then(() => (
-              res.send(`${filteredParticipants.length} created`)
-            ));
-          });
+          for (let i = 0; i < filteredParticipants.length; i += 1) {
+            const filteredParticipant = filteredParticipants[i];
+            const promise = new Promise((resolve, reject) => {
+              models.Student.findOne({
+                where: { newSid: filteredParticipant.newSid },
+              })
+              .then((student) => {
+                if (student) {
+                  models.Participant.create({
+                    StudentId: student.id,
+                    SeminarId: seminarId,
+                  })
+                  .then(() => {
+                    resolve();
+                  });
+                } else {
+                  resolve();
+                }
+              })
+              .catch((createParticipantErr) => {
+                reject(createParticipantErr);
+              });
+            });
+            promises.push(promise);
+          }
+
+          Promise.all(promises)
+          .then(() => (
+            res.send(`${filteredParticipants.length} created`)
+          ));
         });
-  });
+      });
 };
