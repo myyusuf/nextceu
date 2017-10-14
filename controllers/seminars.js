@@ -40,6 +40,14 @@ exports.findAll = function findAll(req, res) {
         $lte: endDate.toDate(),
       },
     },
+    include: [
+      {
+        model: models.SeminarType,
+        include: [
+          { model: models.Department },
+        ],
+      },
+    ],
     limit,
     offset,
   })
@@ -105,6 +113,9 @@ exports.create = function create(req, res) {
   if (seminarForm.moderator) {
     seminarForm.moderatorId = parseInt(seminarForm.moderator, 10);
   }
+  if (seminarForm.seminarType) {
+    seminarForm.SeminarTypeId = parseInt(seminarForm.seminarType, 10);
+  }
   models.Seminar.create(seminarForm)
   .then((seminar) => {
     res.json(seminar);
@@ -122,6 +133,9 @@ exports.update = function update(req, res) {
   }
   if (seminarForm.moderator) {
     seminarForm.moderatorId = parseInt(seminarForm.moderator, 10);
+  }
+  if (seminarForm.seminarType) {
+    seminarForm.SeminarTypeId = parseInt(seminarForm.seminarType, 10);
   }
   models.Seminar.update(
     seminarForm,
