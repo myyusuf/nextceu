@@ -177,81 +177,88 @@ exports.fileUpload = (req, res) => {
   stream._read = function noop() {};
   stream.push(seminarFile.data);
   stream.push(null);
-  workbook.xlsx.read(stream)
-      .then(() => {
-        models.Participant.destroy(
-          {
-            where: { SeminarId: seminarId },
-          })
+
+  models.Seminar.findOne({
+    where: { id: seminarId },
+  })
+  .then((seminar) => {
+    const minimumDuration = seminar.duration * 0.8;
+    workbook.xlsx.read(stream)
         .then(() => {
-          const worksheet = workbook.getWorksheet(1);
-          const promises = [];
-          const participants = {};
+          models.Participant.destroy(
+            {
+              where: { SeminarId: seminarId },
+            })
+          .then(() => {
+            const worksheet = workbook.getWorksheet(1);
+            const promises = [];
+            const participants = {};
 
-          for (let i = 2; i <= Constant.MAX_SEMINAR_UPLOADED_ROW; i += 1) {
-            const cellA = worksheet.getCell(`A${i}`).value;
-            if (cellA === null) {
-              break;
-            } else {
-              const newSid = cellA; // .replace(/\s/, '');
-              const seminarTime = worksheet.getCell(`C${i}`).value;
-
-              const participant = participants[newSid];
-              const seminarTimeMoment = moment(seminarTime, 'DD/MM/YYYY HH:mm:ss');
-              if (participant) {
-                participant.rows.push(seminarTimeMoment);
+            for (let i = 2; i <= Constant.MAX_SEMINAR_UPLOADED_ROW; i += 1) {
+              const cellA = worksheet.getCell(`A${i}`).value;
+              if (cellA === null) {
+                break;
               } else {
-                participants[newSid] = {
-                  rows: [seminarTimeMoment],
-                };
+                const newSid = cellA; // .replace(/\s/, '');
+                const seminarTime = worksheet.getCell(`C${i}`).value;
+
+                const participant = participants[newSid];
+                const seminarTimeMoment = moment(seminarTime, 'DD/MM/YYYY HH:mm:ss');
+                if (participant) {
+                  participant.rows.push(seminarTimeMoment);
+                } else {
+                  participants[newSid] = {
+                    rows: [seminarTimeMoment],
+                  };
+                }
               }
             }
-          }
 
-          const filteredParticipants = [];
-          const particpantKeys = Object.keys(participants);
-          for (let i = 0; i < particpantKeys.length; i += 1) {
-            const participant = participants[particpantKeys[i]];
-            const firstSeminarTime = participant.rows[0];
-            const lastSeminarTime = participant.rows[participant.rows.length - 1];
-            const delta = lastSeminarTime.diff(firstSeminarTime, 'minutes');
-            if (delta >= 60) {
-              filteredParticipants.push({
-                newSid: particpantKeys[i],
-              });
+            const filteredParticipants = [];
+            const particpantKeys = Object.keys(participants);
+            for (let i = 0; i < particpantKeys.length; i += 1) {
+              const participant = participants[particpantKeys[i]];
+              const firstSeminarTime = participant.rows[0];
+              const lastSeminarTime = participant.rows[participant.rows.length - 1];
+              const delta = lastSeminarTime.diff(firstSeminarTime, 'minutes');
+              if (delta >= minimumDuration) {
+                filteredParticipants.push({
+                  newSid: particpantKeys[i],
+                });
+              }
             }
-          }
 
-          for (let i = 0; i < filteredParticipants.length; i += 1) {
-            const filteredParticipant = filteredParticipants[i];
-            const promise = new Promise((resolve, reject) => {
-              models.Student.findOne({
-                where: { newSid: filteredParticipant.newSid },
-              })
-              .then((student) => {
-                if (student) {
-                  models.Participant.create({
-                    StudentId: student.id,
-                    SeminarId: seminarId,
-                  })
-                  .then(() => {
+            for (let i = 0; i < filteredParticipants.length; i += 1) {
+              const filteredParticipant = filteredParticipants[i];
+              const promise = new Promise((resolve, reject) => {
+                models.Student.findOne({
+                  where: { newSid: filteredParticipant.newSid },
+                })
+                .then((student) => {
+                  if (student) {
+                    models.Participant.create({
+                      StudentId: student.id,
+                      SeminarId: seminarId,
+                    })
+                    .then(() => {
+                      resolve();
+                    });
+                  } else {
                     resolve();
-                  });
-                } else {
-                  resolve();
-                }
-              })
-              .catch((createParticipantErr) => {
-                reject(createParticipantErr);
+                  }
+                })
+                .catch((createParticipantErr) => {
+                  reject(createParticipantErr);
+                });
               });
-            });
-            promises.push(promise);
-          }
+              promises.push(promise);
+            }
 
-          Promise.all(promises)
-          .then(() => (
-            res.send(`${filteredParticipants.length} created`)
-          ));
+            Promise.all(promises)
+            .then(() => (
+              res.send(`${filteredParticipants.length} created`)
+            ));
+          });
         });
-      });
+  });
 };
