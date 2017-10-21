@@ -6,16 +6,29 @@ const sendError = (err, res) => {
 
 exports.findAll = function findAll(req, res) {
   const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
+  const hospitalId = req.query.searchHospital;
+  const departmentId = req.query.searchDepartment;
   const limit = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
   const currentPage = req.query.currentPage ? parseInt(req.query.currentPage, 10) : 1;
   const offset = (currentPage - 1) * limit;
+
+  const where = {
+    $or: [
+      { code: { $ilike: searchText } },
+      { name: { $ilike: searchText } },
+    ],
+  };
+
+  if (departmentId) {
+    where.DepartmentId = departmentId;
+  }
+
+  if (hospitalId) {
+    where.HospitalId = hospitalId;
+  }
+
   models.Docent.findAndCountAll({
-    where: {
-      $or: [
-        { code: { $ilike: searchText } },
-        { name: { $ilike: searchText } },
-      ],
-    },
+    where,
     include: [
       { model: models.Hospital },
       { model: models.Department },
