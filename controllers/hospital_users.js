@@ -6,11 +6,19 @@ const sendError = (err, res) => {
 
 exports.findAll = function findAll(req, res) {
   const searchText = req.query.searchText ? `%${req.query.searchText}%` : '%%';
+  const hospitalId = req.query.searchHospital;
   const limit = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
   const currentPage = req.query.currentPage ? parseInt(req.query.currentPage, 10) : 1;
   const offset = (currentPage - 1) * limit;
+
+  const where = {};
+
+  if (hospitalId) {
+    where.HospitalId = hospitalId;
+  }
+
   models.HospitalUser.findAndCountAll({
-    where: {},
+    where,
     include: [
       { model: models.User,
         where: {
