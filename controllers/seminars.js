@@ -232,7 +232,13 @@ exports.fileUpload = (req, res) => {
               const filteredParticipant = filteredParticipants[i];
               const promise = new Promise((resolve, reject) => {
                 models.Student.findOne({
-                  where: { newSid: filteredParticipant.newSid },
+                  // where: { newSid: filteredParticipant.newSid },
+                  where: {
+                    $or: [
+                      { newSid: filteredParticipant.newSid },
+                      { oldSid: filteredParticipant.newSid },
+                    ],
+                  },
                 })
                 .then((student) => {
                   if (student) {
