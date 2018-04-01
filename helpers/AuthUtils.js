@@ -40,5 +40,6 @@ const isAuthenticated = function(req, res, next) {
 
 module.exports = {
   isAuthorizedAsAdmin,
+  isAuthorizedAsBakordik,
   isAuthenticated,
 };

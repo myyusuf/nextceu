@@ -34,6 +34,7 @@ exports.signIn = function(req, res) {
       // });
       if (password === user.password) {
         const token = jwt.sign({
+          user_id: user.id,
           name: user.name,
           role: user.Role.code,
         }, Constant.TOKEN_PASSWORD);
