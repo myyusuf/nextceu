@@ -51,12 +51,14 @@ exports.findInitiateStudentCourses = function findInitiateStudentCourses(req, re
     const limit = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
     const currentPage = req.query.currentPage ? parseInt(req.query.currentPage, 10) : 1;
     const offset = (currentPage - 1) * limit;
-    models.Course.findAndCountAll({
+    models.Course.count({
+      distinct: true,
       where: {
         planStartDate: {
           $gte: startDate.toDate(),
           $lte: endDate.toDate(),
         },
+        hospital1Id: hospitalId,
       },
       include: [
         {
@@ -69,23 +71,51 @@ exports.findInitiateStudentCourses = function findInitiateStudentCourses(req, re
             ],
           },
         },
-        {
-          model: models.Department,
-          where: {},
-        },
-        { model: models.Score },
-        { model: models.Hospital, as: 'hospital1', where: { id: hospitalId } },
-        { model: models.Hospital, as: 'hospital2' },
-        { model: models.Hospital, as: 'clinic' },
-        { model: models.Docent, as: 'adviser' },
-        { model: models.Docent, as: 'examiner' },
-        { model: models.Docent, as: 'dpk' },
       ],
-      limit,
-      offset,
     })
-    .then((result) => {
-      res.json(result);
+    .then((countResult) => {
+      models.Course.findAll({
+        distinct: true,
+        where: {
+          planStartDate: {
+            $gte: startDate.toDate(),
+            $lte: endDate.toDate(),
+          },
+          hospital1Id: hospitalId,
+        },
+        include: [
+          {
+            model: models.Student,
+            where: {
+              $or: [
+                { name: { $ilike: searchText } },
+                { oldSid: { $ilike: searchText } },
+                { newSid: { $ilike: searchText } },
+              ],
+            },
+          },
+          {
+            model: models.Department,
+            where: {},
+          },
+          { model: models.Score },
+          { model: models.Hospital, as: 'hospital1', where: { id: hospitalId } },
+          { model: models.Hospital, as: 'hospital2' },
+          { model: models.Hospital, as: 'clinic' },
+          { model: models.Docent, as: 'adviser' },
+          { model: models.Docent, as: 'examiner' },
+          { model: models.Docent, as: 'dpk' },
+        ],
+        limit,
+        offset,
+      })
+      .then((result) => {
+        res.json({ rows: result, count: countResult });
+      })
+      .catch((err) => {
+        sendError(err, res);
+      });
+
     })
     .catch((err) => {
       sendError(err, res);
