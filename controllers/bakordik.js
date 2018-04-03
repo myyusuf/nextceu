@@ -58,7 +58,11 @@ exports.findInitiateStudentCourses = function findInitiateStudentCourses(req, re
           $gte: startDate.toDate(),
           $lte: endDate.toDate(),
         },
-        hospital1Id: hospitalId,
+        $or: {
+          hospital1Id: hospitalId,
+          hospital2Id: hospitalId,
+          clinicId: hospitalId,
+        },
       },
       include: [
         {
@@ -81,7 +85,11 @@ exports.findInitiateStudentCourses = function findInitiateStudentCourses(req, re
             $gte: startDate.toDate(),
             $lte: endDate.toDate(),
           },
-          hospital1Id: hospitalId,
+          $or: {
+            hospital1Id: hospitalId,
+            hospital2Id: hospitalId,
+            clinicId: hospitalId,
+          },
         },
         include: [
           {
