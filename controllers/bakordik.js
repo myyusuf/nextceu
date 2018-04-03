@@ -57,10 +57,6 @@ exports.findInitiateStudentCourses = function findInitiateStudentCourses(req, re
           $gte: startDate.toDate(),
           $lte: endDate.toDate(),
         },
-        $or: {
-          hospital1Id: hospitalId,
-          hospital2Id: hospitalId,
-        },
       },
       include: [
         {
@@ -78,7 +74,7 @@ exports.findInitiateStudentCourses = function findInitiateStudentCourses(req, re
           where: {},
         },
         { model: models.Score },
-        { model: models.Hospital, as: 'hospital1' },
+        { model: models.Hospital, as: 'hospital1', where: { id: hospitalId } },
         { model: models.Hospital, as: 'hospital2' },
         { model: models.Hospital, as: 'clinic' },
         { model: models.Docent, as: 'adviser' },
